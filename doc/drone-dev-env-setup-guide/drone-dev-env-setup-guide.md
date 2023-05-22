@@ -16,6 +16,8 @@ Ver.1.3.0
   - [5.2. セットアップスクリプトで環境をインストール](#52-セットアップスクリプトで環境をインストール)
 - [6. Visual Studio Code拡張機能インストール](#6-visual-studio-code拡張機能インストール)
 - [7. シミュレータ（SITL）用セットアップ](#7-シミュレータsitl用セットアップ)
+  - [GUI表示のためのセットアップ](#gui表示のためのセットアップ)
+  - [シミュレータ動作確認](#シミュレータ動作確認)
 - [8. シミュレータ（Gazebo）用セットアップ（任意）](#8-シミュレータgazebo用セットアップ任意)
   - [8.1. Gazeboのインストール](#81-gazeboのインストール)
   - [8.2. プラグインのインストール](#82-プラグインのインストール)
@@ -188,6 +190,20 @@ Visual Studio Codeを起動し、WSL（Ubuntu-20.04）に接続します。
 |Lua Autocomplete for ArduPilot|ardupilot|ArduPilot用Lua言語サポート|
 
 # 7. シミュレータ（SITL）用セットアップ
+## GUI表示のためのセットアップ
+【注意】すでにセットアップ済みの場合はスキップしてください。
+
+下記URLから必要なアプリをダウンロードします。  
+https://sourceforge.net/projects/vcxsrv/
+
+`Download` ボタンを押下し `VcXsrv Windows X Server` をダウンロードしてからインストールします。
+インストールは、`Next` -> `Install` -> `インストール処理` -> `Close` と選択していけばできます。
+
+インストール完了後、スタートボタンで `XLaunch`  と検索しXLaunchアプリを起動します。  
+![Alt text](media/SITL-setup-010.jpg)
+
+## シミュレータ動作確認
+
 # 8. シミュレータ（Gazebo）用セットアップ（任意）
 ## 8.1. Gazeboのインストール
 ## 8.2. プラグインのインストール
