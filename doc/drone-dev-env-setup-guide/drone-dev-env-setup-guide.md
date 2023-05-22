@@ -64,9 +64,11 @@ wsl --set-default-version 1
 
 Windowsストアアプリを開き `ubuntu` と検索し `Ubuntu 20.04.6 LTS` を選択してください。
 Ubuntu 20.04 LTSの詳細画面が表示されたら `入手` を選択しダウンロードおよびインストールしてください。  
-![Alt text](media/store-ubuntu.jpg)  
+![Alt text](media/ubuntu-setup-010.jpg)  
+
 インストールが完了したら `開く` を選択してください。画面を閉じてしまった場合は、Windowsメニューから `Ubuntu 20.04.6 LTS` を選択して起動してください。  
-![Alt text](media/store-ubuntu-launch.jpg)  
+![Alt text](media/ubuntu-setup-030.jpg)  
+
 初回起動時 `Installing, this may take a few minutes…` としばらく表示されます。フリーズではないので、そのままインストールが完了するまで待ちます。  
 インストールが終わると password と password をきかれるので、下記の通り入力して設定します。必ず半角英字のみで設定します。
 
@@ -75,11 +77,16 @@ Ubuntu 20.04 LTSの詳細画面が表示されたら `入手` を選択しダウ
 
 パスワードは入力してもセキュリティ上表示されませんが入力されています。間違えた場合はバックスペースで消せます。
 画像のようになればUbuntuのインストールは完了です。このウィンドウを閉じます。
-![Alt text](media/ubuntu-terminal.jpg)
+![Alt text](media/ubuntu-setup-030.jpg)  
 
-念の為、WSLのバージョンを確認します。PowerShellを起動し次のコマンドを実行して確認してください。VERSIONのところが1と表示されていれば問題ありません。
+念の為、WSLのバージョンを確認します。PowerShellを起動し次のコマンドを実行して確認してください。
 ```powershell
 wsl -l -v
+```
+VERSIONのところが `1` と表示されていれば問題ありません。
+```powershell
+  NAME                   STATE           VERSION
+* Ubuntu-20.04           Running         1
 ```
 
 > **Note**
