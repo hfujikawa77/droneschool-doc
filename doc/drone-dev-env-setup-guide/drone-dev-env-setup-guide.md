@@ -67,7 +67,7 @@ Ubuntu 20.04 LTSの詳細画面が表示されたら `入手` を選択しダウ
 ![Alt text](media/ubuntu-setup-010.jpg)  
 
 インストールが完了したら `開く` を選択してください。画面を閉じてしまった場合は、Windowsメニューから `Ubuntu 20.04.6 LTS` を選択して起動してください。  
-![Alt text](media/ubuntu-setup-030.jpg)  
+![Alt text](media/ubuntu-setup-020.jpg)  
 
 初回起動時 `Installing, this may take a few minutes…` としばらく表示されます。フリーズではないので、そのままインストールが完了するまで待ちます。  
 インストールが終わると password と password をきかれるので、下記の通り入力して設定します。必ず半角英字のみで設定します。
