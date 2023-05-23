@@ -84,7 +84,7 @@ Ubuntu 20.04 LTSの詳細画面が表示されたら `入手` を選択しダウ
 * password : `ardupilot` 
 
 パスワードは入力してもセキュリティ上表示されませんが入力されています。間違えた場合はバックスペースで消せます。
-画像のようになればUbuntuのインストールは完了です。このウィンドウを閉じます。
+画像のようになればUbuntuのインストールは完了です。このウィンドウを閉じます。  
 ![Alt text](media/ubuntu-setup-030.jpg)  
 
 念の為、WSLのバージョンを確認します。PowerShellを起動し次のコマンドを実行して確認してください。
@@ -344,7 +344,7 @@ git clone https://github.com/ArduPilot/pymavlink
 画像のようにソースコードを入力した際に補完候補が表示されるようになっていればセットアップ完了です。  
 * DroneKit Python  
  ![Alt text](media/dev-app-setup-040.jpg)  
- 
+
 * pymavlink  
 ![Alt text](media/dev-app-setup-050.jpg)  
 
