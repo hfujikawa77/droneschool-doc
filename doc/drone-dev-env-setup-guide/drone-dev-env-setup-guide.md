@@ -200,7 +200,44 @@ https://sourceforge.net/projects/vcxsrv/
 インストールは、`Next` -> `Install` -> `インストール処理` -> `Close` と選択していけばできます。
 
 インストール完了後、スタートボタンで `XLaunch`  と検索しXLaunchアプリを起動します。  
-![Alt text](media/SITL-setup-010.jpg)
+![Alt text](media/SITL-setup-010.jpg)  
+
+デフォルトのままで「次へ」を選択してください。  
+![Alt text](media/SITL-setup-020.jpg)  
+
+`Disable access control` にチェックを忘れないようにします。  
+![Alt text](media/SITL-setup-030.jpg)  
+
+自動起動設定のために `Save configuration` を選択し設定ファイルを一旦任意の場所に保存してください。`完了` を選択してください。  
+![Alt text](media/SITL-setup-040.jpg)  
+
+セキュリティダイアログが表示されたら、パブリックネットワークも必ずチェックしてから `アクセスを許可する` を選択してください。  
+![Alt text](media/SITL-setup-050.jpg)  
+
+キーボードのWinキー＋rを押して `ファイル名を指定して実行` ウィンドウを開き、次の文字列を入力して `OK` を選択してください。
+```
+shell:startup
+```
+
+前のステップで保存したXLaunchの設定ファイルを開いたフォルダに移動します。  
+![Alt text](media/SITL-setup-060.jpg)  
+
+次に、Ubuntu 20.04.6 LTS を起動して、次のコマンドを実行してから閉じてください。
+```bash
+echo "export DISPLAY=localhost:0.0" >> ~/.bashrc
+```
+
+コマンド実行後、次のコマンドでファイルに正しく書き込まれていることを確認します。
+```bash
+cat ~/.bashrc
+```
+
+下記のような設定が2行追加されていることを確認します。追加されていない場合は手動で修正してください。
+```bash
+source /mnt/c/dev/drone-dev/ardupilot/Tools/completion/completion.bash
+export DISPLAY=localhost:0.0
+```
+
 
 ## シミュレータ動作確認
 
