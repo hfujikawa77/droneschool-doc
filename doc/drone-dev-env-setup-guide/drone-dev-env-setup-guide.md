@@ -126,7 +126,7 @@ Visual Studio Codeが起動したら次の手順に進んでください。
 
 ## 4.2. 日本語表示の有効化
 `Ctrl + Shift + P` を押して表示される入力エリアに `Configure Di` と入力します。  
-表示される候補の中から `Configure Display Language` を選択します。
+表示される候補の中から `Configure Display Language` を選択します。  
 ![Alt text](media/vsc-wsl-link-021.jpg)
 
 その後に表示される候補から `日本語(ja)` を選択します。   
