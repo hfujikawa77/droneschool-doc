@@ -16,8 +16,8 @@ Ver.1.3.0
   - [5.2. セットアップスクリプトで環境をインストール](#52-セットアップスクリプトで環境をインストール)
 - [6. Visual Studio Code拡張機能インストール](#6-visual-studio-code拡張機能インストール)
 - [7. シミュレータ（SITL）用セットアップ](#7-シミュレータsitl用セットアップ)
-  - [GUI表示のためのセットアップ](#gui表示のためのセットアップ)
-  - [シミュレータ動作確認](#シミュレータ動作確認)
+  - [7.1. GUI表示のためのセットアップ](#71-gui表示のためのセットアップ)
+  - [7.2. シミュレータ動作確認](#72-シミュレータ動作確認)
 - [8. シミュレータ（Gazebo）用セットアップ（任意）](#8-シミュレータgazebo用セットアップ任意)
   - [8.1. Gazeboのインストール](#81-gazeboのインストール)
   - [8.2. プラグインのインストール](#82-プラグインのインストール)
@@ -190,7 +190,7 @@ Visual Studio Codeを起動し、WSL（Ubuntu-20.04）に接続します。
 |Lua Autocomplete for ArduPilot|ardupilot|ArduPilot用Lua言語サポート|
 
 # 7. シミュレータ（SITL）用セットアップ
-## GUI表示のためのセットアップ
+## 7.1. GUI表示のためのセットアップ
 【注意】すでにセットアップ済みの場合はスキップしてください。
 
 下記URLから必要なアプリをダウンロードします。  
@@ -238,8 +238,24 @@ source /mnt/c/dev/drone-dev/ardupilot/Tools/completion/completion.bash
 export DISPLAY=localhost:0.0
 ```
 
+## 7.2. シミュレータ動作確認
+Ubuntu端末を閉じ、PCを再起動してください。
+再起動後、タスクトレイに画像のようなアイコンが表示されていることを確認してください。  
+![Alt text](media/SITL-setup-070.jpg)  
 
-## シミュレータ動作確認
+Ubuntu 20.04.6 LTSを起動して次のコマンドを実行してください。
+```bash
+sim_vehicle.py -v Copter --map --console
+```
+
+セキュリティ警告が表示されたら「アクセスを許可する」を選択してください。  
+![Alt text](media/SITL-setup-080.jpg)
+
+画像のような表示になれば正しく動作している状態です。  
+![Alt text](media/SITL-setup-090.jpg)  
+
+シミュレータが起動している状態でMission Plannerを起動すると自動的にUDPでシミュレータに接続します。  
+![Alt text](media/SITL-setup-100.jpg)  
 
 # 8. シミュレータ（Gazebo）用セットアップ（任意）
 ## 8.1. Gazeboのインストール
