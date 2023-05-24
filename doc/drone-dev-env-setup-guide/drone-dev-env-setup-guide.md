@@ -1,11 +1,12 @@
-開発環境構築
-Windows10 / 11
-WSL(Windows SubSystem for Linux)
+開発環境構築  
+Windows10 / 11  
+WSL(Windows SubSystem for Linux)  
 Visual Studio Code
 
-2022.10.28
-Ver.1.3.0
+2023.5.26  
+Ver.1.4.0
 
+Table of Contents
 - [1. Visual Studio Codeインストール](#1-visual-studio-codeインストール)
 - [2. WSLにUbuntuをインストール](#2-wslにubuntuをインストール)
   - [2.1. WSLの有効化設定とバージョン確認](#21-wslの有効化設定とバージョン確認)
@@ -35,15 +36,22 @@ Ver.1.3.0
   - [10.2. デバッグ構成を追加](#102-デバッグ構成を追加)
   - [10.3. ブレークポイントを置く](#103-ブレークポイントを置く)
   - [10.4. デバッグ実行](#104-デバッグ実行)
+- [Appendix](#appendix)
+  - [Visual Studio Codeショートカットキー](#visual-studio-codeショートカットキー)
 
 
 
 # 1. Visual Studio Codeインストール
 【注意】インストール済みの場合はスキップしてください。  
-
+下記サイトを開きます。  
 https://code.visualstudio.com/  
-`Visual Studio Codeのダウンロード` → `Windows X64` を押下しダウンロードを開始する。  
-ダウンロードされるバージョンが手順書の表示と異なる場合、バージョン番号は最新に読み替えてください。
+`Download for Windows Stable Build` をクリックするとダウンロードが開始されます。  
+ダウンロードされた exeファイル `VSCodeUserSetup-x64-＜バージョン番号＞.exe` をダブルクリックしてインストールを進めてください。
+  
+基本的に `次へ` 、 `インストール` をクリックしてインストールを進めます。下記の画面では `PATHへの追加` を選択してください。
+![Alt text](media/vsc-install-010.jpg)  
+
+Visual Studio Codeのインストールが完了したらPCを再起動して次のステップに進みます。
 
 # 2. WSLにUbuntuをインストール
 ## 2.1. WSLの有効化設定とバージョン確認
@@ -52,8 +60,16 @@ https://code.visualstudio.com/
 ```powershell
 winver
 ```
+下記の画面が表示されます。  
+![Alt text](media/wsl-install-010.jpg)  
+WSLをインストールするためには、Windows 10 version 2004(Build 19041)以上、もしくはWindows 11である必要があります。古い場合はWindows10の更新、またはWindows 11のインストールを先に完了してから再度このステップから実行してください。  
+社用PCなどセキュリティ対策が施されている場合、仮想化機能が無効化されている場合はセットアップが失敗する可能性があります。自社のテクニカルサポート部門にお問合せください。  
 
-WSL有効化をするために、PowerShellを管理者権限で開き、次の2つのコマンドを順番に実行し、PCを再起動してください。
+WSL有効化をするために、PowerShellを管理者権限で開きます。  
+タスクバーの検索窓に `PowerShell` と入力します。検索結果 `Windows PowerShell` の右側にある `>` ボタンをクリックし、`管理者として実行する` をクリックします。  
+![Alt text](media/wsl-install-020.jpg)  
+
+立ち上がったPowerShellのウィンドウに次の2つのコマンドを順番に実行し、PCを再起動してください。
 ```powershell
 dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
 ```
@@ -349,10 +365,76 @@ git clone https://github.com/ArduPilot/pymavlink
 ![Alt text](media/dev-app-setup-050.jpg)  
 
 # 10. 【FlightCodeコース向け】デバッグ環境セットアップ
+【注意】セットアップ済みの場合はスキップしてください。
 ## 10.1. 必要なパッケージインストール
+Ubuntu 20.04.6を起動し次のコマンドを実行してください。  
+```bash
+sudo apt install gdb -y
+```
 ## 10.2. デバッグ構成を追加
+ArduPilotのソースコードを開きます。メニュー `ファイル` → `フォルダーを開く…` を選択してください。  
+任意のcppファイルを開いている状態で、メニュー `実行` → `構成の追加…` を選択してください。  
+![Alt text](media/fc-debug-setup-010.jpg)  
+
+表示された `launch.json` の右下 `構成の追加` ボタンをクリックします。
+追加された構成を次のように修正して保存ください。 
+```json
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "(gdb) ArduCopter",
+            "type": "cppdbg",
+            "request": "attach",
+            "program": "${workspaceFolder}/build/sitl/bin/arducopter",
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "gdb の再フォーマットを有効にする",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "逆アセンブリ　フレーバーを Intel に設定",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    ] 
+```
+
 ## 10.3. ブレークポイントを置く
+一般的なデバッグ手法のやり方として、任意の処理行で一時停止するためのブレークポイントを配置することができます。ブレークポイントは複数設定できます。
+
+ここでは例として、`ArduCopter/mode_stabilize.cpp` のソースコードファイルを開き、画像のように行番号の左側をクリックしてブレークポイントを配置してください。  
+![Alt text](media/fc-debug-setup-020.jpg)  
+
 ## 10.4. デバッグ実行
+Visual Studio Codeのターミナルから次のコマンドを1度だけ実行してください。
+デバッグのたびに実行する必要はありません。ただし、再起動時は再度実行する必要があります。  
+```bash
+echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+```
 
+次にシミュレータを次のコマンドで起動します。  
+```bash
+sim_vehicle.py -v Copter --console --map -D
+```
+![Alt text](media/fc-debug-setup-030.jpg)  
+![Alt text](media/fc-debug-setup-040.jpg)  
 
+メニュー `実行` → `デバッグの開始` を選択してください。  
+![Alt text](media/fc-debug-setup-050.jpg)  
 
+`arducopter` プロセスを選択してください。  
+![Alt text](media/fc-debug-setup-060.jpg)  
+
+プロセスにアタッチされ、デバッグアイコンメニュー画面は画像のような表示になります。
+![Alt text](media/fc-debug-setup-070.jpg)  
+
+GDBを利用したデバッグについて知りたい場合は、下記を参照してください。  
+https://ardupilot.org/dev/docs/debugging-with-gdb-using-vscode.html
+
+# Appendix
+## Visual Studio Codeショートカットキー
+英語：https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf
