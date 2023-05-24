@@ -48,7 +48,7 @@ https://code.visualstudio.com/
 `Download for Windows Stable Build` をクリックするとダウンロードが開始されます。  
 ダウンロードされた exeファイル `VSCodeUserSetup-x64-＜バージョン番号＞.exe` をダブルクリックしてインストールを進めてください。
   
-基本的に `次へ` 、 `インストール` をクリックしてインストールを進めます。下記の画面では `PATHへの追加` を選択してください。
+基本的に `次へ` 、 `インストール` をクリックしてインストールを進めます。下記の画面では `PATHへの追加` を選択してください。  
 ![Alt text](media/vsc-install-010.jpg)  
 
 Visual Studio Codeのインストールが完了したらPCを再起動して次のステップに進みます。
@@ -66,7 +66,10 @@ WSLをインストールするためには、Windows 10 version 2004(Build 19041
 社用PCなどセキュリティ対策が施されている場合、仮想化機能が無効化されている場合はセットアップが失敗する可能性があります。自社のテクニカルサポート部門にお問合せください。  
 
 WSL有効化をするために、PowerShellを管理者権限で開きます。  
-タスクバーの検索窓に `PowerShell` と入力します。検索結果 `Windows PowerShell` の右側にある `>` ボタンをクリックし、`管理者として実行する` をクリックします。  
+タスクバーの検索窓に `PowerShell` を入力して検索します。  
+![Alt text](media/wsl-install-011.jpg)  
+
+検索結果に表示された `Windows PowerShell` の右側にある `>` ボタンをクリックし、`管理者として実行する` をクリックします。  
 ![Alt text](media/wsl-install-020.jpg)  
 
 立ち上がったPowerShellのウィンドウに次の2つのコマンドを順番に実行し、PCを再起動してください。
