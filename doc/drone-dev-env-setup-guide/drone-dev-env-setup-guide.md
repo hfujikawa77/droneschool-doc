@@ -1,16 +1,14 @@
-開発環境構築  
-Windows10 / 11  
-WSL(Windows SubSystem for Linux)  
-Visual Studio Code
+ドローンエンジニア養成塾 デベロッパーコース  
+開発環境構築手順書 (Windows10/11 + WSL1(Ubuntu20.04) + Visual Studio Code)  
 
-2023.5.26  
-Ver.1.4.0
+2023.5.26 Ver.1.4.0
 
 Table of Contents
-- [1. Visual Studio Codeインストール](#1-visual-studio-codeインストール)
-- [2. WSLにUbuntuをインストール](#2-wslにubuntuをインストール)
-  - [2.1. WSLの有効化設定とバージョン確認](#21-wslの有効化設定とバージョン確認)
-- [3. Ubuntu20のインストールと初期設定](#3-ubuntu20のインストールと初期設定)
+- [1. はじめに](#1-はじめに)
+- [2. Visual Studio Codeインストール](#2-visual-studio-codeインストール)
+- [3. WSLにUbuntuをインストール](#3-wslにubuntuをインストール)
+  - [3.1. WSLの有効化設定とバージョン確認](#31-wslの有効化設定とバージョン確認)
+  - [3.2. Ubuntu20のインストールと初期設定](#32-ubuntu20のインストールと初期設定)
 - [4. Visual Studio CodeとWSLの連携](#4-visual-studio-codeとwslの連携)
   - [4.1. 拡張機能のインストール](#41-拡張機能のインストール)
   - [4.2. 日本語表示の有効化](#42-日本語表示の有効化)
@@ -36,12 +34,15 @@ Table of Contents
   - [10.2. デバッグ構成を追加](#102-デバッグ構成を追加)
   - [10.3. ブレークポイントを置く](#103-ブレークポイントを置く)
   - [10.4. デバッグ実行](#104-デバッグ実行)
-- [Appendix](#appendix)
-  - [Visual Studio Codeショートカットキー](#visual-studio-codeショートカットキー)
+- [11. Appendix](#11-appendix)
+  - [11.1. Visual Studio Codeショートカットキー](#111-visual-studio-codeショートカットキー)
 
 
-
-# 1. Visual Studio Codeインストール
+# 1. はじめに
+本書はWindows10/11 + WSL1(Ubuntu20.04) + Visual Studio Code を使用してArduPilotドローンソフトウェアの開発・テストを行うための環境構築手順です。  
+開発環境構成における本書の対象範囲は下図の通りとなります。  
+![Alt text](media/intro-010.jpg)  
+# 2. Visual Studio Codeインストール
 【注意】インストール済みの場合はスキップしてください。  
 下記サイトを開きます。  
 https://code.visualstudio.com/  
@@ -53,8 +54,8 @@ https://code.visualstudio.com/
 
 Visual Studio Codeのインストールが完了したらPCを再起動して次のステップに進みます。
 
-# 2. WSLにUbuntuをインストール
-## 2.1. WSLの有効化設定とバージョン確認
+# 3. WSLにUbuntuをインストール
+## 3.1. WSLの有効化設定とバージョン確認
 あまり古いバージョンのWindows10だとWSL機能が使えないため念の為バージョンを確認してください。  
 確認するためにPowerShellで `winver` を実行して確認してください。 
 ```powershell
@@ -86,8 +87,8 @@ PC再起動後、PowerShellを開いて次のコマンドを実行しPowerShell�
 wsl --set-default-version 1
 ```
 
-# 3. Ubuntu20のインストールと初期設定
-【注意】すでにUbuntu 20.04.5がインストール済みの場合はスキップしてください。
+## 3.2. Ubuntu20のインストールと初期設定
+【注意】すでにUbuntu 20.04.6がインストール済みの場合はスキップしてください。
 
 Windowsストアアプリを開き `ubuntu` と検索し `Ubuntu 20.04.6 LTS` を選択してください。
 Ubuntu 20.04 LTSの詳細画面が表示されたら `入手` を選択しダウンロードおよびインストールしてください。  
@@ -168,7 +169,7 @@ Visual Studio Codeを再起動を促されるので再起動します。起動�
 # 5. ArduPilotビルド環境セットアップ
 【注意】すでにビルド環境がセットアップ済みの場合スキップしてください。  
 ## 5.1. ArduPilotソースコードをクローン
-Ubuntu 20.04.5 LTSを起動します。
+Ubuntu 20.04.6 LTSを起動します。
 コース毎にクローンするURLを確認します。
 
 【Applicationコース向け】本家リポジトリURL  
@@ -544,6 +545,6 @@ sim_vehicle.py -v Copter --console --map -D
 GDBを利用したデバッグについて知りたい場合は、下記を参照してください。  
 https://ardupilot.org/dev/docs/debugging-with-gdb-using-vscode.html
 
-# Appendix
-## Visual Studio Codeショートカットキー
+# 11. Appendix
+## 11.1. Visual Studio Codeショートカットキー
 英語：https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf
