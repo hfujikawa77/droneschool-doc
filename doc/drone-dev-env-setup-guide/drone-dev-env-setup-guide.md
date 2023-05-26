@@ -289,9 +289,115 @@ sim_vehicle.py -v Copter --map --console
 ![Alt text](media/SITL-setup-100.jpg)  
 
 # 8. シミュレータ（Gazebo）用セットアップ（任意）
+【注意】スペックが低いマシンの場合はGazeboの表示品質が悪くなります。WSL1はGPU非対応のため、GPU有無は表示品質には影響しません。  
+【注意】環境によってトラブルが多いため任意のセットアップです。
 ## 8.1. Gazeboのインストール
+Ubuntu 20.04.6 LTS を起動して、下記コマンドを実行してパッケージを更新してください。パスワードを聞かれたら前の手順で設定したパスワードを入力してください。  
+```bash
+sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+```
+```bash
+wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+```
+```bash
+sudo apt update
+```
+
+下記コマンドを実行してGazeboをインストールしてください。
+```bash
+sudo apt install gazebo9 libgazebo9-dev
+```
+
+下記コマンドを実行してGazeboが起動することを確認してください。  
+Windows Defender ファイアウォールの確認ダイアログが表示されたら `アクセスを許可する` を選択してください。
+```bash
+gazebo --verbose
+```
+![Alt text](media/gazebo-setup-010.jpg)
+
+起動が確認できたら、 `Ctrl + c` でGazeboを終了します。
+
 ## 8.2. プラグインのインストール
+Ubuntu 20.04.6 LTS に下記コマンドを実行してプラグインのソースコード取得とビルドを行ってください。
+```bash
+sudo apt install -y cmake
+```
+```bash
+git clone https://github.com/khancyr/ardupilot_gazebo
+```
+```bash
+cd ardupilot_gazebo
+```
+```bash
+mkdir build
+```
+```bash
+cd build
+```
+```bash
+cmake ..
+```
+```bash
+make -j4
+```
+```bash
+sudo make install
+```
+
+下記エラーが発生する場合があります。解決策を参考にしてエラーを解消してください。
+
+エラー内容：
+```bash
+gzclient: error while loading shared libraries: libQt5Core.so.5: cannot open shared object file: No such file or directory
+```
+解決策コマンド：
+```bash
+sudo strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5
+```
+参考URL： https://usagi.hatenablog.jp/entry/2019/12/26/181101  
+
+エラー内容：
+```bash
+libGL error: No matching fbConfigs or visuals found
+libGL error: failed to load driver: swrast
+```
+解決策コマンド：
+```bash
+echo "export LIBGL_ALWAYS_INDIRECT=1" >> ~/.bashrc
+```
+参考URL： https://volvox.hateblo.jp/entry/2019/01/06/205054 
+
 ## 8.3. シミュレータの起動
+別のUbuntuウィンドウを開いて下記コマンドを実行してSITLを起動してください。
+```bash
+sim_vehicle.py -f gazebo-iris -v Copter --console –map
+```
+
+下記コマンドを実行してGazeboを起動してください。`ardupilot_gazebo` は前の手順で作業したディレクトリです。
+```bash
+cd ardupilot_gazebo
+```
+```bash
+gazebo --verbose worlds/iris_arducopter_runway.world
+```
+
+
+SITLを起動したウィンドウで下記コマンドを実行してください。
+```bash
+mode guided
+rc 3 1000
+arm throttle
+takeoff 10
+```
+
+SITLと同期してGazebo上の機体が離陸することが確認できます。
+![Alt text](media/gazebo-setup-020.jpg)
+
+次のページ以降は、コースによって必要なところだけセットアップしてください。  
+
+* 【Applicationコース向け】DroneKit Pythonセットアップ
+* 【FlightCodeコース向け】デバッグ環境セットアップ
+
 # 9. 【Applicationコース向け】DroneKit Python, pymavlinkセットアップ
 【注意】セットアップ済みの場合はスキップしてください。
 ## 9.1. DroneKit Python最新のソースコードからインストール
