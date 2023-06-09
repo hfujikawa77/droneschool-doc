@@ -1,9 +1,20 @@
-ドローンエンジニア養成塾 デベロッパーコース  
-開発環境構築手順書 (Windows10/11 + WSL1(Ubuntu20.04) + Visual Studio Code)  
+<div align="center">
+<h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
+<h2>開発環境構築手順書</h2><br>
+(Windows10/11 + WSL1(Ubuntu20.04) + Visual Studio Code)<br/>
+Ver.1.4.1 - 2023.6.9
+</div>
 
-2023.5.26 Ver.1.4.0
+<!--
+Ver.1.4.0 - 2023.5.26 - 初版
+Ver.1.4.1 - 2023.6.9  - WSLインストール方法変更、PDFレイアウト調整、微修正
+-->
 
 Table of Contents
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
 - [1. はじめに](#1-はじめに)
 - [2. Visual Studio Codeインストール](#2-visual-studio-codeインストール)
 - [3. WSLにUbuntuをインストール](#3-wslにubuntuをインストール)
@@ -37,11 +48,16 @@ Table of Contents
 - [11. Appendix](#11-appendix)
   - [11.1. Visual Studio Codeショートカットキー](#111-visual-studio-codeショートカットキー)
 
+<!-- /code_chunk_output -->
+
+
+<div style="page-break-before:always"></div>
 
 # 1. はじめに
 本書はWindows10/11 + WSL1(Ubuntu20.04) + Visual Studio Code を使用してArduPilotドローンソフトウェアの開発・テストを行うための環境構築手順です。  
 開発環境構成における本書の対象範囲は下図の通りとなります。  
-![Alt text](media/intro-010.jpg)  
+<div align="center"><img alt="開発環境構成" src="media/intro-010.jpg" width="75%"></div>
+
 # 2. Visual Studio Codeインストール
 【注意】インストール済みの場合はスキップしてください。  
 下記サイトを開きます。  
@@ -50,9 +66,11 @@ https://code.visualstudio.com/
 ダウンロードされた exeファイル `VSCodeUserSetup-x64-＜バージョン番号＞.exe` をダブルクリックしてインストールを進めてください。
   
 基本的に `次へ` 、 `インストール` をクリックしてインストールを進めます。下記の画面では `PATHへの追加` を選択してください。  
-![Alt text](media/vsc-install-010.jpg)  
+<div align="center"><img alt="VSCodeセットアップ追加タスクの選択" src="media/vsc-install-010.jpg" width="50%"></div>
 
 Visual Studio Codeのインストールが完了したらPCを再起動して次のステップに進みます。
+
+<div style="page-break-before:always"></div>
 
 # 3. WSLにUbuntuをインストール
 ## 3.1. WSLの有効化設定とバージョン確認
@@ -62,16 +80,19 @@ Visual Studio Codeのインストールが完了したらPCを再起動して次
 winver
 ```
 下記の画面が表示されます。  
-![Alt text](media/wsl-install-010.jpg)  
+<div align="center"><img alt="PowerShell起動手順" src="media/wsl-install-010.jpg" width="50%"></div>
 WSLをインストールするためには、Windows 10 version 2004(Build 19041)以上、もしくはWindows 11である必要があります。古い場合はWindows10の更新、またはWindows 11のインストールを先に完了してから再度このステップから実行してください。  
-社用PCなどセキュリティ対策が施されている場合、仮想化機能が無効化されている場合はセットアップが失敗する可能性があります。自社のテクニカルサポート部門にお問合せください。  
+社用PCなどセキュリティ対策が施されている場合、仮想化機能が無効化されている場合はセットアップが失敗する可能性があります。自社のテクニカルサポート部門にお問合せください。<br/>
+WSLのインストールが可能な条件を満たしている場合次のページのインストールに進んでください。
+
+<div style="page-break-before:always"></div>
 
 WSL有効化をするために、PowerShellを管理者権限で開きます。  
 タスクバーの検索窓に `PowerShell` を入力して検索します。  
-![Alt text](media/wsl-install-011.jpg)  
+<div align="center"><img alt="PowerShell起動手順" src="media/wsl-install-011.jpg" width="60%"></div>
 
 検索結果に表示された `Windows PowerShell` の右側にある `>` ボタンをクリックし、`管理者として実行する` をクリックします。  
-![Alt text](media/wsl-install-020.jpg)  
+<div align="center"><img alt="PowerShell起動手順" src="media/wsl-install-020.jpg" width="60%"></div>
 
 立ち上がったPowerShellのウィンドウに次の2つのコマンドを順番に実行し、PCを再起動してください。
 ```powershell
@@ -82,22 +103,23 @@ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /nores
 ```
 
 PC再起動後、PowerShellを開いて次のコマンドを実行しPowerShellを閉じてください。これでデフォルトのバージョンを1にします。  
-デフォルトが1で困る場合は、2でインストールした後で `wsl --set-version Ubuntu-20.04 1` を実行して変更してください。
+デフォルトが1で困る場合は、WSLバージョン2でインストールした後で個別に `wsl --set-version Ubuntu-20.04 1` を実行して変更してください。
 ```powershell
 wsl --set-default-version 1
 ```
 
+<div style="page-break-before:always"></div>
+
 ## 3.2. Ubuntu20のインストールと初期設定
-【注意】すでにUbuntu 20.04.6がインストール済みの場合はスキップしてください。
+【注意】すでにUbuntu 20.04がインストール済みの場合はスキップしてください。
 
-Windowsストアアプリを開き `ubuntu` と検索し `Ubuntu 20.04.6 LTS` を選択してください。
-Ubuntu 20.04 LTSの詳細画面が表示されたら `入手` を選択しダウンロードおよびインストールしてください。  
-![Alt text](media/ubuntu-setup-010.jpg)  
+PowerShellを開いて次のコマンドを実行して`Ubuntu 20.04`をインストールしてください。
+```powershell
+wsl --install -d Ubuntu-20.04
+```
 
-インストールが完了したら `開く` を選択してください。画面を閉じてしまった場合は、Windowsメニューから `Ubuntu 20.04.6 LTS` を選択して起動してください。  
-![Alt text](media/ubuntu-setup-020.jpg)  
-
-初回起動時 `Installing, this may take a few minutes…` としばらく表示されます。フリーズではないので、そのままインストールが完了するまで待ちます。  
+インストールが完了したら `PCを再起動` をしてください。<br/>
+PC起動後の初回起動時 `Installing, this may take a few minutes…` としばらく表示されます。フリーズではないので、そのままインストールが完了するまで待ちます。  
 インストールが終わると password と password をきかれるので、下記の通り入力して設定します。必ず半角英字のみで設定します。
 
 * username : `ardupilot`
@@ -482,7 +504,7 @@ Ubuntu 20.04.6を起動し次のコマンドを実行してください。
 sudo apt install gdb -y
 ```
 ## 10.2. デバッグ構成を追加
-ArduPilotのソースコードを開きます。メニュー `ファイル` → `フォルダーを開く…` を選択してください。  
+ArduPilotのソースコードを開きます。メニュー `ファイル` → `フォルダーを開く…` → `/home/ardupilot/ardupilot`と入力 を選択してください。  
 任意のcppファイルを開いている状態で、メニュー `実行` → `構成の追加…` を選択してください。  
 ![Alt text](media/fc-debug-setup-010.jpg)  
 
