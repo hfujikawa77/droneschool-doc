@@ -1,18 +1,17 @@
 # droneschool-private
 ドローンエンジニア養成塾（プライベート）
 
-## 開発環境構成手順
+## 開発環境構築手順書
 [手順書](doc/drone-dev-env-setup-guide/)はMarkdownで書かれています。<br/>
 
-必要なプラグインを入れます。<br/>
-- shd101wyy.markdown-preview-enhanced
+必要な拡張機能を入れます。<br/>
+- yzhang.markdown-all-in-one
 - yzane.markdown-pdf
 
-PDFへの変換手順は、
-```
-1. 項目に変更があり目次に変更がある場合は[Markdown Preview Enhanced: Create TOC]を実行
-2. プレビューして表示を確認するには[Markdown: Markdown Preview Enhanced: Open Preview to the Side]を実行
-2. PDFファイルにエクスポートするにはMarkdownファイルを開いてる状態で[Markdown PDF: Export(pdf)]を実行
-```
-です。<br/>
-※html中間ファイルが生成された後PDF化されます。
+PDFファイルを作成する場合は、Markdownファイルを開いた状態で、コマンドパレット（`F1`押下）から下記コマンドを実行してください。
+1. プレビューして表示を確認するには`[Markdown: Open Preview to the Side]`を実行
+2. 項番、目次の変更がある場合は`[Markdown All in One: Add/Update section numbers]` → `[Markdown All in One: Update Table TOC]`の順番で実行
+4. PDFファイルにエクスポートするには`[Markdown PDF: Export(pdf)]`を実行
+
+<br/>
+※ html中間ファイルが生成された後PDF化されます。

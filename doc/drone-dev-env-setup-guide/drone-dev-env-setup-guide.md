@@ -2,12 +2,13 @@
 <h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
 <h2>開発環境構築手順書</h2><br>
 (Windows10/11 + WSL1(Ubuntu20.04) + Visual Studio Code)<br/>
-Ver.1.4.1 - 2023.6.9
+Ver.1.4.2 - 2023.7.11
 </div>
 
 <!--
 Ver.1.4.0 - 2023.5.26 - 初版
 Ver.1.4.1 - 2023.6.9  - WSLインストール方法変更、PDFレイアウト調整、微修正
+Ver.1.4.2 - 2023.7.11 - PDF生成方法修正、画像・コードの改行位置調整
 -->
 
 Table of Contents
@@ -50,13 +51,12 @@ Table of Contents
 
 <!-- /code_chunk_output -->
 
-
 <div style="page-break-before:always"></div>
 
 # 1. はじめに
 本書はWindows10/11 + WSL1(Ubuntu20.04) + Visual Studio Code を使用してArduPilotドローンソフトウェアの開発・テストを行うための環境構築手順です。  
 開発環境構成における本書の対象範囲は下図の通りとなります。  
-<div align="center"><img alt="開発環境構成" src="media/intro-010.jpg" width="75%"></div>
+![Alt text](media/intro-010.jpg)  
 
 # 2. Visual Studio Codeインストール
 【注意】インストール済みの場合はスキップしてください。  
@@ -64,9 +64,12 @@ Table of Contents
 https://code.visualstudio.com/  
 `Download for Windows Stable Build` をクリックするとダウンロードが開始されます。  
 ダウンロードされた exeファイル `VSCodeUserSetup-x64-＜バージョン番号＞.exe` をダブルクリックしてインストールを進めてください。
-  
+
+<div style="page-break-before:always"></div>  
+
 基本的に `次へ` 、 `インストール` をクリックしてインストールを進めます。下記の画面では `PATHへの追加` を選択してください。  
-<div align="center"><img alt="VSCodeセットアップ追加タスクの選択" src="media/vsc-install-010.jpg" width="50%"></div>
+
+![Alt text](media/vsc-install-010.jpg)  
 
 Visual Studio Codeのインストールが完了したらPCを再起動して次のステップに進みます。
 
@@ -80,19 +83,21 @@ Visual Studio Codeのインストールが完了したらPCを再起動して次
 winver
 ```
 下記の画面が表示されます。  
-<div align="center"><img alt="PowerShell起動手順" src="media/wsl-install-010.jpg" width="50%"></div>
+![Alt text](media/wsl-install-010.jpg)  
+
 WSLをインストールするためには、Windows 10 version 2004(Build 19041)以上、もしくはWindows 11である必要があります。古い場合はWindows10の更新、またはWindows 11のインストールを先に完了してから再度このステップから実行してください。  
 社用PCなどセキュリティ対策が施されている場合、仮想化機能が無効化されている場合はセットアップが失敗する可能性があります。自社のテクニカルサポート部門にお問合せください。<br/>
 WSLのインストールが可能な条件を満たしている場合次のページのインストールに進んでください。
 
-<div style="page-break-before:always"></div>
-
 WSL有効化をするために、PowerShellを管理者権限で開きます。  
 タスクバーの検索窓に `PowerShell` を入力して検索します。  
-<div align="center"><img alt="PowerShell起動手順" src="media/wsl-install-011.jpg" width="60%"></div>
+![Alt text](media/wsl-install-011.jpg)  
+
+<div style="page-break-before:always"></div>
 
 検索結果に表示された `Windows PowerShell` の右側にある `>` ボタンをクリックし、`管理者として実行する` をクリックします。  
-<div align="center"><img alt="PowerShell起動手順" src="media/wsl-install-020.jpg" width="60%"></div>
+
+![Alt text](media/wsl-install-020.jpg)  
 
 立ち上がったPowerShellのウィンドウに次の2つのコマンドを順番に実行し、PCを再起動してください。
 ```powershell
@@ -107,9 +112,6 @@ PC再起動後、PowerShellを開いて次のコマンドを実行しPowerShell�
 ```powershell
 wsl --set-default-version 1
 ```
-
-<div style="page-break-before:always"></div>
-
 ## 3.2. Ubuntu20のインストールと初期設定
 【注意】すでにUbuntu 20.04がインストール済みの場合はスキップしてください。
 
@@ -142,7 +144,10 @@ VERSIONのところが `1` と表示されていれば問題ありません。
 > **Note**
 > WSLはバージョン1と2を混在させることができます。WSL2はUSB接続を可能にする手順が複雑なため、実機デバイスなどを接続する場合WSL1を推奨します。シミュレータしか使用しない場合はWSL2の方が処理速度が速いのでオススメです。
 
-Ubuntuのインストールが完了したら、Visual Studio Codeと連携するため次のステップに進んでください。
+Ubuntuのインストールが完了したら、Visual Studio Codeと連携するため次のステップに進んでください。  
+
+<div style="page-break-before:always"></div>
+
 # 4. Visual Studio CodeとWSLの連携
 【注意】すでに連携済みの場合はスキップしてください。  
 
@@ -153,6 +158,8 @@ Visual Studio Codeが起動したら次の手順に進んでください。
 ## 4.1. 拡張機能のインストール
 左側の `Extensions（ブロックのようなアイコン）` を選択し拡張機能をインストールします。検索欄に `remote dev` を入力し検索し `Remote Development` を選択します。詳細画面にある `Install` を選択してください。  
 ![Alt text](media/vsc-wsl-link-020.jpg)
+
+<div style="page-break-before:always"></div>
 
 同様の手順で次の拡張機能もインストールしてください。
 
@@ -188,6 +195,8 @@ Visual Studio Codeを再起動を促されるので再起動します。起動�
 新しいウィンドウが開き、左下の部分が画像のような接続した状態になっていることを確認します。  
 ![Alt text](media/vsc-wsl-link-050.jpg)
 
+<div style="page-break-before:always"></div>
+
 # 5. ArduPilotビルド環境セットアップ
 【注意】すでにビルド環境がセットアップ済みの場合スキップしてください。  
 ## 5.1. ArduPilotソースコードをクローン
@@ -212,6 +221,8 @@ git clone https://github.com/ArduPilot/ardupilot.git
 ![Alt text](media/ardupilot-setup-010.jpg)  
 クローンが完了したら次の環境セットアップスクリプトを実行します。  
 
+<div style="page-break-before:always"></div>
+
 ## 5.2. セットアップスクリプトで環境をインストール
 Ubuntu端末に次のコマンドを順番に実行してビルド環境をインストール＆セットアップしていきます。  
 ```bash
@@ -221,6 +232,8 @@ cd ardupilot
 ./Tools/environment_install/install-prereqs-ubuntu.sh -y
 ```
 何度かパスワードを要求されるので都度入力します。結構処理に時間がかかるので待ちます。  
+
+<div style="page-break-before:always"></div>
 
 # 6. WSL（Ubuntu20）へ拡張機能のインストール
 Visual Studio Codeを起動し、WSL（Ubuntu-20.04）に接続します。  
@@ -242,6 +255,8 @@ Visual Studio Codeを起動し、WSL（Ubuntu-20.04）に接続します。
 |Docker|Docker|Dockerサポート|
 |ardupilot-devenv|ardupilot|ArduPilot開発サポート|
 |Lua Autocomplete for ArduPilot|ardupilot|ArduPilot用Lua言語サポート|
+
+<div style="page-break-before:always"></div>
 
 # 7. シミュレータ（SITL）用セットアップ
 ## 7.1. GUI表示のためのセットアップ
@@ -281,6 +296,8 @@ shell:startup
 echo "export DISPLAY=localhost:0.0" >> ~/.bashrc
 ```
 
+<div style="page-break-before:always"></div>
+
 コマンド実行後、次のコマンドでファイルに正しく書き込まれていることを確認します。
 ```bash
 cat ~/.bashrc
@@ -311,6 +328,8 @@ sim_vehicle.py -v Copter --map --console
 シミュレータが起動している状態でMission Plannerを起動すると自動的にUDPでシミュレータに接続します。  
 ![Alt text](media/SITL-setup-100.jpg)  
 
+<div style="page-break-before:always"></div>
+
 # 8. シミュレータ（Gazebo）用セットアップ（任意）
 【注意】スペックが低いマシンの場合はGazeboの表示品質が悪くなります。WSL1はGPU非対応のため、GPU有無は表示品質には影響しません。  
 【注意】環境によってトラブルが多いため任意のセットアップです。
@@ -330,6 +349,8 @@ sudo apt update
 ```bash
 sudo apt install gazebo9 libgazebo9-dev
 ```
+
+<div style="page-break-before:always"></div>
 
 下記コマンドを実行してGazeboが起動することを確認してください。  
 Windows Defender ファイアウォールの確認ダイアログが表示されたら `アクセスを許可する` を選択してください。
@@ -396,6 +417,8 @@ echo "export LIBGL_ALWAYS_INDIRECT=1" >> ~/.bashrc
 sim_vehicle.py -f gazebo-iris -v Copter --console –map
 ```
 
+<div style="page-break-before:always"></div>
+
 下記コマンドを実行してGazeboを起動してください。`ardupilot_gazebo` は前の手順で作業したディレクトリです。
 ```bash
 cd ardupilot_gazebo
@@ -418,8 +441,11 @@ SITLと同期してGazebo上の機体が離陸することが確認できます�
 
 次のページ以降は、コースによって必要なところだけセットアップしてください。  
 
-* 【Applicationコース向け】DroneKit Pythonセットアップ
-* 【FlightCodeコース向け】デバッグ環境セットアップ
+
+* [【Applicationコース向け】DroneKit Python, pymavlinkセットアップ](#9-applicationコース向けdronekit-python-pymavlinkセットアップ)  
+* [【FlightCodeコース向け】デバッグ環境セットアップ](#10-flightcodeコース向けデバッグ環境セットアップ)
+
+<div style="page-break-before:always"></div>
 
 # 9. 【Applicationコース向け】DroneKit Python, pymavlinkセットアップ
 【注意】セットアップ済みの場合はスキップしてください。
@@ -452,6 +478,9 @@ Installing collected packages: dronekit
       Successfully uninstalled dronekit-2.9.2
 Successfully installed dronekit-2.9.2
 ```
+
+<div style="page-break-before:always"></div>
+
 ## 9.2. pymavlinkソースコードの取得
 自動補完用にpymavlinkのソースコードを取得します。ターミナルタブに次のコマンドを入力して実行してください。
 ```bash
@@ -465,6 +494,8 @@ git clone https://github.com/ArduPilot/pymavlink
 ## 9.3. 自動補完セットアップ
 メニュー `ファイル` → `ユーザ設定` → `設定` の順に選択します。下記画面右上の設定ファイルアイコンをクリックします。  
 ![Alt text](media/dev-app-setup-010.jpg)  
+
+<div style="page-break-before:always"></div>
 
 下記の設定を追加します。既存の設定がすでにある場合はご自身の環境に合わせて設定してください。  
 ※ DroneKit Python, pymavlink のクローン先が `/home/ardupilot` の場合です。異なる場合は適宜修正してください。
@@ -496,6 +527,8 @@ git clone https://github.com/ArduPilot/pymavlink
 * pymavlink  
 ![Alt text](media/dev-app-setup-050.jpg)  
 
+<div style="page-break-before:always"></div>
+
 # 10. 【FlightCodeコース向け】デバッグ環境セットアップ
 【注意】セットアップ済みの場合はスキップしてください。
 ## 10.1. 必要なパッケージインストール
@@ -507,6 +540,8 @@ sudo apt install gdb -y
 ArduPilotのソースコードを開きます。メニュー `ファイル` → `フォルダーを開く…` → `/home/ardupilot/ardupilot`と入力 を選択してください。  
 任意のcppファイルを開いている状態で、メニュー `実行` → `構成の追加…` を選択してください。  
 ![Alt text](media/fc-debug-setup-010.jpg)  
+
+<div style="page-break-before:always"></div>
 
 表示された `launch.json` の右下 `構成の追加` ボタンをクリックします。
 追加された構成を次のように修正して保存ください。 
@@ -535,11 +570,15 @@ ArduPilotのソースコードを開きます。メニュー `ファイル` → 
     ] 
 ```
 
+<div style="page-break-before:always"></div>
+
 ## 10.3. ブレークポイントを置く
 一般的なデバッグ手法のやり方として、任意の処理行で一時停止するためのブレークポイントを配置することができます。ブレークポイントは複数設定できます。
 
 ここでは例として、`ArduCopter/mode_stabilize.cpp` のソースコードファイルを開き、画像のように行番号の左側をクリックしてブレークポイントを配置してください。  
 ![Alt text](media/fc-debug-setup-020.jpg)  
+
+<div style="page-break-before:always"></div>
 
 ## 10.4. デバッグ実行
 Visual Studio Codeのターミナルから次のコマンドを1度だけ実行してください。
@@ -566,6 +605,8 @@ sim_vehicle.py -v Copter --console --map -D
 
 GDBを利用したデバッグについて知りたい場合は、下記を参照してください。  
 https://ardupilot.org/dev/docs/debugging-with-gdb-using-vscode.html
+
+<div style="page-break-before:always"></div>
 
 # 11. Appendix
 ## 11.1. Visual Studio Codeショートカットキー
