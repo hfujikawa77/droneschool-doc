@@ -72,7 +72,7 @@ Altitude Angelダイアログが表示されたら、`No`を押下します。�
 上部メニューの `シミュレーション` を押下して、シミュレーション画面に切り替えます。  
 ![Alt text](media/mp-setup-010.jpg)  
 
-ホームポジションを指定するため、Extra command line に `--home 35.879129,140.339683,7,0` （ドローンフィールドKawachiの場所） を入力して、画面下部の `Multirotor` のアイコン を押下します。   
+ホームポジションを指定するため、Extra command line に `--home 36.29356468607107,136.284925064536,0,0` （加賀市立三木小学校の場所） を入力して、画面下部の `Multirotor` のアイコン を押下します。   
 ![Alt text](media/mp-setup-020.jpg)  
 
 Select your versionダイアログが表示されたら、`Stable` を押下します。  
