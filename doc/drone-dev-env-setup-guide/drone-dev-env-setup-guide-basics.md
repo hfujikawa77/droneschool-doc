@@ -1,5 +1,5 @@
 <div align="center">
-<h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
+<h3>ドローンエンジニア会議 2023 in KAGA エンジニア養成講座</h3>
 <h2>開発環境構築手順書</h2><br>
 (Windows10/11 + WSL1(Ubuntu20.04) + Visual Studio Code)<br/>
 Ver.1.4.2 - 2023.7.11
@@ -31,29 +31,16 @@ Table of Contents
   - [5.1. 拡張機能のインストール](#51-拡張機能のインストール)
   - [5.2. 日本語表示の有効化](#52-日本語表示の有効化)
   - [5.3. WSLとの接続](#53-wslとの接続)
-- [6. ArduPilotビルド環境セットアップ](#6-ardupilotビルド環境セットアップ)
-  - [6.1. ArduPilotソースコードをクローン](#61-ardupilotソースコードをクローン)
-  - [6.2. セットアップスクリプトで環境をインストール](#62-セットアップスクリプトで環境をインストール)
-- [7. WSL（Ubuntu20）へ拡張機能のインストール](#7-wslubuntu20へ拡張機能のインストール)
-- [8. シミュレータ（SITL）用セットアップ](#8-シミュレータsitl用セットアップ)
-  - [8.1. GUI表示のためのセットアップ](#81-gui表示のためのセットアップ)
-  - [8.2. シミュレータ動作確認](#82-シミュレータ動作確認)
-- [9. シミュレータ（Gazebo）用セットアップ（任意）](#9-シミュレータgazebo用セットアップ任意)
-  - [9.1. Gazeboのインストール](#91-gazeboのインストール)
-  - [9.2. プラグインのインストール](#92-プラグインのインストール)
-  - [9.3. シミュレータの起動](#93-シミュレータの起動)
-- [10. 【Applicationコース向け】DroneKit Python, pymavlinkセットアップ](#10-applicationコース向けdronekit-python-pymavlinkセットアップ)
-  - [10.1. DroneKit Python最新のソースコードからインストール](#101-dronekit-python最新のソースコードからインストール)
-  - [10.2. pymavlinkソースコードの取得](#102-pymavlinkソースコードの取得)
-  - [10.3. 自動補完セットアップ](#103-自動補完セットアップ)
-  - [10.4. 動作確認](#104-動作確認)
-- [11. 【FlightCodeコース向け】デバッグ環境セットアップ](#11-flightcodeコース向けデバッグ環境セットアップ)
-  - [11.1. 必要なパッケージインストール](#111-必要なパッケージインストール)
-  - [11.2. デバッグ構成を追加](#112-デバッグ構成を追加)
-  - [11.3. ブレークポイントを置く](#113-ブレークポイントを置く)
-  - [11.4. デバッグ実行](#114-デバッグ実行)
-- [12. Appendix](#12-appendix)
-  - [12.1. Visual Studio Codeショートカットキー](#121-visual-studio-codeショートカットキー)
+- [6. WSL（Ubuntu20）へ拡張機能のインストール](#6-wslubuntu20へ拡張機能のインストール)
+- [7. DroneKit Python セットアップ](#7-dronekit-python-セットアップ)
+  - [7.1. pipのインストール](#71-pipのインストール)
+  - [7.2. DroneKit Python最新のソースコードからインストール](#72-dronekit-python最新のソースコードからインストール)
+  - [7.3. 自動補完セットアップ](#73-自動補完セットアップ)
+  - [7.4. 自動補完の動作確認](#74-自動補完の動作確認)
+  - [7.5. Pythonスクリプト実行の動作確認](#75-pythonスクリプト実行の動作確認)
+  - [7.6. DroneKit Pythonの動作確認](#76-dronekit-pythonの動作確認)
+- [8. Appendix](#8-appendix)
+  - [8.1. Visual Studio Codeショートカットキー](#81-visual-studio-codeショートカットキー)
 
 <!-- /code_chunk_output -->
 
@@ -298,45 +285,7 @@ Visual Studio Codeを再起動を促されるので再起動します。起動�
 
 <div style="page-break-before:always"></div>
 
-# 6. ArduPilotビルド環境セットアップ
-【注意】すでにビルド環境がセットアップ済みの場合スキップしてください。  
-## 6.1. ArduPilotソースコードをクローン
-Ubuntu20.04を起動します。
-コース毎にクローンするURLを確認します。
-
-【Applicationコース向け】本家リポジトリURL  
-  https://github.com/ArduPilot/ardupilot.git
-
-【FlightCodeコース向け】Githubアカウントを作成し、本家ardupilotリポジトリをフォークしてから、自分のアカウントのardupilotリポジトリをクローンするのがよいです。その場合のURLは、  
-  https://github.com/[自分のGithubアカウント名]/ardupilot.git  
-になるはずです。
-
-次のようなコマンドを入力してクローンを実行します。  
-※ここでは、Applicationコース向けの本家リポジトリURLを使い、クローン先はhomeディレクトリ `/home/ardupilot` としています。
-```bash
-cd
-```
-```bash
-git clone https://github.com/ArduPilot/ardupilot.git
-```
-![Alt text](media/ardupilot-setup-010.jpg)  
-クローンが完了したら次の環境セットアップスクリプトを実行します。  
-
-<div style="page-break-before:always"></div>
-
-## 6.2. セットアップスクリプトで環境をインストール
-Ubuntu端末に次のコマンドを順番に実行してビルド環境をインストール＆セットアップしていきます。  
-```bash
-cd ardupilot
-```
-```bash
-./Tools/environment_install/install-prereqs-ubuntu.sh -y
-```
-何度かパスワードを要求されるので都度入力します。結構処理に時間がかかるので待ちます。  
-
-<div style="page-break-before:always"></div>
-
-# 7. WSL（Ubuntu20）へ拡張機能のインストール
+# 6. WSL（Ubuntu20）へ拡張機能のインストール
 Visual Studio Codeを起動し、WSL（Ubuntu-20.04）に接続します。  
 メニューを `ファイル` -> `フォルダーを開く` の順に選択し、前項でダウンロードしたardupilotディレクトリ（パス：`/home/ardupilot/ardupilot`）を開きます。  
 ![Alt text](media/vsc-ext-install-010.jpg)  
@@ -357,201 +306,32 @@ Visual Studio Codeを起動し、WSL（Ubuntu-20.04）に接続します。
 
 <div style="page-break-before:always"></div>
 
-# 8. シミュレータ（SITL）用セットアップ
-## 8.1. GUI表示のためのセットアップ
-【注意】すでにセットアップ済みの場合はスキップしてください。
+# 7. DroneKit Python セットアップ
+Ubuntu20.04、Visual Studio Codeを全部終了してください。次にVisual Studio Codeを起動しWSLに接続します。  
+メニュー `ターミナル` → `新しいターミナル` を選択します。
 
-下記URLから必要なアプリをダウンロードします。  
-https://sourceforge.net/projects/vcxsrv/
+## 7.1. pipのインストール
+【注意】インストール済みの場合はスキップしてください。  
 
-`Download` ボタンを押下し `VcXsrv Windows X Server` をダウンロードしてからインストールします。
-インストールは、`Next` -> `Install` -> `インストール処理` -> `Close` と選択していけばできます。
-
-インストール完了後、スタートボタンで `XLaunch`  と検索しXLaunchアプリを起動します。  
-![Alt text](media/SITL-setup-010.jpg)  
-
-デフォルトのままで「次へ」を選択してください。  
-![Alt text](media/SITL-setup-020.jpg)  
-
-`Disable access control` にチェックを忘れないようにします。  
-![Alt text](media/SITL-setup-030.jpg)  
-
-自動起動設定のために `Save configuration` を選択し設定ファイルを一旦任意の場所に保存してください。`完了` を選択してください。  
-![Alt text](media/SITL-setup-040.jpg)  
-
-セキュリティダイアログが表示されたら、パブリックネットワークも必ずチェックしてから `アクセスを許可する` を選択してください。  
-![Alt text](media/SITL-setup-050.jpg)  
-
-キーボードのWinキー＋rを押して `ファイル名を指定して実行` ウィンドウを開き、次の文字列を入力して `OK` を選択してください。
-```
-shell:startup
-```
-
-前のステップで保存したXLaunchの設定ファイルを開いたフォルダに移動します。  
-![Alt text](media/SITL-setup-060.jpg)  
-
-次に、Ubuntu20.04 を起動して、次のコマンドを実行してから閉じてください。
-```bash
-echo "export DISPLAY=localhost:0.0" >> ~/.bashrc
-```
-
-<div style="page-break-before:always"></div>
-
-コマンド実行後、次のコマンドでファイルに正しく書き込まれていることを確認します。
-```bash
-cat ~/.bashrc
-```
-
-下記のような設定が2行追加されていることを確認します。追加されていない場合は手動で修正してください。
-```bash
-source /mnt/c/dev/drone-dev/ardupilot/Tools/completion/completion.bash
-export DISPLAY=localhost:0.0
-```
-
-## 8.2. シミュレータ動作確認
-Ubuntu端末を閉じ、PCを再起動してください。
-再起動後、タスクトレイに画像のようなアイコンが表示されていることを確認してください。  
-![Alt text](media/SITL-setup-070.jpg)  
-
-Ubuntu20.04を起動して次のコマンドを実行してください。
-```bash
-sim_vehicle.py -v Copter --map --console -L Kawachi
-```
-
-セキュリティ警告が表示されたら「アクセスを許可する」を選択してください。  
-![Alt text](media/SITL-setup-080.jpg)
-
-画像のような表示になれば正しく動作している状態です。  
-![Alt text](media/SITL-setup-090.jpg)  
-
-シミュレータが起動している状態でMission Plannerを起動すると自動的にUDPでシミュレータに接続します。  
-![Alt text](media/SITL-setup-100.jpg)  
-
-<div style="page-break-before:always"></div>
-
-# 9. シミュレータ（Gazebo）用セットアップ（任意）
-【注意】スペックが低いマシンの場合はGazeboの表示品質が悪くなります。WSL1はGPU非対応のため、GPU有無は表示品質には影響しません。  
-【注意】環境によってトラブルが多いため任意のセットアップです。
-## 9.1. Gazeboのインストール
-Ubuntu20.04 を起動して、下記コマンドを実行してパッケージを更新してください。パスワードを聞かれたら前の手順で設定したパスワードを入力してください。  
-```bash
-sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" → /etc/apt/sources.list.d/gazebo-stable.list'
-```
-```bash
-wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
-```
+ターミナルタブに次のコマンドを順番に実行してください。パスワードや続行可否を聞かれるので、都度入力してください。  
 ```bash
 sudo apt update
 ```
-
-下記コマンドを実行してGazeboをインストールしてください。
 ```bash
-sudo apt install gazebo9 libgazebo9-dev
-```
-
-<div style="page-break-before:always"></div>
-
-下記コマンドを実行してGazeboが起動することを確認してください。  
-Windows Defender ファイアウォールの確認ダイアログが表示されたら `アクセスを許可する` を選択してください。
-```bash
-gazebo --verbose
-```
-![Alt text](media/gazebo-setup-010.jpg)
-
-起動が確認できたら、 `Ctrl + c` でGazeboを終了します。
-
-## 9.2. プラグインのインストール
-Ubuntu20.04 に下記コマンドを実行してプラグインのソースコード取得とビルドを行ってください。
-```bash
-sudo apt install -y cmake
+sudo apt install python3-pip
 ```
 ```bash
-git clone https://github.com/khancyr/ardupilot_gazebo
+pip -V
 ```
+下記のように表示されたら正常にインストールされています。  
 ```bash
-cd ardupilot_gazebo
-```
-```bash
-mkdir build
-```
-```bash
-cd build
-```
-```bash
-cmake ..
-```
-```bash
-make -j4
-```
-```bash
-sudo make install
+pip 22.0.2 from /usr/lib/python3/dist-packages/pip (python 3.10)
 ```
 
-下記エラーが発生する場合があります。解決策を参考にしてエラーを解消してください。
+## 7.2. DroneKit Python最新のソースコードからインストール
+<!-- Ubuntu20.04、Visual Studio Codeを全部終了してください。次にVisual Studio Codeを起動しWSLに接続します。
 
-エラー内容：
-```bash
-gzclient: error while loading shared libraries: libQt5Core.so.5: cannot open shared object file: No such file or directory
-```
-解決策コマンド：
-```bash
-sudo strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5
-```
-参考URL： https://usagi.hatenablog.jp/entry/2019/12/26/181101  
-
-エラー内容：
-```bash
-libGL error: No matching fbConfigs or visuals found
-libGL error: failed to load driver: swrast
-```
-解決策コマンド：
-```bash
-echo "export LIBGL_ALWAYS_INDIRECT=1" >> ~/.bashrc
-```
-参考URL： https://volvox.hateblo.jp/entry/2019/01/06/205054 
-
-## 9.3. シミュレータの起動
-別のUbuntuウィンドウを開いて下記コマンドを実行してSITLを起動してください。
-```bash
-sim_vehicle.py -f gazebo-iris -v Copter --console –map -L Kawachi
-```
-
-<div style="page-break-before:always"></div>
-
-下記コマンドを実行してGazeboを起動してください。`ardupilot_gazebo` は前の手順で作業したディレクトリです。
-```bash
-cd ardupilot_gazebo
-```
-```bash
-gazebo --verbose worlds/iris_arducopter_runway.world
-```
-
-
-SITLを起動したウィンドウで下記コマンドを実行してください。
-```bash
-mode guided
-rc 3 1000
-arm throttle
-takeoff 10
-```
-
-SITLと同期してGazebo上の機体が離陸することが確認できます。
-![Alt text](media/gazebo-setup-020.jpg)
-
-次のページ以降は、コースによって必要なところだけセットアップしてください。  
-
-
-* [【Applicationコース向け】DroneKit Python, pymavlinkセットアップ](#9-applicationコース向けdronekit-python-pymavlinkセットアップ)  
-* [【FlightCodeコース向け】デバッグ環境セットアップ](#10-flightcodeコース向けデバッグ環境セットアップ)
-
-<div style="page-break-before:always"></div>
-
-# 10. 【Applicationコース向け】DroneKit Python, pymavlinkセットアップ
-【注意】セットアップ済みの場合はスキップしてください。
-## 10.1. DroneKit Python最新のソースコードからインストール
-シミュレータ、Ubuntu20.04、Visual Studio Codeを全部終了してください。次にVisual Studio Codeを起動しWSLに接続します。
-
-メニュー `ターミナル` → `新しいターミナル` を選択します。
+メニュー `ターミナル` → `新しいターミナル` を選択します。 -->
 ターミナルタブに次のコマンドを順番に実行してください。
 ```bash
 cd
@@ -578,135 +358,75 @@ Installing collected packages: dronekit
 Successfully installed dronekit-2.9.2
 ```
 
-<div style="page-break-before:always"></div>
-
-## 10.2. pymavlinkソースコードの取得
-自動補完用にpymavlinkのソースコードを取得します。ターミナルタブに次のコマンドを入力して実行してください。
-```bash
-cd
-```
-```bash
-git clone https://github.com/ArduPilot/pymavlink
-```
-次のステップに進んで、自動補完のセットアップをしてください。
-
-## 10.3. 自動補完セットアップ
+## 7.3. 自動補完セットアップ
 メニュー `ファイル` → `ユーザ設定` → `設定` の順に選択します。下記画面右上の設定ファイルアイコンをクリックします。  
 ![Alt text](media/dev-app-setup-010.jpg)  
 
-<div style="page-break-before:always"></div>
-
 下記の設定を追加します。既存の設定がすでにある場合はご自身の環境に合わせて設定してください。  
-※ DroneKit Python, pymavlink のクローン先が `/home/ardupilot` の場合です。異なる場合は適宜修正してください。
+※ DroneKit Python のクローン先が `/home/ardupilot` の場合です。異なる場合は適宜修正してください。
 ```json
 {
     "python.autoComplete.extraPaths": [
-        "/home/ardupilot/pymavlink",
         "/home/ardupilot/dronekit-python"
     ],
     "python.analysis.extraPaths": [
-        "/home/ardupilot/pymavlink",
         "/home/ardupilot/dronekit-python"
     ],
     ～省略～
 }
 ```
 
-## 10.4. 動作確認
+## 7.4. 自動補完の動作確認
 自動補完の動作確認をするために `ファイル` → `新規ファイル` を選択してください。  
 ![Alt text](media/dev-app-setup-020.jpg)  
 
 次に、新規ファイルウィンドウ部分にフォーカスし `Ctrl + s` で保存メニューを表示してください。`/home/ardupilot/test.py` となるように保存します。   
 ![Alt text](media/dev-app-setup-030.jpg)  
 
-画像のようにソースコードを入力した際に補完候補が表示されるようになっていればセットアップ完了です。  
-* DroneKit Python  
- ![Alt text](media/dev-app-setup-040.jpg)  
+画像のようにソースコードを入力後に `Ctrl + space`を押下して補完候補が表示されていればセットアップ完了です。  
+![Alt text](media/dev-app-setup-040.jpg)  
 
-* pymavlink  
-![Alt text](media/dev-app-setup-050.jpg)  
+## 7.5. Pythonスクリプト実行の動作確認
+`test.py` を開いて 下記のように編集・保存して、右上の`▷`ボタンを押下します。  
+![Alt text](media/dev-app-setup-060.jpg)  
+
+下記ダイアログが表示された場合、`Python インタープリターの選択` を押下します。  
+![Alt text](media/dev-app-setup-070.jpg)  
 
 <div style="page-break-before:always"></div>
 
-# 11. 【FlightCodeコース向け】デバッグ環境セットアップ
-【注意】セットアップ済みの場合はスキップしてください。
-## 11.1. 必要なパッケージインストール
-Ubuntu20.04を起動し次のコマンドを実行してください。  
+ターミナルで `which python3` コマンドを実行して表示される場所（下記画面では`/usr/bin/python3`）を選択します。  
+![Alt text](media/dev-app-setup-080.jpg)  
+
+再度、`test.py` を開いて 右上の`▷`ボタンを押下します。ターミナルに下記のように表示されることを確認します。  
 ```bash
-sudo apt install gdb -y
+hello dronekit!
 ```
-## 11.2. デバッグ構成を追加
-ArduPilotのソースコードを開きます。メニュー `ファイル` → `フォルダーを開く…` → `/home/ardupilot/ardupilot`と入力 を選択してください。  
-任意のcppファイルを開いている状態で、メニュー `実行` → `構成の追加…` を選択してください。  
-![Alt text](media/fc-debug-setup-010.jpg)  
+
+## 7.6. DroneKit Pythonの動作確認
+[シミュレータ（Mission Planner）の起動](#22-シミュレータmission-plannerの起動) の手順を参考にして、シミュレータを起動してMission Plannerから接続します。  
+
+`test.py` を開いて 下記のように編集・保存して、右上の`▷`ボタンを押下します。  
+```python
+from dronekit import connect
+
+# 機体に接続
+vehicle = connect('tcp:127.0.0.1:5762')
+
+# GUIDEDモード変更
+vehicle.wait_for_mode("GUIDED")
+
+# アーム
+vehicle.arm()
+```  
 
 <div style="page-break-before:always"></div>
 
-表示された `launch.json` の右下 `構成の追加` ボタンをクリックします。
-追加された構成を次のように修正して保存ください。 
-```json
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "(gdb) ArduCopter",
-            "type": "cppdbg",
-            "request": "attach",
-            "program": "${workspaceFolder}/build/sitl/bin/arducopter",
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "gdb の再フォーマットを有効にする",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                },
-                {
-                    "description": "逆アセンブリ　フレーバーを Intel に設定",
-                    "text": "-gdb-set disassembly-flavor intel",
-                    "ignoreFailures": true
-                }
-            ]
-        }
-    ] 
-```
+スクリプトが正常終了し、Mission PlannerのHUDにアーム状態:`ARMED`, モード:`Guided` が表示されることを確認します。  
+![Alt text](media/dev-app-setup-090.jpg)  
 
 <div style="page-break-before:always"></div>
 
-## 11.3. ブレークポイントを置く
-一般的なデバッグ手法のやり方として、任意の処理行で一時停止するためのブレークポイントを配置することができます。ブレークポイントは複数設定できます。
-
-ここでは例として、`ArduCopter/mode_stabilize.cpp` のソースコードファイルを開き、画像のように行番号の左側をクリックしてブレークポイントを配置してください。  
-![Alt text](media/fc-debug-setup-020.jpg)  
-
-<div style="page-break-before:always"></div>
-
-## 11.4. デバッグ実行
-Visual Studio Codeのターミナルから次のコマンドを1度だけ実行してください。
-デバッグのたびに実行する必要はありません。ただし、再起動時は再度実行する必要があります。  
-```bash
-echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
-```
-
-次にシミュレータを次のコマンドで起動します。  
-```bash
-sim_vehicle.py -v Copter --console --map -D -L Kawachi
-```
-![Alt text](media/fc-debug-setup-030.jpg)  
-![Alt text](media/fc-debug-setup-040.jpg)  
-
-メニュー `実行` → `デバッグの開始` を選択してください。  
-![Alt text](media/fc-debug-setup-050.jpg)  
-
-`arducopter` プロセスを選択してください。  
-![Alt text](media/fc-debug-setup-060.jpg)  
-
-プロセスにアタッチされ、デバッグアイコンメニュー画面は画像のような表示になります。
-![Alt text](media/fc-debug-setup-070.jpg)  
-
-GDBを利用したデバッグについて知りたい場合は、下記を参照してください。  
-https://ardupilot.org/dev/docs/debugging-with-gdb-using-vscode.html
-
-<div style="page-break-before:always"></div>
-
-# 12. Appendix
-## 12.1. Visual Studio Codeショートカットキー
+# 8. Appendix
+## 8.1. Visual Studio Codeショートカットキー
 英語：https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf
