@@ -300,7 +300,7 @@ Visual Studio Codeを起動し、WSL（Ubuntu-20.04）に接続します。
 初回は信頼ダイアログが表示されるので `はい、作成者を信頼します` を選択します。  
 ![Alt text](media/ardupilot-setup-020.jpg)
 
-[Visual Studio CodeとWSLの連携](#4-visual-studio-codeとwslの連携) の手順を参考にして下記の拡張機能をインストールします。
+[Visual Studio CodeとWSLの連携](#5-visual-studio-codeとwslの連携) の手順を参考にして下記の拡張機能をインストールします。
 
 |Extentions|検索ワード|japanese|
 |----|----|----|
