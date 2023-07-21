@@ -39,8 +39,15 @@ Table of Contents
   - [7.4. 自動補完の動作確認](#74-自動補完の動作確認)
   - [7.5. Pythonスクリプト実行の動作確認](#75-pythonスクリプト実行の動作確認)
   - [7.6. DroneKit Pythonの動作確認](#76-dronekit-pythonの動作確認)
-- [8. Appendix](#8-appendix)
-  - [8.1. Visual Studio Codeショートカットキー](#81-visual-studio-codeショートカットキー)
+- [8. Luaスクリプトのセットアップ](#8-luaスクリプトのセットアップ)
+  - [8.1. Luaスクリプトの有効化](#81-luaスクリプトの有効化)
+  - [8.2. Luaスクリプトの作成と機体へのアップロード](#82-luaスクリプトの作成と機体へのアップロード)
+  - [8.3. Luaスクリプトの動作確認](#83-luaスクリプトの動作確認)
+- [9. Appendix](#9-appendix)
+  - [9.1. Mission Planner](#91-mission-planner)
+  - [9.2. Visual Studio Code](#92-visual-studio-code)
+  - [9.3. DroneKit Python](#93-dronekit-python)
+  - [9.4. Lua Scripts](#94-lua-scripts)
 
 <!-- /code_chunk_output -->
 
@@ -406,7 +413,7 @@ hello dronekit!
 ## 7.6. DroneKit Pythonの動作確認
 [シミュレータ（Mission Planner）の起動](#22-シミュレータmission-plannerの起動) の手順を参考にして、シミュレータを起動してMission Plannerから接続します。  
 
-`test.py` を開いて 下記のように編集・保存して、右上の`▷`ボタンを押下します。  
+`test.py` を開いて、下記のように編集・保存して、右上の`▷`ボタンを押下します。  
 ```python
 from dronekit import connect
 
@@ -427,6 +434,52 @@ vehicle.arm()
 
 <div style="page-break-before:always"></div>
 
-# 8. Appendix
-## 8.1. Visual Studio Codeショートカットキー
-英語：https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf
+# 8. Luaスクリプトのセットアップ
+[シミュレータ（Mission Planner）の起動](#22-シミュレータmission-plannerの起動) の手順を参考にして、シミュレータを起動してMission Plannerから接続します。  
+
+## 8.1. Luaスクリプトの有効化
+Mission Planner の上部メニュー `設定/調整` → `フルパラメータリスト` を開きます。下記の通り該当パラメータの値を変更して、`パラメータ書込` ボタンを押下します。  
+|コマンド|値|
+|---|---|
+|SCR_ENABLE|1|
+
+## 8.2. Luaスクリプトの作成と機体へのアップロード
+Windows上で任意のエディタ（自動補完が効くVisual Studio Code推奨）を開いて、下記内容を入力して、ファイル名 `hello_world.lua` として保存します。
+```lua
+function update()
+    gcs:send_text(0, "hello, world") 
+    return update, 5000
+end
+
+return update()
+```
+
+Mission Planner 上部メニュー `設定/調整` → `MAVFtp` を開きます。`/scripts` フォルダを作成し、`hello_world.lua` をアップロードします。フォルダ作成、ファイルアップロードは右クリックで行います。  
+![Alt text](media/lua-setup-010.jpg)  
+
+<div style="page-break-before:always"></div>
+
+## 8.3. Luaスクリプトの動作確認
+上部メニュー `フライト・データ` → アクションタブを開きます。リストボックスから`Preflight_Reboot_Shutdown` を選択して、`アクション実行`ボタンを押下して、機体を再起動します。  
+![Alt text](media/lua-setup-020.jpg)  
+
+`接続`ボタンを押下して、機体に再接続します。
+HUDウィンドウ、メッセージタブに `hello, world` が表示されていれば、スクリプトが正常に動作している状態です。  
+![Alt text](media/lua-setup-030.jpg)  
+
+スクリプトを停止するには、上部メニュー `設定/調整` → `MAVFtp` を開いて、`/scripts/hello_world.lua` を削除して、機体を再起動します。
+
+<div style="page-break-before:always"></div>
+
+# 9. Appendix
+## 9.1. Mission Planner
+* ArduPilot Wiki：[https://ardupilot.org/planner/](https://ardupilot.org/planner/)
+## 9.2. Visual Studio Code
+* Keyboard shortcuts：[https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf)
+## 9.3. DroneKit Python
+* Document：[https://dronekit-python.readthedocs.io/en/latest/](https://dronekit-python.readthedocs.io/en/latest/)
+* Examples：[https://github.com/dronekit/dronekit-python/tree/master/examples](https://github.com/dronekit/dronekit-python/tree/master/examples)
+
+## 9.4. Lua Scripts
+* ArduPilot Wiki：[https://ardupilot.org/copter/docs/common-lua-scripts.html](https://ardupilot.org/copter/docs/common-lua-scripts.html)
+* Examples : [https://github.com/ArduPilot/ardupilot/tree/master/libraries/AP_Scripting/examples](https://github.com/ArduPilot/ardupilot/tree/master/libraries/AP_Scripting/examples)
