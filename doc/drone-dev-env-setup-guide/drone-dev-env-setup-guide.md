@@ -44,7 +44,7 @@ Table of Contents
   - [9.3. シミュレータの起動](#93-シミュレータの起動)
 - [10. 【Applicationコース向け】DroneKit Python, pymavlinkセットアップ](#10-applicationコース向けdronekit-python-pymavlinkセットアップ)
   - [10.1. DroneKit Python最新のソースコードからインストール](#101-dronekit-python最新のソースコードからインストール)
-  - [10.2. pymavlinkソースコードの取得](#102-pymavlinkソースコードの取得)
+  - [10.2. pymavlink最新のソースコードからインストール](#102-pymavlink最新のソースコードからインストール)
   - [10.3. 自動補完セットアップ](#103-自動補完セットアップ)
   - [10.4. 動作確認](#104-動作確認)
 - [11. 【FlightCodeコース向け】デバッグ環境セットアップ](#11-flightcodeコース向けデバッグ環境セットアップ)
@@ -580,14 +580,33 @@ Successfully installed dronekit-2.9.2
 
 <div style="page-break-before:always"></div>
 
-## 10.2. pymavlinkソースコードの取得
-自動補完用にpymavlinkのソースコードを取得します。ターミナルタブに次のコマンドを入力して実行してください。
-```bash
-cd
-```
+## 10.2. pymavlink最新のソースコードからインストール
+ターミナルタブに次のコマンドを入力して実行してください。
 ```bash
 git clone https://github.com/ArduPilot/pymavlink
 ```
+```bash
+cd pymavlink
+```
+```bash
+git clone https://github.com/ArduPilot/mavlink.git
+```
+```bash
+pip3 install --user .
+```
+下記のような実行結果になれば正常にインストールが完了しています。  
+```bash
+  Installing build dependencies ... done
+～省略～
+Successfully built pymavlink
+Installing collected packages: pymavlink
+  Attempting uninstall: pymavlink
+    Found existing installation: pymavlink 2.4.37
+    Uninstalling pymavlink-2.4.37:
+      Successfully uninstalled pymavlink-2.4.37
+Successfully installed pymavlink-2.4.40
+```
+
 次のステップに進んで、自動補完のセットアップをしてください。
 
 ## 10.3. 自動補完セットアップ
