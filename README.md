@@ -1,5 +1,5 @@
-# droneschool-private
-ドローンエンジニア養成塾（プライベート）
+# droneschool-doc
+ドローンエンジニア養成塾（ドキュメント）
 
 ## 開発環境構築手順書
 [手順書](doc/drone-dev-env-setup-guide/)はMarkdownで書かれています。<br/>
