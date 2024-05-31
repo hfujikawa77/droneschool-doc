@@ -15,7 +15,8 @@ Table of Contents
 <!-- code_chunk_output -->
 
 - [1. はじめに](#1-はじめに)
-  - [1.1. 前提事項](#11-前提事項)
+  - [1.1. 実機導入の目的](#11-実機導入の目的)
+  - [1.2. 前提事項](#12-前提事項)
 - [2. ラズパイの初期セットアップ](#2-ラズパイの初期セットアップ)
   - [2.1. 事前準備](#21-事前準備)
   - [2.2. イメージのフラッシュ](#22-イメージのフラッシュ)
@@ -56,8 +57,14 @@ Table of Contents
 開発段階からコンパニオンコンピュータ実機を使用することで、アプリ開発⇔実機テストのサイクルがスムーズに行えるようになることが狙いです。  
 ![Alt text](media/cc-intro-010.jpg)  
 
-## 1.1. 前提事項
-Windows 10/11 PCにMission Planner、Visual Studio Code がインストールされ、セットアップ済みであること。
+## 1.1. 実機導入の目的
+実機を導入することで座学習の理解をより一層深めることを第一の目的としています。  
+- それぞれの技術要素、ソフト、ツールが実機のどこで利用されるのか。
+- 実機ならではの問題に遭遇し、それの対処法を考える。
+- 卒業後でも継続して開発または活用できる。
+
+## 1.2. 前提事項
+アプリケーションコース向けの開発環境構築手順書に則ってセットアップが完了している前提とします。Windows 10/11のPCにMission PlannerとVS Codeがインストールされていることを確認してください。
 
 <div style="page-break-before:always"></div>  
 
@@ -81,17 +88,27 @@ Windows 10/11 PCにMission Planner、Visual Studio Code がインストールさ
 ## 2.2. イメージのフラッシュ
 
 下記Webサイトを開いて、Rpanion-Serverのイメージをダウンロードします。  
-[https://www.docs.rpanion.com/software/rpanion-server](https://www.docs.rpanion.com/software/rpanion-server)  
+[https://www.docs.rpanion.com/software/rpanion-server](https://www.docs.rpanion.com/software/rpanion-server#disk_images)  
 ※ 2024年5月時点の最新版 0.10 が対象
 
 Blena Etcherを入手して、SDカードにRpanion-Serverのイメージをフラッシュします。  
-[https://etcher.balena.io/](https://etcher.balena.io/)
+[https://etcher.balena.io/](https://etcher.balena.io/)  
+使い方はとてもシンプルです。  
+1. SDカードをPCに挿します。（SDカードスロットがないPCはカードリーダーを使う）
+1. Balena Etcherを起動します。
+1. 左側のボタンでダウンロードしたイメージファイルを選択します。
+1. 真ん中のボタンでSDカードドライブを選択します。（くれぐれもPCのメインドライブを選択しないように!!!）
+1. 右側のボタンでフラッシュを開始します。
 
 ## 2.3. 起動確認
-ラズパイにSDカードを挿して、USBから電源供給してラズパイを起動します。
+ラズパイにSDカードを挿して、外側のマイクロUSBから電源供給してラズパイを起動します。  
 
+30秒程度するとラズパイのWi-Fiアクセスポイントが起動しますので、
 PCからラズパイのアクセスポイントにWiFi接続できることを確認します。  
-※SSID, Password は[Rpanion-Server Web画面](http://10.0.2.100:3000/network)から変更可能です。
+
+【注意】  
+<span style="color:red;">養成塾参加中はアクセスポイントの設定は変更しないでください。</span>  
+※卒業後、SSID, Password は[Rpanion-Server Web画面](http://10.0.2.100:3000/network)から変更することができます。
 <table>
 <tr>
 <th>SSID</th>
@@ -101,9 +118,10 @@ PCからラズパイのアクセスポイントにWiFi接続できることを�
 <th>Password</th>
 <td>rpanion123</td>
 </tr>
-</table>  
-
-PCからTeratermなどSSHクライアントを起動してラズパイにSSH接続できることを確認します。	
+</table>
+<br/><br/>
+PCからラズパイにSSH接続できることを確認します。<br/>
+<br/>
 <table>
 <tr>
 <th>Host</th>
@@ -118,6 +136,18 @@ PCからTeratermなどSSHクライアントを起動してラズパイにSSH接�
 <td>raspberry</td>
 </tr>
 </table>
+<br/>
+rpanionというWi-Fiに接続している状態で、コマンドプロンプトを起動して次のコマンドを実行します。
+
+```
+ssh pi@10.0.2.100 [エンターキー]
+```
+
+初めての接続時は質問が表示されるので「**yes**」と回答します。パスワードは入力しても表示されないですが入力できています。入力ミスをした場合はバックスペースキーで削除できます。<br/>
+次の画像を参考にしてください。
+
+![alt コマンドプロンプトでssh接続例](media/rpanion-ssh.png)
+
 
 <div style="page-break-before:always"></div> 
 
@@ -151,7 +181,12 @@ SSHホストに`10.0.2.100` `pi` が追加されていることを確認しま�
 ![alt text](media/vsc-rpi-link-041.jpg)
 
 パスワードを聞かれるので、 `raspberry` を入力します。  
-※ 作業中にパスワードを聞かれることがあるので、同様に対応してください。  
+<br/>
+初回接続時は、VS Code接続のためのツールがラズパイにインストールます。
+
+![alt VSCode server install](media/vscode-server-install.png)
+
+作業中にパスワードを聞かれることがある場合、同様に `raspberry` を入力してください。  
 ![alt text](media/vsc-rpi-link-050.jpg)
 
 画面左下に `SSH: 10.0.2.100` と表示され、接続状態になっていることを確認します。  
@@ -180,10 +215,10 @@ Select your versionダイアログが表示されたら、`Stable` を押下し�
 <div style="page-break-before:always"></div>  
 
 ## 4.2. ラズパイへのテレメトリ転送
-シミュレータが起動している状態で、Mission Planner上で`Ctrl + F`をクリックし、 `MAVLink` ボタンをクリックします。  
+シミュレータが起動している状態で、Mission Planner上で`Ctrl + f`をクリックし、 `MAVLink` ボタンをクリックします。  
 ![alt text](media/mp-tele-out-010.jpg)
 
-ダイアログのリストボックスから `UDP Client`、`4800`を選択し、`アクセス、書込み`チェックボックスにチェックを付けて `接続`をクリックします。   
+ダイアログのリストボックスから `UDP Client`を選択し、`4800`はそのまま、`アクセス、書込み`チェックボックスにチェックを付けて `接続`をクリックします。   
 ![alt text](media/mp-tele-out-020.jpg)
 
 remote host `10.0.2.100`、remote Port `14550` をそれぞれ入力して `OK` をクリックします。  
@@ -203,7 +238,7 @@ UDP Server 欄の Enable UDP Server がチェック済、UDP Server Port が `14
 ![alt text](media/rpi-tele-routing-010.jpg)
 ![alt text](media/rpi-tele-routing-020.jpg)
 
-Status 欄の Connection Status: `Connected` となり、機体情報が表示されていることを確認します。
+Status 欄の Connection Status: `Connected` となり、機体情報が表示されていることを確認します。  
 ![alt text](media/rpi-tele-routing-030.jpg)
 
 <div style="page-break-before:always"></div>  
@@ -245,7 +280,7 @@ git clone https://github.com/ArduPilot/mavlink
 下記コマンドを実行して各開発ツールをインストールします。
 
 ```bash
-pip install mavproxy
+pip install --user mavproxy
 cd  /home/pi/GitHub/dronekit-python
 pip install --user .
 cd  /home/pi/GitHub/pymavlink
@@ -253,7 +288,7 @@ pip install --user .
 ```
 
 ## 6.2. VS Code拡張機能のインストール
-VS Codeの左側メニュー `拡張機能（ブロックのようなアイコン）`をクリックして拡張機能画面を開きます。  
+VS Codeをラズパイに接続している状態で、左側メニュー `拡張機能（ブロックのようなアイコン）`をクリックして拡張機能画面を開きます。  
 下記の拡張機能を検索してラズパイ上にインストールします。
 
 |Extentions|検索ワード|japanese|
@@ -350,6 +385,9 @@ VS Codeのエクスプローラーから `GitHub/droneschool/dronekit_scripts/01
 ## 8.1. Rpanion-Server
 1. Official Website：[https://www.docs.rpanion.com/software/rpanion-server](https://www.docs.rpanion.com/software/rpanion-server)
 2. GitHub：[https://github.com/stephendade/Rpanion-server](https://github.com/stephendade/Rpanion-server)
+3. Kawamura Custom Image
+   1. ラズパイに慣れている方向け、「microUSB 有線LAN 変換アダプター」が不要でiPhoneのテザリングに接続できる。
+   2. ダウンロード：[https://www.dropbox.com/scl/fi/b61taz2xoer14pydqgtzm/rpanion-for-drone-school-v1-20240519.img?rlkey=4h3jec3db3f7wcnylp8dtj9zg&st=68bsnihj&dl=0](https://www.dropbox.com/scl/fi/b61taz2xoer14pydqgtzm/rpanion-for-drone-school-v1-20240519.img?rlkey=4h3jec3db3f7wcnylp8dtj9zg&st=68bsnihj&dl=0)
 ## 8.2. Mission Planner
 1. ArduPilot Wiki：[https://ardupilot.org/planner/](https://ardupilot.org/planner/)
 ## 8.3. Visual Studio Code
