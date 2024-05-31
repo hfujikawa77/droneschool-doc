@@ -51,13 +51,13 @@ Table of Contents
 <div style="page-break-before:always"></div>
 
 # 1. はじめに
-本書は、ArduPilotドローンアプリケーションの開発・運用に使用できるコンパニオンコンピュータ環境を構築する手順書です。  
-コンパニオンコンピュータとしてRaspberry Pi Zero 2W（以下、ラズパイ）を、エディタ・IDEとしてVisual Studio Code（以下、VS Code）を使用します。  
-Rpanion-Serverは、ネットワーク、テレメトリ、ビデオストリーミング、機体設定、Web画面など、ドローンアプリケーションの開発・運用に必要な機能を提供するOSイメージです。
+本書はArduPilotドローンアプリケーション開発用コンパニオンコンピュータ環境を構築する手順書です。  
+コンパニオンコンピュータとしてRaspberry Pi Zero 2W（以下、ラズパイ）、OSイメージとしてRpanion-Server、エディタ・IDEとしてVisual Studio Code（以下、VS Code）を使用します。  
+開発段階からコンパニオンコンピュータ実機を使用することで、アプリ開発⇔実機テストのサイクルがスムーズに行えるようになることが狙いです。  
 ![Alt text](media/cc-intro-010.jpg)  
 
 ## 1.1. 前提事項
-Windows 10/11 PCにMission Planner、Visual Studio Code がインストールおよびセットアップ済みであること。
+Windows 10/11 PCにMission Planner、Visual Studio Code がインストールされ、セットアップ済みであること。
 
 <div style="page-break-before:always"></div>  
 
@@ -72,7 +72,11 @@ Windows 10/11 PCにMission Planner、Visual Studio Code がインストールお
 1. microUSB 有線LAN 変換アダプター
 1. LANケーブル
 
-ラズパイにmicroUSB⇔有線LAN 変換アダプターを装着し、ONU or モデム or ルーターに有線LAN接続して、WANにアクセスできるようにしておきます。
+ラズパイにmicroUSB 有線LAN 変換アダプターを装着し、ONU or モデム にLANケーブルで接続して、WANにアクセスできるようにしておきます。  
+※ アプリケーションコース講義ではラズパイとZoomに同時に接続する必要があるため、この構成で講義に参加してください。  
+![alt text](media/rpi-setup-010.jpg)
+
+<div style="page-break-before:always"></div>
 
 ## 2.2. イメージのフラッシュ
 
