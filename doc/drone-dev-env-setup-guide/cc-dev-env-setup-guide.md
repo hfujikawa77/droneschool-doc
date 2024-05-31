@@ -181,7 +181,12 @@ SSHホストに`10.0.2.100` `pi` が追加されていることを確認しま�
 ![alt text](media/vsc-rpi-link-041.jpg)
 
 パスワードを聞かれるので、 `raspberry` を入力します。  
-※ 作業中にパスワードを聞かれることがあるので、同様に対応してください。  
+<br/>
+初回接続時は、VS Code接続のためのツールがラズパイにインストールます。
+
+![alt VSCode server install](media/vscode-server-install.png)
+
+作業中にパスワードを聞かれることがある場合、同様に `raspberry` を入力してください。  
 ![alt text](media/vsc-rpi-link-050.jpg)
 
 画面左下に `SSH: 10.0.2.100` と表示され、接続状態になっていることを確認します。  
