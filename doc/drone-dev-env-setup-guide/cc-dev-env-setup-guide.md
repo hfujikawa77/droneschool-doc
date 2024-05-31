@@ -54,17 +54,19 @@ Table of Contents
 # 1. はじめに
 本書はArduPilotドローンアプリケーション開発用コンパニオンコンピュータ環境を構築する手順書です。  
 コンパニオンコンピュータとしてRaspberry Pi Zero 2W（以下、ラズパイ）、OSイメージとしてRpanion-Server、エディタ・IDEとしてVisual Studio Code（以下、VS Code）を使用します。  
-開発段階からコンパニオンコンピュータ実機を使用することで、アプリ開発⇔実機テストのサイクルがスムーズに行えるようになることが狙いです。  
+本書で構築する開発環境の構成は下記の図の通りです。  
 ![Alt text](media/cc-intro-010.jpg)  
 
 ## 1.1. 実機導入の目的
-実機を導入することで座学習の理解をより一層深めることを第一の目的としています。  
+コンパニオンコンピュータ実機を導入することで座学習の理解をより一層深めることを第一の目的としています。  
 - それぞれの技術要素、ソフト、ツールが実機のどこで利用されるのか。
 - 実機ならではの問題に遭遇し、それの対処法を考える。
-- 卒業後でも継続して開発または活用できる。
+- アプリ開発⇔実機テストのサイクルをスムーズに行える。
+- 卒業後でも継続して開発、運用のために活用できる。
 
 ## 1.2. 前提事項
-アプリケーションコース向けの開発環境構築手順書に則ってセットアップが完了している前提とします。Windows 10/11のPCにMission PlannerとVS Codeがインストールされていることを確認してください。
+デベロッパーコース向けの開発環境構築手順書（`drone-dev-setup-guide.pdf`）に則ってセットアップが完了している前提とします。  
+Windows 10/11のPCにMission PlannerとVS Codeがインストールされていることを確認してください。
 
 <div style="page-break-before:always"></div>  
 
@@ -104,11 +106,7 @@ Blena Etcherを入手して、SDカードにRpanion-Serverのイメージをフ�
 ラズパイにSDカードを挿して、外側のマイクロUSBから電源供給してラズパイを起動します。  
 
 30秒程度するとラズパイのWi-Fiアクセスポイントが起動しますので、
-PCからラズパイのアクセスポイントにWiFi接続できることを確認します。  
-
-【注意】  
-<span style="color:red;">養成塾参加中はアクセスポイントの設定は変更しないでください。</span>  
-※卒業後、SSID, Password は[Rpanion-Server Web画面](http://10.0.2.100:3000/network)から変更することができます。
+PCからラズパイのアクセスポイントにWiFi接続できることを確認します。<br/>
 <table>
 <tr>
 <th>SSID</th>
@@ -119,9 +117,9 @@ PCからラズパイのアクセスポイントにWiFi接続できることを�
 <td>rpanion123</td>
 </tr>
 </table>
+
 <br/><br/>
 PCからラズパイにSSH接続できることを確認します。<br/>
-<br/>
 <table>
 <tr>
 <th>Host</th>
@@ -137,17 +135,19 @@ PCからラズパイにSSH接続できることを確認します。<br/>
 </tr>
 </table>
 <br/>
-rpanionというWi-Fiに接続している状態で、コマンドプロンプトを起動して次のコマンドを実行します。
 
-```
+<div style="page-break-before:always"></div> 
+
+`rpanion`というWi-Fiに接続している状態で、コマンドプロンプトを起動して次のコマンドを実行します。
+
+```cmd
 ssh pi@10.0.2.100 [エンターキー]
 ```
 
-初めての接続時は質問が表示されるので「**yes**」と回答します。パスワードは入力しても表示されないですが入力できています。入力ミスをした場合はバックスペースキーで削除できます。<br/>
+初めての接続時は質問が表示されるので `yes` と回答します。パスワードは入力しても表示されないですが入力できています。入力ミスをした場合はバックスペースキーで削除できます。<br/>
 次の画像を参考にしてください。
 
 ![alt コマンドプロンプトでssh接続例](media/rpanion-ssh.png)
-
 
 <div style="page-break-before:always"></div> 
 
@@ -181,10 +181,9 @@ SSHホストに`10.0.2.100` `pi` が追加されていることを確認しま�
 ![alt text](media/vsc-rpi-link-041.jpg)
 
 パスワードを聞かれるので、 `raspberry` を入力します。  
-<br/>
-初回接続時は、VS Code接続のためのツールがラズパイにインストールます。
+初回接続時は、VS Code接続のためのツールがラズパイにインストールされます。  
+![alt text](media/vsc-rpi-link-042.jpg)
 
-![alt VSCode server install](media/vscode-server-install.png)
 
 作業中にパスワードを聞かれることがある場合、同様に `raspberry` を入力してください。  
 ![alt text](media/vsc-rpi-link-050.jpg)
@@ -385,9 +384,9 @@ VS Codeのエクスプローラーから `GitHub/droneschool/dronekit_scripts/01
 ## 8.1. Rpanion-Server
 1. Official Website：[https://www.docs.rpanion.com/software/rpanion-server](https://www.docs.rpanion.com/software/rpanion-server)
 2. GitHub：[https://github.com/stephendade/Rpanion-server](https://github.com/stephendade/Rpanion-server)
-3. Kawamura Custom Image
-   1. ラズパイに慣れている方向け、「microUSB 有線LAN 変換アダプター」が不要でiPhoneのテザリングに接続できる。
-   2. ダウンロード：[https://www.dropbox.com/scl/fi/b61taz2xoer14pydqgtzm/rpanion-for-drone-school-v1-20240519.img?rlkey=4h3jec3db3f7wcnylp8dtj9zg&st=68bsnihj&dl=0](https://www.dropbox.com/scl/fi/b61taz2xoer14pydqgtzm/rpanion-for-drone-school-v1-20240519.img?rlkey=4h3jec3db3f7wcnylp8dtj9zg&st=68bsnihj&dl=0)
+3. Kawamura Custom Image   
+   * ラズパイに慣れている方向け。「microUSB 有線LAN 変換アダプター」が不要でiPhoneのテザリングに接続できる。
+   * ダウンロード：[https://www.dropbox.com/scl/fi/b61taz2xoer14pydqgtzm/rpanion-for-drone-school-v1-20240519.img?rlkey=4h3jec3db3f7wcnylp8dtj9zg&st=68bsnihj&dl=0](https://www.dropbox.com/scl/fi/b61taz2xoer14pydqgtzm/rpanion-for-drone-school-v1-20240519.img?rlkey=4h3jec3db3f7wcnylp8dtj9zg&st=68bsnihj&dl=0)  
 ## 8.2. Mission Planner
 1. ArduPilot Wiki：[https://ardupilot.org/planner/](https://ardupilot.org/planner/)
 ## 8.3. Visual Studio Code
@@ -395,7 +394,10 @@ VS Codeのエクスプローラーから `GitHub/droneschool/dronekit_scripts/01
 ## 8.4. MAVLink-router
 1. GitHub：[https://github.com/mavlink-router/mavlink-router](https://github.com/mavlink-router/mavlink-router)
 ## 8.5. MAVProxy
+1. ArduPilot Wiki：[https://ardupilot.org/mavproxy/index.html](https://ardupilot.org/mavproxy/index.html)
 ## 8.6. Pymavlink
+1. GitHub：[https://github.com/ArduPilot/pymavlink](https://github.com/ArduPilot/pymavlink)
+2. Examples：[https://www.ardusub.com/developers/pymavlink.html](https://www.ardusub.com/developers/pymavlink.html)
 ## 8.7. DroneKit Python
 1. Document：[https://dronekit-python.readthedocs.io/en/latest/](https://dronekit-python.readthedocs.io/en/latest/)
 2. Examples：[https://github.com/dronekit/dronekit-python/tree/master/examples](https://github.com/dronekit/dronekit-python/tree/master/examples)
