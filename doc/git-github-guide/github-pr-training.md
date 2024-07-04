@@ -1,9 +1,9 @@
-## ドローンエンジニア養成塾 Pull Request 演習
+## ドローンエンジニア養成塾 ArduPilot Pull Request 演習
 ### 1. はじめに
    - 本演習の目的はArduPilotプロジェクトに貢献手段であるPull Requestの作成方法を学ぶことです。
    - 本演習は[ArduPilot WikiのGitチュートリアル](https://ardupilot.org/dev/docs/git-branch.html)をGitHub Webページ上の操作で完結するようにアレンジしたものです。実際の開発ではローカルにリポジトリをCloneして行います。  
    ![alt text](media/github-pr-training-009.jpg)
-   - GitHubアカウントを持ってない人は、[GitHubアカウント作成手順](https://docs.github.com/ja/get-started/start-your-journey/creating-an-account-on-github) を参照して、アカウントを作成してください。
+   - GitHubアカウントを持ってない人は、[アカウント作成手順](https://docs.github.com/ja/get-started/start-your-journey/creating-an-account-on-github) を参照して作成してください。
 
 ### 2. リポジトリのフォーク
    1. [ArduPilotリポジトリ](https://github.com/ardupilot/ardupilot)にアクセスします。
@@ -24,7 +24,7 @@
 ### 4. ファイル変更とコミット&プッシュ
    1. フォークしたリポジトリのメインページに戻り、ブランチ`ardupilot_git_tutorial` が選択されていることを確認します。
    2. `Tools/GIT_Test/GIT_Success.txt` ファイルを開きます。
-   3. キーボードの`.`をクリックします。VS Code Web版が起動することを確認します。
+   3. キーボードの`.`をクリックします。github.dev Web ベース エディターが起動することを確認します。
    4. ファイル`GIT_Success.txt`を開き、末尾に自分の名前（firstname lastname）を追加します。
    5. `Ctrl + S`をクリックして変更を保存します。  
    6. 画面左側メニューから`ソース管理`をクリックします。  
