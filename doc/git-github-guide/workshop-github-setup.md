@@ -29,7 +29,7 @@
      git remote -v    # upstream リモートリポジトリが追加されたことを確認
      ```
 
-1. **新しいブランチを作成し、チェックアウトする**:
+1. **ワークブランチを作成し、チェックアウトする**:
    - ブランチ名の `＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `17th_hideyuki-fujikawa` ）
      ```bash
      git checkout -b 17th_＜fname-lname＞
