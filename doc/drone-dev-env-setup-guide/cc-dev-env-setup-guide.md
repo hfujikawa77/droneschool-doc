@@ -65,7 +65,7 @@ Table of Contents
 - 卒業後でも継続して開発、運用のために活用できる。
 
 ## 1.2. 前提事項
-デベロッパーコース向けの開発環境構築手順書（`drone-dev-setup-guide.pdf`）に則ってセットアップが完了している前提とします。  
+デベロッパーコース向けの開発環境構築手順書（`drone-dev-env-setup-guide.pdf`）に則ってセットアップが完了している前提とします。  
 Windows 10/11のPCにMission PlannerとVS Codeがインストールされていることを確認してください。
 
 <div style="page-break-before:always"></div>  

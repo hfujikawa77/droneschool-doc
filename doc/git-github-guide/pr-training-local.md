@@ -11,12 +11,12 @@
    ![alt text](media/github-pr-training-010.jpg)
 
 ### 3. リポジトリのクローン or リモート切替
-   1. VS Codeを起動し、WSL（Ubuntu-20.04）に接続します。
+   1. VS Codeを起動し、WSL（Ubuntu22.04）に接続します。
    1. メニュー`ターミナル`→`新しいターミナル`をクリックして、ターミナルを起動します。
    1. ArduPilot本線リポジトリからクローン済/未済によって下記のいずれかの手順を実施してください。
       1. クローン済みの場合、リモートリポジトリを切り替えます。
             ```bash
-            cd /home/ardupilot/ardupilot
+            cd /home/ardupilot/GitHub/ardupilot
             git remote set-url origin https://github.com/＜GitHubアカウント名＞/ardupilot.git
             git remote add upstream https://github.com/ardupilot/ardupilot.git
             git remote -v    # 変更が反映されていることを確認
@@ -26,7 +26,7 @@
             cd
             git clone https://github.com/＜GitHubアカウント名＞/ardupilot.git
          ``` 
-   1. VS Codeのメニュー`ファイル`→`フォルダを開く` でクローンしたArduPilotリポジトリのディレクトリ`/home/ardupilot/ardupilot`を開きます。
+   1. VS Codeのメニュー`ファイル`→`フォルダを開く` でクローンしたArduPilotリポジトリのディレクトリ`/home/ardupilot/GitHub/ardupilot`を開きます。
 
 <div style="page-break-before:always"></div>
 
