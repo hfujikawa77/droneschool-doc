@@ -205,11 +205,14 @@ dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux 
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 ```
 
-PC再起動後、PowerShellを開いて次のコマンドを実行しPowerShellを閉じてください。これでデフォルトのバージョンを1にします。  
-デフォルトが1で困る場合は、WSLバージョン2でインストールした後で個別に `wsl --set-version Ubuntu-22.04 1` を実行して変更してください。
+PC再起動後、PowerShellを開いて次のコマンドを実行しPowerShellを閉じてください。これでデフォルトのバージョンを2にします。  
+デフォルトが2で困る場合は、WSLバージョン2でインストールした後で個別に `wsl --set-version Ubuntu-22.04 1` を実行して変更してください。
 ```powershell
 wsl --set-default-version 2
 ```
+
+<div style="page-break-before:always"></div>
+
 ## 4.2. Ubuntu22のインストールと初期設定
 【注意】すでにUbuntu22.04がインストール済みの場合はスキップしてください。
 
@@ -219,9 +222,10 @@ wsl --install -d Ubuntu-22.04
 ```
 
 【発生しうるエラーと対策】  
-■ カーネル関連エラー
+* カーネル関連エラー  
 以下のエラーが表示されてインストールできない場合
-```
+
+```powershell
 Installing, this may take a few minutes...
 WslRegisterDistribution failed with error: 0x800701bc
 Error: 0x800701bc WSL 2 ???????????? ??????????????????????? https://aka.ms/wsl2kernel ?????????
@@ -229,18 +233,21 @@ Error: 0x800701bc WSL 2 ???????????? ??????????????????????? https://aka.ms/wsl2
 Press any key to continue...
 ```
 
-次のURLを参照して、Linux カーネル更新プログラムパッケージをダウンロードしてインストールしてから再度4.2インストールを実施してください。  
+次のURLを参照して、Linux カーネル更新プログラムパッケージをダウンロードしてインストールしてから再度 [4.2. Ubuntu22のインストールと初期設定](#42-ubuntu22のインストールと初期設定) を実施してください。  
 https://learn.microsoft.com/ja-jp/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package
 
-■ 画面が進まない
+* 画面が進まない  
 15分以上、以下の表示で変化しない場合、Ctrl+cショートカット押下して進める。
+
 ```
 Installing, this may take a few minutes...
 ```
 
-<br/>
-無事インストールが完了したら `PCを再起動` をしてください。<br/>
-PC起動後の初回起動時 `Installing, this may take a few minutes…` としばらく表示されます。フリーズではないので、そのままインストールが完了するまで待ちます。  
+無事インストールが完了したら PCを再起動してください。  
+PC再起動後の初回起動時 `Installing, this may take a few minutes…` としばらく表示されます。フリーズではないので、そのままインストールが完了するまで待ちます。  
+
+<div style="page-break-before:always"></div>
+
 インストールが終わると username と password をきかれるので、下記の通り入力して設定します。必ず半角英字のみで設定します。
 
 * username : `ardupilot`
@@ -329,9 +336,9 @@ Ubuntu22.04を起動します。
   https://github.com/[自分のGithubアカウント名]/ardupilot.git  
 になるはずです。
 
-次のコマンドを入力してArduPilotソースコードするディレクトリを作成します。  
+次のコマンドを入力してArduPilotソースコードをクローンするディレクトリを作成します。  
 ```bash
-cd
+cd /home/ardupilot
 mkdir GitHub
 cd GitHub
 ```
