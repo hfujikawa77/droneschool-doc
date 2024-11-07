@@ -218,7 +218,28 @@ PowerShellを開いて次のコマンドを実行して`Ubuntu-22.04`をイン�
 wsl --install -d Ubuntu-22.04
 ```
 
-インストールが完了したら `PCを再起動` をしてください。<br/>
+【発生しうるエラーと対策】  
+■ カーネル関連エラー
+以下のエラーが表示されてインストールできない場合
+```
+Installing, this may take a few minutes...
+WslRegisterDistribution failed with error: 0x800701bc
+Error: 0x800701bc WSL 2 ???????????? ??????????????????????? https://aka.ms/wsl2kernel ?????????
+
+Press any key to continue...
+```
+
+次のURLを参照して、Linux カーネル更新プログラムパッケージをダウンロードしてインストールしてから再度4.2インストールを実施してください。  
+https://learn.microsoft.com/ja-jp/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package
+
+■ 画面が進まない
+15分以上、以下の表示で変化しない場合、Ctrl+cショートカット押下して進める。
+```
+Installing, this may take a few minutes...
+```
+
+<br/>
+無事インストールが完了したら `PCを再起動` をしてください。<br/>
 PC起動後の初回起動時 `Installing, this may take a few minutes…` としばらく表示されます。フリーズではないので、そのままインストールが完了するまで待ちます。  
 インストールが終わると username と password をきかれるので、下記の通り入力して設定します。必ず半角英字のみで設定します。
 
