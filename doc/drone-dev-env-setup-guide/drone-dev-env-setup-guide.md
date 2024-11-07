@@ -206,16 +206,16 @@ dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /nores
 ```
 
 PC再起動後、PowerShellを開いて次のコマンドを実行しPowerShellを閉じてください。これでデフォルトのバージョンを1にします。  
-デフォルトが1で困る場合は、WSLバージョン2でインストールした後で個別に `wsl --set-version Ubuntu22.04 1` を実行して変更してください。
+デフォルトが1で困る場合は、WSLバージョン2でインストールした後で個別に `wsl --set-version Ubuntu-22.04 1` を実行して変更してください。
 ```powershell
 wsl --set-default-version 2
 ```
 ## 4.2. Ubuntu22のインストールと初期設定
 【注意】すでにUbuntu22.04がインストール済みの場合はスキップしてください。
 
-PowerShellを開いて次のコマンドを実行して`Ubuntu22.04`をインストールしてください。
+PowerShellを開いて次のコマンドを実行して`Ubuntu-22.04`をインストールしてください。
 ```powershell
-wsl --install -d Ubuntu22.04
+wsl --install -d Ubuntu-22.04
 ```
 
 インストールが完了したら `PCを再起動` をしてください。<br/>
@@ -236,7 +236,7 @@ wsl -l -v
 VERSIONのところが `2` と表示されていれば問題ありません。
 ```powershell
   NAME                   STATE           VERSION
-* Ubuntu22.04           Running         2
+* Ubuntu-22.04           Running         2
 ```
 
 > **Note**
