@@ -205,8 +205,8 @@ dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux 
 dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 ```
 
-PC再起動後、PowerShellを開いて次のコマンドを実行しPowerShellを閉じてください。これでデフォルトのバージョンを2にします。  
-デフォルトが2で困る場合は、WSLバージョン2でインストールした後で個別に `wsl --set-version Ubuntu-22.04 1` を実行して変更してください。
+PCを再起動後、PowerShellを開いて次のコマンドを実行し、PowerShellを閉じてください。これで、デフォルトの WSL バージョンが 2 に設定されます。  
+デフォルトをバージョン 2 から 1 に戻したい場合は、`wsl --set-default-version 1`を実行して変更してください。  
 ```powershell
 wsl --set-default-version 2
 ```

@@ -1,10 +1,10 @@
 ### アプリケーション編 Workshop用 GitHub準備
 1. **前提事項**: 
-   - CC環境構築手順書（`cc-dev-env-setup-guide.pdf`）の手順が完了しており、`http://github.com/tajisoft/droneschool` からcloneされていること。
+   - 開発環境構築手順書（`drone-dev-env-setup-guide.pdf`）の手順が完了しており、`http://github.com/tajisoft/droneschool` からソースコードがcloneされていること。
    - [GitHubアカウント作成](https://docs.github.com/ja/get-started/start-your-journey/creating-an-account-on-github) が完了していること。
 
 2. **リポジトリのフォーク**:
-   - GitHubで、`https://github.com/tajisoft/droneschool` を開きます。
+   - GitHubで、[https://github.com/tajisoft/droneschool](https://github.com/tajisoft/droneschool) を開きます。
    - ページ右上の`Fork`ボタンをクリックして、リポジトリを自分のアカウントにフォークします。
 
 3. **既存のローカルリポジトリの設定変更**:
@@ -30,35 +30,35 @@
      ```
 
 1. **ワークブランチを作成し、チェックアウトする**:
-   - ブランチ名の `＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `17th_hideyuki-fujikawa` ）
+   - ブランチ名の `＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `18th_hideyuki-fujikawa` ）
      ```bash
-     git checkout -b 17th_＜fname-lname＞
+     git checkout -b 18th_＜fname-lname＞
      ```
 
 2. **ディレクトリとファイルを作成する**:
    - 作業ディレクトリを作成します。  
-     ディレクトリ名の ＜fname-lname＞ はご自身の氏名に置き換えてください。（例: `workshop/17th/hideyuki-fujikawa` ）
+     ディレクトリ名の ＜fname-lname＞ はご自身の氏名に置き換えてください。（例: `workshop/18th/hideyuki-fujikawa` ）
      ```bash
-     mkdir -p workshop/17th/＜fname-lname＞
+     mkdir -p workshop/18th/＜fname-lname＞
      ```
    - README.md ファイルを作成してテキストを追加します。
      ```bash
-     echo "Hello, ArduPilot!" > workshop/17th/＜fname-lname＞/README.md
+     echo "Hello, ArduPilot!" > workshop/18th/＜fname-lname＞/README.md
      ```
 
 1. **変更をステージングし、コミットする**:
    - 変更をステージングします。
      ```bash
-     git add workshop/17th/＜fname-lname＞/README.md
+     git add workshop/18th/＜fname-lname＞/README.md
      ```
    - コミットメッセージを付けてコミットします。
      ```bash
-     git commit -m "Add 17th workshop folder with README.md"
+     git commit -m "Add 18th workshop folder with README.md"
      ```
 
 2. **変更をリモートリポジトリにプッシュする**:
    ```bash
-   git push origin 17th_＜fname-lname＞
+   git push origin 18th_＜fname-lname＞
    ```
 
 3. **Pull Requestの作成**:
@@ -68,6 +68,12 @@
      - **base repository**: `tajisoft/droneschool`
      - **base**: `master`
      - **head repository**: `＜GitHubアカウント名＞/droneschool`
-     - **compare**: `17th_＜fname-lname＞`
+     - **compare**: `18th_＜fname-lname＞`
    - Pull Requestのタイトルと本文を入力し、 `Create pull request`ボタンをクリックして、Pull Requestを作成します。
+  
+4. 本線の変更の取り込み
+   1. フォークしたリポジトリのメインページに戻り、 ブランチ`master`を選択します。
+   2. `Sync fork`ボタンをクリックします。
+   3. `Update Branch`ボタンをクリックします。本線の最新の変更が取り込まれたことを確認します。  
+   ![alt text](media/github-pr-training-110.jpg)
 
