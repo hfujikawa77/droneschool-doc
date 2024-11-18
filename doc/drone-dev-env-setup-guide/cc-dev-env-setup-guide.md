@@ -399,5 +399,5 @@ VS Codeのエクスプローラーから `GitHub/droneschool/dronekit_scripts/01
 1. GitHub：[https://github.com/ArduPilot/pymavlink](https://github.com/ArduPilot/pymavlink)
 2. Examples：[https://www.ardusub.com/developers/pymavlink.html](https://www.ardusub.com/developers/pymavlink.html)
 ## 8.7. DroneKit Python
-1. Document：[https://dronekit-python.readthedocs.io/en/latest/](https://dronekit-python.readthedocs.io/en/latest/)
+1. Document：[https://dronekit.netlify.app/](https://dronekit.netlify.app/)
 2. Examples：[https://github.com/dronekit/dronekit-python/tree/master/examples](https://github.com/dronekit/dronekit-python/tree/master/examples)
