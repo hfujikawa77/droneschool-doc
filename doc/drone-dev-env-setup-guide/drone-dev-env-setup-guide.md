@@ -293,6 +293,7 @@ Visual Studio Codeが起動したら次の手順に進んでください。
 |----|----|----|
 |Japanese Language Pack for Visual Studio Code|japanese|表示の日本語化|
 |Python|Python|Python言語サポート|
+|Black Formatter|Black Formatter|Python言語フォーマッター|
 |C/C++|C++|C/C++言語サポート|
 |Lua|Lua|Lua言語サポート|
 |Docker|Docker|Dockerサポート|
@@ -381,6 +382,7 @@ Visual Studio Codeを起動し、WSL（Ubuntu22.04）に接続します。
 |Extentions|検索ワード|japanese|
 |----|----|----|
 |Python|Python|Python言語サポート|
+|Black Formatter|Black Formatter|Python言語フォーマッター|
 |C/C++|C++|C/C++言語サポート|
 |Lua|Lua|Lua言語サポート|
 |Docker|Docker|Dockerサポート|
