@@ -2,11 +2,12 @@
 <h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
 <h2>コンパニオンコンピュータ環境構築手順書</h2><br>
 (Raspberry Pi Zero 2W + Rpanion-Server + Visual Studio Code)<br/>
-Ver.1.0.0 - 2024.5.30
+Ver.1.0.1 - 2025.5.17
 </div>
 
 <!--
-Ver.1.0.0 - 2023.5.30 - 初版
+Ver.1.0.0 - 2024.5.30 - 初版
+Ver.1.0.1 - 2025.5.17 - Rpanion-SServerバージョン更新, 拡張機能追加
 -->
 
 Table of Contents
@@ -91,7 +92,7 @@ Windows 10/11のPCにMission PlannerとVS Codeがインストールされてい�
 
 下記Webサイトを開いて、Rpanion-Serverのイメージをダウンロードします。  
 [https://www.docs.rpanion.com/software/rpanion-server](https://www.docs.rpanion.com/software/rpanion-server#disk_images)  
-※ 2024年5月時点の最新版 0.10 が対象
+※ 2025年5月時点の最新版 0.11 が対象
 
 Blena Etcherを入手して、SDカードにRpanion-Serverのイメージをフラッシュします。  
 [https://etcher.balena.io/](https://etcher.balena.io/)  
@@ -292,7 +293,8 @@ VS Codeをラズパイに接続している状態で、左側メニュー `拡�
 
 |Extentions|検索ワード|japanese|
 |----|----|----|
-|Python|Python|Python言語サポート|
+|[Python](https://marketplace.visualstudio.com/items?itemName=ms-python.python)|Python|Python言語サポート|
+|[Black Formatter](https://marketplace.visualstudio.com/items?itemName=ms-python.black-formatter)|Black|Pythonコードフォーマッター|
 
 <div style="page-break-before:always"></div>  
 

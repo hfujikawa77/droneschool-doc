@@ -2,7 +2,7 @@
 <h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
 <h2>開発環境構築手順書</h2><br>
 (Windows10/11 + WSL2(Ubuntu22.04) + Visual Studio Code)<br/>
-Ver.1.4.3 - 2024.11.9
+Ver.1.4.4 - 2025.5.17
 </div>
 
 <!--
@@ -10,6 +10,7 @@ Ver.1.4.0 - 2023.5.26 - 初版
 Ver.1.4.1 - 2023.6.9  - WSLインストール方法変更、PDFレイアウト調整、微修正
 Ver.1.4.2 - 2023.7.11 - PDF生成方法修正、画像・コードの改行位置調整
 Ver.1.4.3 - 2024.11.9 - WSL2, Ubuntu22.04 前提で手順を修正
+Ver.1.4.4 - 2025.5.17 - Appendixの更新
 -->
 
 Table of Contents
@@ -50,7 +51,12 @@ Table of Contents
   - [10.3. ブレークポイントを置く](#103-ブレークポイントを置く)
   - [10.4. デバッグ実行](#104-デバッグ実行)
 - [11. Appendix](#11-appendix)
-  - [11.1. Visual Studio Codeショートカットキー](#111-visual-studio-codeショートカットキー)
+  - [11.1. Mission Planner](#111-mission-planner)
+  - [11.2. Visual Studio Code](#112-visual-studio-code)
+  - [11.3. MAVLink-router](#113-mavlink-router)
+  - [11.4. MAVProxy](#114-mavproxy)
+  - [11.5. Pymavlink](#115-pymavlink)
+  - [11.6. DroneKit Python](#116-dronekit-python)
 
 <!-- /code_chunk_output -->
 
@@ -594,7 +600,7 @@ sim_vehicle.py -v Copter --console --map -D -L Kawachi
 `arducopter` プロセスを選択してください。  
 ![Alt text](media/fc-debug-setup-060.jpg)  
 
-プロセスにアタッチされ、デバッグアイコンメニュー画面は画像のような表示になります。
+プロセスにアタッチされ、デバッグアイコンメニュー画面は画像のような表示になります。  
 ![Alt text](media/fc-debug-setup-070.jpg)  
 
 GDBを利用したデバッグについて知りたい場合は、下記を参照してください。  
@@ -603,5 +609,17 @@ https://ardupilot.org/dev/docs/debugging-with-gdb-using-vscode.html
 <div style="page-break-before:always"></div>
 
 # 11. Appendix
-## 11.1. Visual Studio Codeショートカットキー
-英語：https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf
+## 11.1. Mission Planner
+1. ArduPilot Wiki：[https://ardupilot.org/planner/](https://ardupilot.org/planner/)
+## 11.2. Visual Studio Code
+1. Keyboard shortcuts：[https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf)
+## 11.3. MAVLink-router
+1. GitHub：[https://github.com/mavlink-router/mavlink-router](https://github.com/mavlink-router/mavlink-router)
+## 11.4. MAVProxy
+1. ArduPilot Wiki：[https://ardupilot.org/mavproxy/index.html](https://ardupilot.org/mavproxy/index.html)
+## 11.5. Pymavlink
+1. GitHub：[https://github.com/ArduPilot/pymavlink](https://github.com/ArduPilot/pymavlink)
+2. Examples：[https://www.ardusub.com/developers/pymavlink.html](https://www.ardusub.com/developers/pymavlink.html)
+## 11.6. DroneKit Python
+1. Document：[https://dronekit.netlify.app/](https://dronekit.netlify.app/)
+2. Examples：[https://github.com/dronekit/dronekit-python/tree/master/examples](https://github.com/dronekit/dronekit-python/tree/master/examples)

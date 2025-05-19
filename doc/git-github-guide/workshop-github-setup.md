@@ -30,35 +30,35 @@
      ```
 
 1. **ワークブランチを作成し、チェックアウトする**:
-   - ブランチ名の `＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `18th_hideyuki-fujikawa` ）
+   - ブランチ名の `＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `19th_hideyuki-fujikawa` ）
      ```bash
-     git checkout -b 18th_＜fname-lname＞
+     git checkout -b 19th_＜fname-lname＞
      ```
 
 2. **ディレクトリとファイルを作成する**:
    - 作業ディレクトリを作成します。  
-     ディレクトリ名の ＜fname-lname＞ はご自身の氏名に置き換えてください。（例: `workshop/18th/hideyuki-fujikawa` ）
+     ディレクトリ名の ＜fname-lname＞ はご自身の氏名に置き換えてください。（例: `workshop/19th/hideyuki-fujikawa` ）
      ```bash
-     mkdir -p workshop/18th/＜fname-lname＞
+     mkdir -p workshop/19th/＜fname-lname＞
      ```
    - README.md ファイルを作成してテキストを追加します。
      ```bash
-     echo "Hello, ArduPilot!" > workshop/18th/＜fname-lname＞/README.md
+     echo "Hello, ArduPilot!" > workshop/19th/＜fname-lname＞/README.md
      ```
 
 1. **変更をステージングし、コミットする**:
    - 変更をステージングします。
      ```bash
-     git add workshop/18th/＜fname-lname＞/README.md
+     git add workshop/19th/＜fname-lname＞/README.md
      ```
    - コミットメッセージを付けてコミットします。
      ```bash
-     git commit -m "Add 18th workshop folder with README.md"
+     git commit -m "Add 19th workshop folder with README.md"
      ```
 
 2. **変更をリモートリポジトリにプッシュする**:
    ```bash
-   git push origin 18th_＜fname-lname＞
+   git push origin 19th_＜fname-lname＞
    ```
 
 3. **Pull Requestの作成**:
@@ -68,7 +68,7 @@
      - **base repository**: `tajisoft/droneschool`
      - **base**: `master`
      - **head repository**: `＜GitHubアカウント名＞/droneschool`
-     - **compare**: `18th_＜fname-lname＞`
+     - **compare**: `19th_＜fname-lname＞`
    - Pull Requestのタイトルと本文を入力し、 `Create pull request`ボタンをクリックして、Pull Requestを作成します。
   
 4. 本線の変更の取り込み
