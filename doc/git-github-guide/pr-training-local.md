@@ -75,7 +75,22 @@
       ![alt text](media/github-pr-training-100.jpg)
    1. ArduPilotリポジトリの [Pull requestsタブ](https://github.com/ArduPilot/ardupilot/pulls) を開いてPull Requestが作成されていることを確認します。
 
-### 7. ArduPilot本線の変更の取り込み
+### 7. ワークブランチの削除
+   1. Pull Requestがマージされたら、不要になったブランチを削除します。
+   2. ローカルリポジトリで下記コマンドを実行します。
+      ```bash
+      # masterブランチに切り替えて、本線の最新状態を取得
+      git checkout master
+      git pull upstream master
+
+      # ローカルの作業ブランチを削除
+      git branch -d ardupilot_git_tutorial
+
+      # リモート（自分のフォーク）の作業ブランチを削除
+      git push origin --delete ardupilot_git_tutorial
+      ```
+   
+### 8. ArduPilot本線の変更の取り込み
    1. フォークしたリポジトリのメインページに戻り、 ブランチ`master`を選択します。
    1. `Sync fork`ボタンをクリックします。
    1. `Update Branch`ボタンをクリックします。ArduPilot本線の最新の変更が取り込まれたことを確認します。  
