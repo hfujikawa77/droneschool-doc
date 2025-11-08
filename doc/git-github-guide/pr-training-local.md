@@ -17,14 +17,14 @@
       1. クローン済みの場合、リモートリポジトリを切り替えます。
             ```bash
             cd /home/ardupilot/GitHub/ardupilot
-            git remote set-url origin https://github.com/＜GitHubアカウント名＞/ardupilot.git
+            git remote set-url origin https://github.com/＜あなたのGitHubアカウント名＞/ardupilot.git
             git remote add upstream https://github.com/ardupilot/ardupilot.git
             git remote -v    # 変更が反映されていることを確認
             ```
       1. クローン未済の場合、フォークしたリポジトリをクローンします。
             ```bash
             cd
-            git clone https://github.com/＜GitHubアカウント名＞/ardupilot.git
+            git clone https://github.com/＜あなたのGitHubアカウント名＞/ardupilot.git
          ``` 
    1. VS Codeのメニュー`ファイル`→`フォルダを開く` でクローンしたArduPilotリポジトリのディレクトリ`/home/ardupilot/GitHub/ardupilot`を開きます。
 
@@ -59,12 +59,12 @@
 <div style="page-break-before:always"></div>
 
 ### 6. Pull Requestの作成
-   1. WebブラウザでフォークしたArduPilotリポジトリのページ `https://github.com/＜GitHubアカウント名＞/ardupilot` を開き、`Compare & pull request`ボタンをクリックします。  
+   1. WebブラウザでフォークしたArduPilotリポジトリのページ `https://github.com/＜あなたのGitHubアカウント名＞/ardupilot` を開き、`Compare & pull request`ボタンをクリックします。  
    ![alt text](media/github-pr-training-080.jpg)
    1. 比較するベースとなるリポジトリとブランチ、そして自分のフォークしたリポジトリとブランチを選択します。
        - **base repository**: `Ardupilot/ardupilot`
        - **base**: `master`
-       - **head repository**: `＜GitHubアカウント名＞/ardupilot`
+       - **head repository**: `＜あなたのGitHubアカウント名＞/ardupilot`
        - **compare**: `ardupilot_git_tutorial`
    1. タイトルと本文を以下のように入力します。
       ```

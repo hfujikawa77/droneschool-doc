@@ -2,7 +2,7 @@
 <h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
 <h2>開発環境構築手順書</h2><br>
 (Windows10/11 + WSL2(Ubuntu22.04) + Visual Studio Code)<br/>
-Ver.1.4.4 - 2025.5.17
+Ver.1.4.5 - 2025.11.8
 </div>
 
 <!--
@@ -11,6 +11,7 @@ Ver.1.4.1 - 2023.6.9  - WSLインストール方法変更、PDFレイアウト�
 Ver.1.4.2 - 2023.7.11 - PDF生成方法修正、画像・コードの改行位置調整
 Ver.1.4.3 - 2024.11.9 - WSL2, Ubuntu22.04 前提で手順を修正
 Ver.1.4.4 - 2025.5.17 - Appendixの更新
+Ver.1.4.5 - 2025.11.8 - 一部GitHubリポジトリはFork&Cloneするように修正
 -->
 
 Table of Contents
@@ -34,7 +35,7 @@ Table of Contents
   - [5.2. 日本語表示の有効化](#52-日本語表示の有効化)
   - [5.3. WSLとの接続](#53-wslとの接続)
 - [6. ArduPilotビルド環境セットアップ](#6-ardupilotビルド環境セットアップ)
-  - [6.1. ArduPilotソースコードをクローン](#61-ardupilotソースコードをクローン)
+  - [6.1. ArduPilotソースコードをフォーク\&クローン](#61-ardupilotソースコードをフォーククローン)
   - [6.2. セットアップスクリプトで環境をインストール](#62-セットアップスクリプトで環境をインストール)
 - [7. WSL（Ubuntu22.04）へ拡張機能のインストール](#7-wslubuntu2204へ拡張機能のインストール)
 - [8. シミュレータ（SITL）用セットアップ](#8-シミュレータsitl用セットアップ)
@@ -45,6 +46,7 @@ Table of Contents
   - [9.3. 接続確認](#93-接続確認)
     - [9.3.1. DroneKit Python からの確認](#931-dronekit-python-からの確認)
     - [9.3.2. Pymavlink からの確認](#932-pymavlink-からの確認)
+  - [9.4. 課題提出用GitHubリポジトリ準備](#94-課題提出用githubリポジトリ準備)
 - [10. 【FlightCodeコース向け】デバッグ環境セットアップ](#10-flightcodeコース向けデバッグ環境セットアップ)
   - [10.1. 必要なパッケージインストール](#101-必要なパッケージインストール)
   - [10.2. デバッグ構成を追加](#102-デバッグ構成を追加)
@@ -302,7 +304,7 @@ Visual Studio Codeが起動したら次の手順に進んでください。
 |Black Formatter|Black Formatter|Python言語フォーマッター|
 |C/C++|C++|C/C++言語サポート|
 |Lua|Lua|Lua言語サポート|
-|Docker|Docker|Dockerサポート|
+<!-- |Docker|Docker|Dockerサポート| -->
 |ardupilot-devenv|ardupilot|ArduPilot開発サポート|
 |Lua Autocomplete for ArduPilot|ardupilot|ArduPilot用Lua言語サポート|
 
@@ -332,16 +334,13 @@ Visual Studio Codeを再起動を促されるので再起動します。起動�
 
 # 6. ArduPilotビルド環境セットアップ
 【注意】すでにビルド環境がセットアップ済みの場合スキップしてください。  
-## 6.1. ArduPilotソースコードをクローン
+## 6.1. ArduPilotソースコードをフォーク&クローン
+[GitHub](https://github.com/login)を開いてログインします。GitHubアカウントがない場合は[こちらの手順](https://docs.github.com/ja/get-started/start-your-journey/creating-an-account-on-github)を参照して作成してください。
+
+[https://github.com/ArduPilot/ardupilot.git](https://github.com/ArduPilot/ardupilot.git) を開いて、右上の`Fork` ボタンを押下して自分のアカウントにArduPilotソースコードをフォークします。  
+![alt text](media/ardupilot-setup-009.png)
+
 Ubuntu22.04を起動します。
-コース毎にクローンするURLを確認します。
-
-【Applicationコース向け】本家リポジトリURL  
-  https://github.com/ArduPilot/ardupilot.git
-
-【FlightCodeコース向け】Githubアカウントを作成し、本家ardupilotリポジトリをフォークしてから、自分のアカウントのardupilotリポジトリをクローンするのがよいです。その場合のURLは、  
-  https://github.com/[自分のGithubアカウント名]/ardupilot.git  
-になるはずです。
 
 次のコマンドを入力してArduPilotソースコードをクローンするディレクトリを作成します。  
 ```bash
@@ -349,9 +348,9 @@ cd /home/ardupilot
 mkdir GitHub
 cd GitHub
 ```
-次のコマンドを入力してArduPilotソースコードのクローンを実行します。下記例ではApplicationコース向け本家リポジトリURLを使用しています。  
+次のコマンドを入力してArduPilotソースコードのクローンを実行します。
 ```bash
-git clone https://github.com/ArduPilot/ardupilot.git
+git clone https://github.com/＜あなたのGitHubアカウント名＞/ardupilot.git
 ```
   
 クローンが完了したら次の環境セットアップスクリプトを実行します。  
@@ -424,15 +423,18 @@ sim_vehicle.py -v Copter --map --console -L Kawachi
 # 9. 【Applicationコース向け】DroneKit Python, Pymavlinkセットアップ
 【注意】セットアップ済みの場合はスキップしてください。
 ## 9.1. GitHubからソースコード取得とインストール
+[https://github.com/hfujikawa77/droneschool.git](https://github.com/hfujikawa77/droneschool.git) を開き、右上の`Fork` ボタンを押下して自分のアカウントに教材のソースコードをフォークします。  
+![alt text](media/ardupilot-setup-009.png)
+
 シミュレータ、Ubuntu22.04、Visual Studio Codeを全部終了してください。次にVisual Studio Codeを起動しWSL（Ubuntu22.04）に接続します。
 
 メニュー `ターミナル` → `新しいターミナル` をクリックしてターミナルを起動します。  
 下記コマンドを実行してGitHubから開発ツール、教材のソースコードを取得します。
 ```bash
 cd /home/ardupilot/GitHub
-git clone https://github.com/tajisoft/droneschool
+git clone https://github.com/＜あなたのGitHubアカウント名＞/droneschool
 git clone https://github.com/dronekit/dronekit-python
-git clone https://github.com/intel/mavlink-router
+git clone https://github.com/mavlink-router/mavlink-router
 git clone https://github.com/ArduPilot/pymavlink
 cd pymavlink
 git clone https://github.com/ArduPilot/mavlink
@@ -525,6 +527,65 @@ Visual Studio Codeのエクスプローラーから `GitHub/droneschool/pymavlin
 ![alt text](media/dev-app-setup-053.jpg)  
 
 `Ctrl+C`で終了します。
+
+<div style="page-break-before:always"></div>
+
+## 9.4. 課題提出用GitHubリポジトリ準備
+
+アプリケーション編の課題提出用にGitHubリポジトリの準備を行います。
+
+1. 既にcloneしているローカルGitリポジトリに移動します。
+     ```bash
+     cd 
+     cd GitHub/droneschool
+     ```
+
+1. ワークブランチを作成し、チェックアウトします。ブランチ名の `＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `20th_hideyuki-fujikawa` ）
+     ```bash
+     git checkout -b 20th_＜fname-lname＞
+     ```
+
+1. 作業ディレクトリを作成します。 ディレクトリ名の `＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `workshop/20th/hideyuki-fujikawa` ）
+     ```bash
+     mkdir -p workshop/20th/＜fname-lname＞
+     ```
+1. README.md ファイルを作成してテキストを追加します。
+     ```bash
+     echo "Hello, ArduPilot!" > workshop/20th/＜fname-lname＞/README.md
+     ```
+
+1. 変更をリモートリポジトリに反映します。
+     ```bash
+     # 変更のステージング
+     git add workshop/20th/＜fname-lname＞/README.md
+
+     # コミットメッセージを付けてコミット
+     git commit -m "Add 20th workshop folder with README.md"
+
+    # 変更をリモートリポジトリにプッシュ
+    git push origin 20th_＜fname-lname＞
+    ```
+
+<div style="page-break-before:always"></div>
+
+1. Pull Requestの作成
+    - GitHubの `https://github.com/＜あなたのGitHubアカウント名＞/droneschool/pulls` ページに移動します。
+    - `New pull request`ボタンをクリックします。
+    - 比較するベースとなるリポジトリとブランチ、そして自分のフォークしたリポジトリとブランチを選択します。
+      - **base repository**: `hfujikawa77/droneschool`
+      - **base**: `master`
+      - **head repository**: `＜あなたのGitHubアカウント名＞/droneschool`
+      - **compare**: `20th_＜fname-lname＞`
+    - Pull Requestのタイトルと本文を入力し、 `Create pull request`ボタンをクリックして、Pull Requestを作成します。
+  
+1. フォーク元の変更の取り込み  
+   ※ フォーク元リポジトリの変更を取り込みたい場合に実施してください。
+    - フォークしたリポジトリのメインページに戻り、 ブランチ`master`を選択します。
+    - `Sync fork`ボタンをクリックします。
+    - `Update Branch`ボタンをクリックします。本線の最新の変更が取り込まれたことを確認します。  
+    ![alt text](../git-github-guide/media/github-pr-training-110.jpg)
+
+
 
 <div style="page-break-before:always"></div>
 

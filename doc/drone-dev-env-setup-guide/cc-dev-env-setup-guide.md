@@ -270,7 +270,7 @@ VS Codeを起動して、リモートエクスプローラーからラスパイ�
 cd
 mkdir GitHub
 cd GitHub
-git clone https://github.com/tajisoft/droneschool
+git clone https://github.com/＜あなたのGitHubアカウント名＞/droneschool
 git clone https://github.com/dronekit/dronekit-python
 git clone https://github.com/ArduPilot/pymavlink
 cd pymavlink

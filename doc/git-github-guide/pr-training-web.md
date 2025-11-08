@@ -11,7 +11,7 @@
    ![alt text](media/github-pr-training-010.jpg)
 
 ### 3. ワークブランチ作成
-   1. フォークしたリポジトリのページ `https://github.com/＜GitHubアカウント名＞/ardupilot` に移動します。
+   1. フォークしたリポジトリのページ `https://github.com/＜あなたのGitHubアカウント名＞/ardupilot` に移動します。
    1. リポジトリページの上部にあるブランチのドロップダウンリストから`master`を選択します。
    1. ブランチのドロップダウンの下部にある`Find or create a branch`フィールドにワークブランチ名`ardupilot_git_tutorial` を入力します。  
    1. ボタン名が`Create branch ardupilot_git_tutorial from master`になっていることを確認してクリックします。  
@@ -40,12 +40,12 @@
 <div style="page-break-before:always"></div>
 
 ### 5. Pull Requestの作成
-   1. WebブラウザでフォークしたArduPilotリポジトリのページ `https://github.com/＜GitHubアカウント名＞/ardupilot` を開き、`Compare & pull request`ボタンをクリックします。  
+   1. WebブラウザでフォークしたArduPilotリポジトリのページ `https://github.com/＜あなたのGitHubアカウント名＞/ardupilot` を開き、`Compare & pull request`ボタンをクリックします。  
    ![alt text](media/github-pr-training-080.jpg)
    1. 比較するベースとなるリポジトリとブランチ、そして自分のフォークしたリポジトリとブランチを選択します。
        - **base repository**: `Ardupilot/ardupilot`
        - **base**: `master`
-       - **head repository**: `＜GitHubアカウント名＞/ardupilot`
+       - **head repository**: `＜あなたのGitHubアカウント名＞/ardupilot`
        - **compare**: `ardupilot_git_tutorial`
    1. タイトルと本文を以下のように入力します。
       ```
