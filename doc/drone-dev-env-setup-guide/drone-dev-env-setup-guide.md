@@ -297,7 +297,7 @@ Visual Studio Codeが起動したら次の手順に進んでください。
 
 同様の手順で次の拡張機能もインストールしてください。
 
-|Extentions|検索ワード|japanese|
+|Extensions|検索ワード|japanese|
 |----|----|----|
 |Japanese Language Pack for Visual Studio Code|japanese|表示の日本語化|
 |Python|Python|Python言語サポート|
@@ -384,7 +384,7 @@ Visual Studio Codeを起動し、WSL（Ubuntu22.04）に接続します。
 
 [Visual Studio CodeとWSLの連携](#5-visual-studio-codeとwslの連携) の手順を参考にして下記の拡張機能をインストールします。
 
-|Extentions|検索ワード|japanese|
+|Extensions|検索ワード|japanese|
 |----|----|----|
 |Python|Python|Python言語サポート|
 |Black Formatter|Black Formatter|Python言語フォーマッター|
