@@ -371,6 +371,15 @@ while True:
 
 **目的:** WSL で動作確認したスクリプトを Companion Computer アプリケーションへ発展させる。最終的に BlueOS の左メニューに追加される Extension を作成する。
 
+**第2部の前提環境:** Raspberry Pi 上で動作する BlueOS を使用する。FC は接続せず、**BlueOS の SITL モード**で進める。
+
+**BlueOS SITL の有効化手順**
+
+1. ブラウザで `http://<BlueOS_IP>` を開く
+2. 左メニュー → `Vehicle Setup` → `Autopilot Firmware`
+3. Board の選択で `SITL` を選択して Apply
+4. ArduPilot Manager が SITL として起動し、MAVLink Router 経由で接続可能になる
+
 ---
 
 ## 4.1. 演習1 BlueOS 接続
@@ -379,24 +388,25 @@ while True:
 - BlueOS のネットワーク構成
 - MAVLink Router エンドポイント経由での pymavlink 接続
 
-**BlueOS のネットワーク構成**
+**BlueOS のネットワーク構成（SITL モード）**
 
 ```
 Raspberry Pi (BlueOS)
-  IP: 192.168.2.2 (ROV 標準) または DHCP 割り当て
+  IP: 192.168.x.x (DHCP 割り当て)
 
+  ArduPilot Manager → SITL として起動
   MAVLink Router がポート 14550 (UDP) を公開
-  → Python アプリはここに接続する
+  → PC 上の Python アプリはここに接続する
 ```
 
 **接続先の変更（WSL との差分はここだけ）**
 
 ```python
-# WSL 版
+# WSL 版（SITL がローカルで動作）
 master = mavutil.mavlink_connection("udp:127.0.0.1:14550")
 
-# BlueOS 版（接続先 IP を BlueOS の IP に変更）
-BLUEOS_IP = "192.168.2.2"
+# BlueOS 版（BlueOS の IP に変更）
+BLUEOS_IP = "192.168.x.x"  # BlueOS の IP に合わせて変更
 master = mavutil.mavlink_connection(f"udp:{BLUEOS_IP}:14550")
 ```
 
@@ -626,11 +636,35 @@ drone-monitor/
 }
 ```
 
+**Docker Hub へのイメージ公開**
+
+BlueOS は Docker Hub からイメージを pull してインストールするため、事前にイメージを公開しておく必要があります。
+
+1. [hub.docker.com](https://hub.docker.com) で無料アカウントを作成する
+2. ターミナルでログインする
+   ```bash
+   docker login
+   ```
+3. イメージに Docker Hub 用のタグを付ける（`<username>` は自分のアカウント名）
+   ```bash
+   docker tag drone-monitor <username>/drone-monitor:latest
+   ```
+4. Docker Hub へ push する
+   ```bash
+   docker push <username>/drone-monitor:latest
+   ```
+
 **BlueOS へのインストール手順（BlueOS Web UI）**
 
 1. ブラウザで `http://<BlueOS_IP>` を開く
 2. 左メニュー → `Tools` → `Extensions Manager`
-3. `Add Extension` → Docker イメージ名とタグを入力
+3. `Add Extension` をクリックし、以下を入力する
+
+   | 項目 | 値 |
+   |-----|-----|
+   | Docker image | `<username>/drone-monitor` |
+   | Tag | `latest` |
+
 4. `Install` を押下
 
 インストール後、BlueOS の左メニューに **Drone Monitor** が追加されます。
@@ -845,36 +879,51 @@ threading.Thread(target=monitor, daemon=True).start()
 ## 5.3. 演習3 通知連携
 
 **学習内容**
-- 外部通知サービスとの連携（LINE / Discord / Slack / Telegram）
+- Discord Webhook を使った外部通知の実装
 
-**Discord Webhook 通知の例**
+**Discord Webhook の設定**
+
+1. Discord サーバーの通知を送りたいチャンネルを開く
+2. チャンネル設定 → `連携サービス` → `ウェブフック` → `新しいウェブフック`
+3. 作成した Webhook の URL をコピーする
+
+**実装例**
 
 ```python
 import requests
 
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/<your-webhook>"
+DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/<your-webhook-url>"
 
-def notify_discord(message: str):
+def notify(message: str):
     requests.post(DISCORD_WEBHOOK_URL, json={"content": message})
 
 # フェイルセーフ検知時に呼び出す
-notify_discord("バッテリー低下を検知しました！")
+notify("バッテリー低下を検知しました！")
+notify("GPS 異常: Fix なし")
 ```
 
-**LINE Notify の例**
+**フェイルセーフ監視と組み合わせる**
 
 ```python
-LINE_TOKEN = "<your-line-token>"
+def monitor():
+    while True:
+        msg = master.recv_match(
+            type=["GPS_RAW_INT", "SYS_STATUS"],
+            blocking=True, timeout=5
+        )
+        if msg is None:
+            continue
 
-def notify_line(message: str):
-    requests.post(
-        "https://notify-api.line.me/api/notify",
-        headers={"Authorization": f"Bearer {LINE_TOKEN}"},
-        data={"message": message}
-    )
+        if msg.get_type() == "GPS_RAW_INT" and msg.fix_type < 3:
+            notify("GPS 異常: Fix なし")
+
+        if msg.get_type() == "SYS_STATUS":
+            volt = msg.voltage_battery / 1000
+            if volt < BATTERY_THRESHOLD_V:
+                notify(f"バッテリー低下: {volt:.1f} V")
 ```
 
-**成果物:** フェイルセーフ検知時に外部サービスへ通知するシステム
+**成果物:** フェイルセーフ検知時に Discord へ通知するシステム
 
 <div style="page-break-before:always"></div>
 
