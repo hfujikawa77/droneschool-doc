@@ -129,7 +129,7 @@ MAVLink Router (BlueOS内部)
     └─→ Python アプリ (UDP:14550)
 ```
 
-Python アプリは `udp:192.168.x.x:14550` に接続することで FC のデータを受信できます。
+Python アプリは `udp:192.168.42.1:14550` に接続することで FC のデータを受信できます。
 
 <div style="page-break-before:always"></div>
 
@@ -371,14 +371,15 @@ while True:
 
 **目的:** WSL で動作確認したスクリプトを Companion Computer アプリケーションへ発展させる。最終的に BlueOS の左メニューに追加される Extension を作成する。
 
-**第2部の前提環境:** Raspberry Pi 上で動作する BlueOS を使用する。FC は接続せず、**BlueOS の SITL モード**で進める。
+**第2部の前提環境:** Raspberry Pi 上で動作する BlueOS を使用する。FC は接続せず、**WSL 上の外部 SITL** を BlueOS の Manual ボードに接続した構成で進める。
 
-**BlueOS SITL の有効化手順**
+事前に **[コンパニオンコンピュータ環境構築手順書](../drone-dev-env-setup-guide/cc-blueos-setup-guide.md)** を完了し、下記の状態になっていること：
 
-1. ブラウザで `http://<BlueOS_IP>` を開く
-2. 左メニュー → `Vehicle Setup` → `Autopilot Firmware`
-3. Board の選択で `SITL` を選択して Apply
-4. ArduPilot Manager が SITL として起動し、MAVLink Router 経由で接続可能になる
+| チェック | 内容 |
+|--------|------|
+| ☐ | BlueOS が起動し、ホットスポット（192.168.42.1）に接続できる |
+| ☐ | Manual ボード設定済み（Master Endpoint: UDP Server 0.0.0.0:14551） |
+| ☐ | WSL 上の SITL が起動済み（`sim_vehicle.py -v ArduCopter -L Kawachi --out udp:192.168.42.1:14551`） |
 
 ---
 
@@ -388,14 +389,14 @@ while True:
 - BlueOS のネットワーク構成
 - MAVLink Router エンドポイント経由での pymavlink 接続
 
-**BlueOS のネットワーク構成（SITL モード）**
+**BlueOS のネットワーク構成（Manual ボード + 外部 SITL）**
 
 ```
-Raspberry Pi (BlueOS)
-  IP: 192.168.x.x (DHCP 割り当て)
+WSL (Ubuntu) ── UDP 14551 ──→ 192.168.42.1:14551
 
-  ArduPilot Manager → SITL として起動
-  MAVLink Router がポート 14550 (UDP) を公開
+Raspberry Pi (BlueOS)  IP: 192.168.42.1
+  ArduPilot Manager → Manual ボード（外部 SITL からテレメトリを受信）
+  MAVLink Router → UDP Server 14550 を公開
   → PC 上の Python アプリはここに接続する
 ```
 
@@ -405,8 +406,8 @@ Raspberry Pi (BlueOS)
 # WSL 版（SITL がローカルで動作）
 master = mavutil.mavlink_connection("udp:127.0.0.1:14550")
 
-# BlueOS 版（BlueOS の IP に変更）
-BLUEOS_IP = "192.168.x.x"  # BlueOS の IP に合わせて変更
+# BlueOS 版（BlueOS ホットスポット IP に変更）
+BLUEOS_IP = "192.168.42.1"  # BlueOS ホットスポット IP
 master = mavutil.mavlink_connection(f"udp:{BLUEOS_IP}:14550")
 ```
 
@@ -449,7 +450,7 @@ master = mavutil.mavlink_connection(f"udp:{BLUEOS_IP}:14550")
 ```python
 import requests
 
-BLUEOS_IP = "192.168.2.2"
+BLUEOS_IP = "192.168.42.1"
 
 # MAVLink2REST 経由で高度取得
 url = f"http://{BLUEOS_IP}/mavlink2rest/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT"
@@ -496,7 +497,7 @@ from pymavlink import mavutil
 
 app = FastAPI(title="Drone API")
 
-BLUEOS_IP = "127.0.0.1"  # SITL 時は 127.0.0.1、BlueOS 時は BlueOS の IP
+BLUEOS_IP = "192.168.42.1"  # BlueOS ホットスポット IP（第1部 WSL 版は 127.0.0.1）
 master = mavutil.mavlink_connection(f"udp:{BLUEOS_IP}:14550")
 master.wait_heartbeat()
 
@@ -812,7 +813,7 @@ def rtl():
 BLUEOS_IP = "127.0.0.1"
 
 # 実機版（Raspberry Pi の IP に変更）
-BLUEOS_IP = "192.168.2.2"  # BlueOS デフォルト IP（環境に合わせて変更）
+BLUEOS_IP = "192.168.42.1"  # BlueOS ホットスポット IP（環境に合わせて変更）
 ```
 
 **接続確認手順**
