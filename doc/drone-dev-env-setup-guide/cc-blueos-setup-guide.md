@@ -36,10 +36,12 @@ Table of Contents
   - [4.3. 飛行動作の確認（任意）](#43-飛行動作の確認任意)
   - [4.4. CockpitからのGCS接続確認（任意）](#44-cockpitからのgcs接続確認任意)
 - [5. Appendix](#5-appendix)
-  - [5.1. BlueOS](#51-blueos)
-  - [5.2. ArduPilot SITL](#52-ardupilot-sitl)
-  - [5.3. Mission Planner](#53-mission-planner)
-  - [5.4. Cockpit](#54-cockpit)
+  - [5.1. 参考情報](#51-参考情報)
+    - [5.1.1. BlueOS](#511-blueos)
+    - [5.1.2. ArduPilot SITL](#512-ardupilot-sitl)
+    - [5.1.3. Mission Planner](#513-mission-planner)
+    - [5.1.4. Cockpit](#514-cockpit)
+  - [5.2. （参考）BlueOS内蔵SITLを使う場合](#52-参考blueos内蔵sitlを使う場合)
 
 <!-- /code_chunk_output -->
 
@@ -346,15 +348,75 @@ Cockpitの画面に切り替わり、機体（SITL）のテレメトリ（高度
 <div style="page-break-before:always"></div>
 
 # 5. Appendix
-## 5.1. BlueOS
+## 5.1 参考情報
+### 5.1.1. BlueOS
 1. Official Website：[https://blueos.cloud/](https://blueos.cloud/)
 2. Documentation：[https://blueos.cloud/docs/stable/](https://blueos.cloud/docs/stable/)
 3. GitHub：[https://github.com/bluerobotics/BlueOS](https://github.com/bluerobotics/BlueOS)
 4. Releases（イメージダウンロード）：[https://github.com/bluerobotics/BlueOS/releases](https://github.com/bluerobotics/BlueOS/releases)
-## 5.2. ArduPilot SITL
+### 5.1.2. ArduPilot SITL
 1. ArduPilot Wiki：[https://ardupilot.org/dev/docs/sitl-simulator-software-in-the-loop.html](https://ardupilot.org/dev/docs/sitl-simulator-software-in-the-loop.html)
-## 5.3. Mission Planner
+### 5.1.3. Mission Planner
 1. ArduPilot Wiki：[https://ardupilot.org/planner/](https://ardupilot.org/planner/)
-## 5.4. Cockpit
+### 5.1.4. Cockpit
 1. GitHub：[https://github.com/bluerobotics/cockpit](https://github.com/bluerobotics/cockpit)
 2. ドキュメント：[https://blueos.cloud/docs/stable/extensions/cockpit/](https://blueos.cloud/docs/stable/extensions/cockpit/)
+
+## 5.2. （参考）BlueOS内蔵SITLを使う場合
+
+本書では外部SITL（WSL）+ Manualボード構成を採用していますが、BlueOS内部でSITLを起動して使用する機能もあります。構成が簡素化せれるので、手軽に動作確認したい場合に参考としてください。
+
+**有効化手順**
+
+1. BlueOS管理画面 → 左メニュー `Vehicle Setup` → `Autopilot Firmware`
+2. `CHANGE BOARD` ボタンをクリック
+3. Board を `SITL` に変更して `SET` をクリック
+4. `Firmware update` を展開し、下記を入力して `INSTALL FIRMWARE` をクリック
+
+| 項目 | 値 |
+|------|-----|
+| Board | SITL (current) |
+| Vechicle Type | Copter |
+| Firmware | DEV |
+
+![alt text](media/blueos-sitl-setup-010.png)
+
+5. `Successfully installed new firmware` が表示されたら、`START AUTOPILOT` をクリック
+
+これだけでBlueOS上でSITLが起動し、MAVLink Router経由でMission Planner（UDP 14550）に接続できます。WSL側でのSITL起動は不要です。
+
+**既知の制限事項**
+
+ホーム位置の固定はBlueOSのソースコード（`autopilot_manager.py`）に `--home "-27.563,-48.459,0.0,270.0"` としてハードコードされているため、設定画面からは変更できません。起動場所を日本国内にしたい場合は本書のWSL外部SITL構成を使用してください。
+
+**トラブルシューティング**
+
+**症状1: アームできない（PreArm: 3D Accel calibration needed）**
+
+SITLでもキャリブレーション未実施扱いになることがあります。BlueOS管理画面の左メニューから `Vehicle Setup` → `CONFIGURE` → `ACCELEROMETER` → `QUICK CALIBRATION` をクリックしてキャリブレーションを実施してください。
+
+**症状2: 離陸しても高度が上がらない（Potential Thrust Loss）**
+
+`sitl_frame` が `vectored`（水中ROV向け）のまま残っている場合に発生します。設定ファイルはホストOS上にあるため、SSHでログインして下記を実行します（[2.3.3節](#233-接続確認)参照）。
+
+```bash
+# バックアップ
+cp /root/.config/blueos/ardupilot-manager/settings.json \
+   /root/.config/blueos/ardupilot-manager/settings.json.bak
+
+# 設定ファイルを編集
+sudo nano /root/.config/blueos/ardupilot-manager/settings.json
+```
+
+`sitl_frame` の値を `vectored` から `quad` に変更して保存します（`Ctrl+O` → `Enter` → `Ctrl+X`）。
+
+```json
+"preferred_router": "MAVLinkRouter",
+"sitl_frame": "quad"
+```
+
+保存後、`sudo reboot` で再起動します。起動後に下記で確認できます。
+
+```bash
+pgrep -af ardupilot   # "--model quad" が含まれていれば正常
+```
