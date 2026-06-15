@@ -16,6 +16,12 @@ Ver.1.4.6 - 2026.6.8  - 誤字修正
 Ver.1.4.7 - 2026.6.15 - 20th -> 21st に変更
 -->
 
+## 変更履歴
+
+| 日付 | バージョン | 変更箇所・理由 |
+|------|-----------|--------------|
+| 2026.6.15 | 1.4.7 | 9.3節：SITL起動方法（MP SITL / WSL SITL）に応じた接続先IPアドレスの説明を追加<br>9.4節：20th → 21st に変更 |
+
 Table of Contents
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
