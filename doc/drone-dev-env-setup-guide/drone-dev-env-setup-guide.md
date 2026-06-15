@@ -70,7 +70,7 @@ Table of Contents
 
 | 日付 | バージョン | 変更箇所・理由 |
 |------|-----------|--------------|
-| 2026.6.15 | 1.4.7 | 9.3節：SITL起動方法（MP SITL / WSL SITL）に応じた接続先IPアドレスの説明を追加<br>9.4節：20th → 21st に変更 |
+| 2026.6.15 | 1.4.7 | 9.3節：SITL起動方法（MP/WSL）毎の接続先IPアドレスの説明を追加<br>9.4節：20th → 21st に変更 |
 
 <div style="page-break-before:always"></div>
 
