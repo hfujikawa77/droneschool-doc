@@ -567,30 +567,30 @@ Visual Studio Codeのエクスプローラーから `GitHub/droneschool/pymavlin
      cd GitHub/droneschool
      ```
 
-1. ワークブランチを作成し、チェックアウトします。ブランチ名の `＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `21st_hideyuki-fujikawa` ）
+1. ワークブランチを作成し、チェックアウトします。ブランチ名の `＜term_no＞` は期番号（例: `21st`）、`＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `21st_hideyuki-fujikawa` ）
      ```bash
-     git checkout -b 21st_＜fname-lname＞
+     git checkout -b ＜term_no＞_＜fname-lname＞
      ```
 
-1. 作業ディレクトリを作成します。 ディレクトリ名の `＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `workshop/21st/hideyuki-fujikawa` ）
+1. 作業ディレクトリを作成します。 ディレクトリ名の `＜term_no＞` は期番号（例: `21st`）、`＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `workshop/21st/hideyuki-fujikawa` ）
      ```bash
-     mkdir -p workshop/21st/＜fname-lname＞
+     mkdir -p workshop/＜term_no＞/＜fname-lname＞
      ```
 1. README.md ファイルを作成してテキストを追加します。
      ```bash
-     echo "Hello, ArduPilot!" > workshop/21st/＜fname-lname＞/README.md
+     echo "Hello, ArduPilot!" > workshop/＜term_no＞/＜fname-lname＞/README.md
      ```
 
 1. 変更をリモートリポジトリに反映します。
      ```bash
      # 変更のステージング
-     git add workshop/21st/＜fname-lname＞/README.md
+     git add workshop/＜term_no＞/＜fname-lname＞/README.md
 
      # コミットメッセージを付けてコミット
-     git commit -m "Add 21st workshop folder with README.md"
+     git commit -m "Add ＜term_no＞ workshop folder with README.md"
 
     # 変更をリモートリポジトリにプッシュ
-    git push origin 21st_＜fname-lname＞
+    git push origin ＜term_no＞_＜fname-lname＞
     ```
 
 <div style="page-break-before:always"></div>
@@ -602,7 +602,7 @@ Visual Studio Codeのエクスプローラーから `GitHub/droneschool/pymavlin
       - **base repository**: `hfujikawa77/droneschool`
       - **base**: `master`
       - **head repository**: `＜あなたのGitHubアカウント名＞/droneschool`
-      - **compare**: `21st_＜fname-lname＞`
+      - **compare**: `＜term_no＞_＜fname-lname＞`（例: `21st_hideyuki-fujikawa`）
     - Pull Requestのタイトルと本文を入力し、 `Create pull request`ボタンをクリックして、Pull Requestを作成します。
   
 1. フォーク元の変更の取り込み  

@@ -2,7 +2,7 @@
 
 ### 1. はじめに
    - 本手順は、教材リポジトリ [hfujikawa77/droneschool](https://github.com/hfujikawa77/droneschool) に追加・更新された最新資材を、各自の作業環境に取り込むための手順です。
-   - 前提として、各自はドローン開発環境構築手順書（`drone-dev-env-setup-guide.pdf`）の「9.4. 課題提出用GitHubリポジトリ準備」に従い、教材リポジトリを自分のアカウントにフォークし、ワークブランチ（例: `21st_＜fname-lname＞`）で作業している状態とします。
+   - 前提として、各自はドローン開発環境構築手順書（`drone-dev-env-setup-guide.pdf`）の「9.4. 課題提出用GitHubリポジトリ準備」に従い、教材リポジトリを自分のアカウントにフォークし、ワークブランチ（例: `＜term_no＞_＜fname-lname＞`）で作業している状態とします。
    - 用語の整理
       - **origin** : 自分のアカウントにフォークしたリポジトリ（`＜あなたのGitHubアカウント名＞/droneschool`）
       - **upstream** : 教材の本線リポジトリ（`hfujikawa77/droneschool`）
@@ -39,7 +39,7 @@
       ```
    1. 自分のワークブランチにいることを確認します。`＜fname-lname＞` はご自身の氏名に置き換えてください。
       ```bash
-      git checkout 21st_＜fname-lname＞
+      git checkout ＜term_no＞_＜fname-lname＞
       git branch    # * が付いているブランチが現在のブランチ
       ```
    1. 本線 `master` の最新資材を、自分のワークブランチに取り込みます。
@@ -48,7 +48,7 @@
       ```
    1. （任意）取り込んだ内容を自分のフォーク（origin）にもプッシュして反映します。
       ```bash
-      git push origin 21st_＜fname-lname＞
+      git push origin ＜term_no＞_＜fname-lname＞
       ```
 
 <div style="page-break-before:always"></div>
@@ -80,6 +80,6 @@
       cd /home/ardupilot/GitHub/droneschool
       git checkout master
       git pull origin master
-      git checkout 21st_＜fname-lname＞
+      git checkout ＜term_no＞_＜fname-lname＞
       git merge master
       ```
