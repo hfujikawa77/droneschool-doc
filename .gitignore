@@ -1,3 +1,6 @@
 *.pdf
 logs/*/*
 logs/*
+eeprom.bin
+mav.tlog
+mav.tlog.raw
