@@ -42,6 +42,7 @@ Table of Contents
     - [5.1.3. Mission Planner](#513-mission-planner)
     - [5.1.4. Cockpit](#514-cockpit)
   - [5.2. （参考）BlueOS内蔵SITLを使う場合](#52-参考blueos内蔵sitlを使う場合)
+  - [5.3. （参考）実機FC（フライトコントローラー）を接続する場合](#53-参考実機fcフライトコントローラーを接続する場合)
 
 <!-- /code_chunk_output -->
 
@@ -427,3 +428,25 @@ sudo nano /root/.config/blueos/ardupilot-manager/settings.json
 ```bash
 pgrep -af ardupilot   # "--model quad" が含まれていれば正常
 ```
+
+<div style="page-break-before:always"></div>
+
+## 5.3. （参考）実機FC（フライトコントローラー）を接続する場合
+
+本書ではFC実機の代わりにWSL上のSITLを機体として接続しますが、ラズパイにFC実機を接続して使用することもできます。実機を接続する場合の手順を参考として示します。
+
+**接続手順**
+
+1. FCをUSBケーブルでラズパイのUSBポートに接続します。  
+![alt text](media/blueos-fc-connect-010.png)
+
+2. BlueOS管理画面 → 左メニュー `Vehicle Setup` → `Autopilot Firmware` を開きます。
+3. 画面下部の `CHANGE BOARD` ボタンをクリックします。`Available boards` に接続したFC（例: `CUAV-7-Nano`）が表示されるので選択して適用します。  
+![alt text](media/blueos-fc-connect-020.png)
+
+4. 適用後、Autopilotパネルに接続したボードの情報が表示されることを確認します。`Board name` に接続したFC名、`Path` に `/dev/ttyACM0` などのシリアルデバイスが表示されていれば、FCが正常に認識されています。  
+![alt text](media/blueos-fc-connect-030.jpg)
+
+FCが認識されると、SITLの場合と同様にMAVLink Router経由でMission Planner（UDP 14550）等のクライアントから接続できます。エンドポイントの追加設定は不要です（[第4章](#4-疎通確認)参照）。
+
+※ 実機FCを接続する場合は、第3章の `Manual` ボードへの切り替えやWSL上のSITLの起動は不要です。
