@@ -153,7 +153,7 @@ MAV_ENDPOINT=tcp:127.0.0.1:5762 uvicorn main:app --host 0.0.0.0 --port 9999
 
 ブラウザで `http://localhost:9999/` を開き、地図・テレメトリ・操作ボタンが動くことを確認します。
 
-> 🖼️ **TODO（画像）**: ローカル SITL で Drone Web Control が動作している画面（地図・テレメトリ・操作パネル）
+![ローカル SITL で動作する Drone Web Control](media/drone-webapp-010.png)
 
 > 接続先は環境変数 `MAV_ENDPOINT` で切り替えます。未指定だと BlueOS 用の既定値（`udpout:host.docker.internal:14550`）になるため、ローカルでは `tcp:127.0.0.1:5762` を明示します。**同じコード・同じイメージのまま、接続先だけを差し替えて** WSL→BlueOS を移行できるのがポイントです。
 
