@@ -245,7 +245,7 @@ curl http://192.168.42.1/mavlink2rest/mavlink/vehicles/1/components/1/messages/G
 
 JSON が返れば疎通 OK です。`jq` があれば高度だけを取り出せます。
 
-> 🖼️ **TODO（画像）**: curl 実行結果（または `http://<BlueOS_IP>/mavlink2rest/docs` の画面）
+> 🖼️ **TODO（画像）**: curl 実行結果（または `http://192.168.42.1:6040/docs/index.html?url=/docs.json` の画面）
 
 ```bash
 curl -s http://192.168.42.1/mavlink2rest/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT \
@@ -262,7 +262,7 @@ curl -s http://192.168.42.1/mavlink2rest/mavlink/vehicles/1/components/1/message
 | `.../messages/GLOBAL_POSITION_INT` | GPS 位置・高度 |
 | `.../messages/SYS_STATUS` | バッテリー等 |
 
-> API ドキュメントは `http://<BlueOS_IP>/mavlink2rest/docs` で確認できます。
+> API ドキュメント（Swagger UI）は `http://192.168.42.1:6040/docs/index.html?url=/docs.json` で確認できます。
 
 **成果物:** curl で MAVLink2REST から応答を得る
 
@@ -523,7 +523,7 @@ Companion Computer の強みは、FC 単体では難しいセンサ・通信・A
 
 **MAVLink2REST**
 - GitHub: https://github.com/patrickelectric/mavlink2rest
-- API ドキュメント: `http://<BlueOS_IP>/mavlink2rest/docs`
+- API ドキュメント: `http://192.168.42.1:6040/docs/index.html?url=/docs.json`
 
 **pymavlink**
 - GitHub: https://github.com/ArduPilot/pymavlink
