@@ -381,7 +381,7 @@ docker run --rm --network host -e MAV_ENDPOINT=tcp:127.0.0.1:5762 drone-web-app
 
 > **`--network host` と `-e MAV_ENDPOINT`:** ローカルでは host ネットワークで SITL に直結し、接続先を `tcp:5762` へ明示します。BlueOS（4.2）では env を渡さず、既定の `host.docker.internal` で MAVLink Server に繋ぎます。
 
-> 🖼️ **TODO（画像）**: コンテナ起動ログ、または `docker run` 後にブラウザで開いた <http://localhost:9999/> の画面
+![docker run でコンテナを起動し、ブラウザで開いた画面](media/blueos-extensions-002.png)
 
 **成果物:** 要件適用済み・ローカル検証済みの Extension イメージ
 
