@@ -305,9 +305,25 @@ JSON が返れば疎通 OK です。
 
 **目的:** 第2部で作った Web アプリを **BlueOS Extension 化**し、BlueOS の左メニューから開けるように配布する。**アプリのロジックは変えず**、BlueOS で動かすための要件を満たすことが中心。
 
+**全体像**
+
+![Extension 編の全体像（build → push → pull → 配備とデータ経路）](media/blueos-extensions-001.png)
+
+第4部の流れは、大きく「**作る → 配る → 動かす**」の3段階です。
+
+- **作る（WSL／4.1）** … WSL 上でアプリ（Application）を `/dronify-blueos` で Extension 化し、Docker イメージ（Extension Container Image）に **build** する。動作確認は WSL SITL（`sim_vehicle.py`・ポート 5762）に対して行う。
+- **配る（4.2 前半）** … build したイメージを **Docker Hub へ push** する。BlueOS は Docker Hub から **pull** してインストールする。
+- **動かす（4.2 後半）** … BlueOS 上の Extension（Container）が、内部の **MAVLink Server（UDP Server 14550）** に `host.docker.internal:14550` で接続する。第3部で確認したとおり、外部 SITL は WSL の MAVProxy（14550）から BlueOS（14551）へ送られ、Mission Planner などの GCS は BlueOS の 14550 経由で監視する。
+
+> 図のとおり、**同じアプリが「WSL では SITL（5762）」「BlueOS では MAVLink Server（14550）」に接続**します。接続先は環境変数 `MAV_ENDPOINT` で切り替わるだけで、コードもイメージも共通です（第2部 2.2 参照）。
+
 ## 4.1. Web アプリを Extension 化（`/dronify-blueos`）
 
-AI が生成しただけのアプリでは、BlueOS 固有の要件が**満たされません**。本講座の中核がこの要件であり、Agent Skill **`/dronify-blueos`** がこれらを一問一答で確定 → 自動適用 → ローカルビルド検証まで行います（**Docker 化と Extension 化をまとめて適用**）。配布（build / push / install）は 4.2 で自分で行います。
+AI が生成しただけのアプリでは、BlueOS 固有の要件が**満たされません**。本講座の中核がこの要件であり、Agent Skill **[`/dronify-blueos`](https://github.com/hfujikawa77/droneschool/blob/master/.claude/skills/dronify-blueos/SKILL.md)** がこれらを一問一答で確定 → 自動適用 → ローカルビルド検証まで行います（**Docker 化と Extension 化をまとめて適用**）。配布（build / push / install）は 4.2 で自分で行います。
+
+> スキルの詳細仕様は [`SKILL.md`](https://github.com/hfujikawa77/droneschool/blob/master/.claude/skills/dronify-blueos/SKILL.md) を参照してください。
+
+> **演習では完成版を使います（3分クッキング）。** `/dronify-blueos` の実行は宿題です。演習時間中は、すでに要件適用済みの完成・BlueOS版 **`webapp-blueos/drone-web-app-blueos/`** を使って、コンテナのビルド・起動を確認します（下記「ローカル確認」）。
 
 **`/dronify-blueos` が適用する要件**
 
