@@ -39,13 +39,13 @@ Table of Contents
 本ガイドは、WSL 上の SITL で動作確認した Web アプリを、そのまま **BlueOS Extension** として Raspberry Pi 上で動かすまでを扱う実習ガイドです。
 
 ```
-WSL + SITL で Web アプリを動かす（応用編）
-    ↓  BlueOS の各サービスに接続する基礎を確認する（基礎編）
-BlueOS 基礎編
-    ↓  Agent Skill で Extension 化し、配布する（Extension 編）
-BlueOS Extension 編
-    ↓  機能を足し、他者の実装を読む（次の一手）
-次の一手
+応用編 ― WSL + SITL で Web アプリを動かす
+   ↓
+基礎編 ― BlueOS の各サービスへの接続を確認する
+   ↓
+Extension 編 ― Agent Skill で Extension 化し、配布する
+   ↓
+次の一手 ― 機能を足し、他者の実装を読む
 ```
 
 > **前提となる環境構築**
@@ -276,7 +276,7 @@ JSON が返れば疎通 OK です。
 
 ![MAVLink2REST の Swagger UI（API 一覧）](media/blueos-mavlink2rest-020.png)
 
-各エンドポイントを開いて `Execute` を押すと、リクエスト URL とレスポンス（JSON）が確認できます。
+各エンドポイントを開き、`Try it out` を押してから `Execute` を押すと、リクエスト URL とレスポンス（JSON）が確認できます。
 
 ![Swagger UI で /info を実行した結果](media/blueos-mavlink2rest-030.png)
 
