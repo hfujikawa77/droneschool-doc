@@ -16,7 +16,7 @@ Table of Contents
 - [2. BlueOS アーキテクチャ](#2-blueos-アーキテクチャ)
   - [2.1. BlueOS とは](#21-blueos-とは)
   - [2.2. コンテナ構成とサービス](#22-コンテナ構成とサービス)
-  - [2.3. MAVLink Router の役割](#23-mavlink-router-の役割)
+  - [2.3. MAVLink Server の役割](#23-mavlink-server-の役割)
 - [3. 第1部 WSL編 ― pymavlink 基礎](#3-第1部-wsl編--pymavlink-基礎)
   - [3.1. 演習1 MAVLink接続](#31-演習1-mavlink接続)
   - [3.2. 演習2 テレメトリ取得](#32-演習2-テレメトリ取得)
@@ -26,7 +26,7 @@ Table of Contents
   - [3.6. 演習6 イベント監視](#36-演習6-イベント監視)
 - [4. 第2部 BlueOS編 ― Companion Computer アプリ開発](#4-第2部-blueos編--companion-computer-アプリ開発)
   - [4.1. 演習1 BlueOS 接続](#41-演習1-blueos-接続)
-  - [4.2. 演習2 MAVLink Router 理解](#42-演習2-mavlink-router-理解)
+  - [4.2. 演習2 MAVLink Server 理解](#42-演習2-mavlink-server-理解)
   - [4.3. 演習3 MAVLink2REST 利用](#43-演習3-mavlink2rest-利用)
   - [4.4. 演習4 アプリ開発（Vibe コーディング）](#44-演習4-アプリ開発vibe-コーディング)
   - [4.5. 演習5 BlueOS Extension 化（`/dronify-blueos`）](#45-演習5-blueos-extension-化dronify-blueos)
@@ -102,7 +102,7 @@ BlueOS Extension 化
 | ☐ | pymavlink インストール済み |
 | ☐ | Docker インストール済み（第2部から必要） |
 | ☐ | `droneschool` リポジトリをフォーク＆クローン済み・ワークブランチ作成済み（[環境構築手順書 9.4](../drone-dev-env-setup-guide/drone-dev-env-setup-guide.md#94-課題提出用githubリポジトリ準備)） |
-| ☐ | `droneschool` の master を自分のブランチに取り込み済み（`vibe-coding/` と `.claude/skills/dronify-blueos/` がある。第2部冒頭参照） |
+| ☐ | `droneschool` の master を自分のブランチに取り込み済み（`webapp-blueos/` と `.claude/skills/dronify-blueos/` がある。第2部冒頭参照） |
 | ☐ | AIコーディングエージェント（Claude Code / Codex / GitHub Copilot CLI のいずれか）が使える状態 |
 
 <div style="page-break-before:always"></div>
@@ -134,14 +134,14 @@ BlueOS は Docker Compose で複数のサービスを管理します。主要サ
 
 NGINX がリバースプロキシとして各サービスを `/helper/`, `/mavlink2rest/`, `/ardupilot-manager/`, `/kraken/` などのパスで公開しています。
 
-## 2.3. MAVLink Router の役割
+## 2.3. MAVLink Server の役割
 
-フライトコントローラー (FC) からの MAVLink データを複数のクライアントに同時配信します。
+フライトコントローラー (FC) からの MAVLink データを複数のクライアントに同時配信（ルーティング）します。BlueOS ではこの役割を **MAVLink Server**（BlueOS 独自実装。Rpanion 等が内部で使う単体ツール `mavlink-router` とは別物）が担い、Web UI 上は **MAVLink Endpoints** として設定します。
 
 ```
 FC (シリアル)
     ↓
-MAVLink Router (BlueOS内部)
+MAVLink Server (BlueOS内部・UIでは MAVLink Endpoints)
     ├─→ Mission Planner (外部PC・UDP)
     ├─→ QGroundControl (外部PC・UDP)
     ├─→ MAVLink2REST (ポート6040)
@@ -149,7 +149,7 @@ MAVLink Router (BlueOS内部)
 ```
 
 外部 PC からの監視は Mission Planner / QGroundControl が `192.168.42.1:14550` に接続して行います（演習1）。
-一方、自作の **Extension アプリは BlueOS 上で動作**し、内部から `host.docker.internal:14550` 経由で同じ Router に接続します（演習6以降）。
+一方、自作の **Extension アプリは BlueOS 上で動作**し、内部から `host.docker.internal:14550` 経由で同じ MAVLink Server に接続します（演習6以降）。
 
 <div style="page-break-before:always"></div>
 
@@ -416,7 +416,7 @@ while True:
 | ☐ | WSL 上の SITL が起動済み（`sim_vehicle.py -v ArduCopter -L Kawachi --out udp:192.168.42.1:14551`） |
 
 > **【重要】教材の最新化（master の取り込み）**
-> 本演習で使う Vibe コーディング教材（`vibe-coding/`）と Agent Skill（`.claude/skills/dronify-blueos/`）は、`droneschool` リポジトリの master に後から追加されました。[環境構築手順書 9.4](../drone-dev-env-setup-guide/drone-dev-env-setup-guide.md#94-課題提出用githubリポジトリ準備) で作成した自分のブランチ（例 `21st_<fname-lname>`）には含まれていないため、作業前に master を取り込んでください。
+> 本演習で使う Vibe コーディング教材（`webapp-blueos/`）と Agent Skill（`.claude/skills/dronify-blueos/`）は、`droneschool` リポジトリの master に後から追加されました。[環境構築手順書 9.4](../drone-dev-env-setup-guide/drone-dev-env-setup-guide.md#94-課題提出用githubリポジトリ準備) で作成した自分のブランチ（例 `21st_<fname-lname>`）には含まれていないため、作業前に master を取り込んでください。
 >
 > 1. GitHub 上で自分のフォークの `master` を **Sync fork**（9.4 の「フォーク元の変更の取り込み」と同じ）
 > 2. ローカルで master を更新し、自分のワークブランチへ取り込む：
@@ -429,7 +429,7 @@ while True:
 >    ```
 > 3. 取り込めたか確認（両方が存在すれば OK）：
 >    ```bash
->    ls vibe-coding/ .claude/skills/dronify-blueos/
+>    ls webapp-blueos/ .claude/skills/dronify-blueos/
 >    ```
 
 > **使用するAIコーディングエージェント**
@@ -451,7 +451,7 @@ WSL (Ubuntu) ── UDP 14551 ──→ 192.168.42.1:14551
 
 Raspberry Pi (BlueOS)  IP: 192.168.42.1
   ArduPilot Manager → Manual ボード（外部 SITL からテレメトリを受信）
-  MAVLink Router → UDP Server 14550 を公開
+  MAVLink Server → UDP Server 14550 を公開
         ├─→ Mission Planner（外部 PC・運用モニタリング）
         └─→ Drone Web Control Extension（BlueOS 内部・host.docker.internal 経由）
 ```
@@ -463,8 +463,8 @@ Raspberry Pi (BlueOS)  IP: 192.168.42.1
 | 用途 | 誰が | 接続先 | 登場 |
 |------|------|--------|------|
 | アプリのロジック開発・検証 | WSL の Python / コンテナ | ローカル SITL `tcp:127.0.0.1:5762` | 第1部・4.4・4.5 |
-| 本番（Extension） | BlueOS 上のコンテナ | Board（Router）`udpout:host.docker.internal:14550` | 4.6 以降 |
-| 運用モニタリング | Mission Planner（外部 PC） | Router `192.168.42.1:14550` | 本演習 |
+| 本番（Extension） | BlueOS 上のコンテナ | Board（MAVLink Server）`udpout:host.docker.internal:14550` | 4.6 以降 |
+| 運用モニタリング | Mission Planner（外部 PC） | MAVLink Server `192.168.42.1:14550` | 本演習 |
 
 > アプリ開発はローカル SITL（第1部・4.4・4.5）で完結し、完成したアプリは Extension として BlueOS 上で Board に接続します（4.6 以降）。**外部 PC からの監視は Mission Planner が担当**し、自作アプリを外部から BlueOS につなぐ必要はありません。本演習ではこの監視経路を確認します。
 
@@ -487,10 +487,10 @@ Raspberry Pi (BlueOS)  IP: 192.168.42.1
 
 ---
 
-## 4.2. 演習2 MAVLink Router 理解
+## 4.2. 演習2 MAVLink Server 理解
 
 **学習内容**
-- MAVLink Router によるデータ経路の理解
+- MAVLink Server によるデータ経路の理解
 - BlueOS Web UI でのエンドポイント管理
 
 **BlueOS Web UI でのエンドポイント確認**
@@ -511,7 +511,7 @@ Raspberry Pi (BlueOS)  IP: 192.168.42.1
 | IP | 0.0.0.0 |
 | Port | 14660 |
 
-> **Extension は新規エンドポイント不要:** 演習6以降の Drone Web Control Extension は、既存の `UDP Server 14550` に **BlueOS 内部から `host.docker.internal` 経由**で接続します。MAVLink Router は1つのエンドポイントへ複数クライアントが同時接続できるため、Mission Planner（外部）と Extension（内部）が同じ 14550 を共有しても問題ありません。
+> **Extension は新規エンドポイント不要:** 演習6以降の Drone Web Control Extension は、既存の `UDP Server 14550` に **BlueOS 内部から `host.docker.internal` 経由**で接続します。MAVLink Server は1つのエンドポイントへ複数クライアントが同時接続できるため、Mission Planner（外部）と Extension（内部）が同じ 14550 を共有しても問題ありません。
 
 **成果物:** データ経路図の理解 + エンドポイント管理（確認・追加）手順の習得
 
@@ -582,12 +582,12 @@ else:
 
 **Vibe コーディング（宿題）**
 
-上記の仕様＋技術スタックは、生成用プロンプト **`vibe-coding/build-prompt.md`** にまとまっています。これを自分のワークフォルダにコピーし、AI コーディングエージェントにそのプロンプトで指示してアプリ（以後 **Drone Web Control**）を生成します。
+上記の仕様＋技術スタックは、生成用プロンプト **`webapp-blueos/build-prompt.md`** にまとまっています。これを自分のワークフォルダにコピーし、AI コーディングエージェントにそのプロンプトで指示してアプリ（以後 **Drone Web Control**）を生成します。
 
 ```bash
 # ① ワークフォルダを作成し、生成プロンプトをコピー
 mkdir -p ~/GitHub/droneschool/workshop/21st/hideyuki-fujikawa
-cp ~/GitHub/droneschool/vibe-coding/build-prompt.md \
+cp ~/GitHub/droneschool/webapp-blueos/build-prompt.md \
    ~/GitHub/droneschool/workshop/21st/hideyuki-fujikawa/
 ```
 
@@ -602,7 +602,7 @@ claude        # または codex / copilot（CLI 版）
 
 > このアプリは演習5で **そのまま Docker 化・BlueOS Extension 化**します。BlueOS で動かすための要件（接続先・`register_service`・`avoid_iframes` 等）は演習5で `/dronify-blueos` が適用し、演習6で配布します。
 
-> **演習では完成版を使います（3分クッキング）。** 上記の生成作業は宿題です。演習時間中は完成・素版 **`vibe-coding/drone-web-app/`** をそのまま使って、以下のローカル動作確認を行います。
+> **演習では完成版を使います（3分クッキング）。** 上記の生成作業は宿題です。演習時間中は完成・素版 **`webapp-blueos/drone-web-app/`** をそのまま使って、以下のローカル動作確認を行います。
 
 **ローカル動作確認（WSL + SITL）**
 
@@ -613,8 +613,8 @@ sim_vehicle.py -v Copter --console -L Kawachi
 
 ```bash
 # ② アプリ起動（接続先をローカル SITL に上書き）
-#    演習: 完成版 vibe-coding/drone-web-app / 宿題: 自分が生成したアプリ
-cd ~/GitHub/droneschool/vibe-coding/drone-web-app/backend
+#    演習: 完成版 webapp-blueos/drone-web-app / 宿題: 自分が生成したアプリ
+cd ~/GitHub/droneschool/webapp-blueos/drone-web-app/backend
 MAV_ENDPOINT=tcp:127.0.0.1:5762 uvicorn main:app --host 0.0.0.0 --port 9999
 ```
 
@@ -650,12 +650,12 @@ MAV_ENDPOINT=tcp:127.0.0.1:5762 uvicorn main:app --host 0.0.0.0 --port 9999
 | ① | **permissions LABEL（bridge + ポート固定）** | Kraken は LABEL を Docker API 設定としてそのまま使う。`avoid_iframes` で `http://<IP>:9999/` を直接開くためポートは固定（`HostPort:"9999"`） |
 | ② | **`/register_service`（`avoid_iframes: true`）** | Helper はこの JSON で左メニューを生成。WebSocket は nginx 自動ルートが WS 非対応のため、直接ポートを開かせる |
 | ③ | **`GET /` が 200 を返す** | Helper は `/` で生存確認。200 以外だと `/register_service` を呼ばずメニューに出ない |
-| ④ | **MAVLink 接続（bridge / Router 対策）** | `host.docker.internal` 接続・非ブロック接続・`mode_mapping_byname` での明示マップ・自機のみ受信（mode/armed の点滅防止） |
+| ④ | **MAVLink 接続（bridge / MAVLink Server 対策）** | `host.docker.internal` 接続・非ブロック接続・`mode_mapping_byname` での明示マップ・自機のみ受信（mode/armed の点滅防止） |
 | ⑤ | **Leaflet をローカル同梱** | BlueOS ホットスポット接続中はネットに出られず CDN 不達（`L is not defined`） |
 
 > **モードマップの落とし穴:** Plane の `GUIDED=15` を Copter に送ると Copter ではモード 15 が **AUTOTUNE** になり「Mode change to Autotune failed」になります（Copter は `GUIDED=4`）。これが `mode_mapping_byname` を使う理由です。
 >
-> **Router 側:** BlueOS の MAVLink Endpoint は **UDP Server `0.0.0.0:14550`** で公開しておきます（演習1の構成）。
+> **MAVLink Server 側:** BlueOS の MAVLink Endpoint は **UDP Server `0.0.0.0:14550`** で公開しておきます（演習1の構成）。
 >
 > **ポート:** **9999** で統一します（8080 は BlueOS 内の `mavlink-server` が使用済みのため避ける）。
 
@@ -677,7 +677,7 @@ claude        # Claude Code を起動
 
 **ローカル確認（完成版で確認）**
 
-演習では、すでに要件が適用済みの完成・BlueOS版 **`vibe-coding/drone-web-app-blueos/`** を使って、コンテナ起動を確認します（スキル適用は宿題）。
+演習では、すでに要件が適用済みの完成・BlueOS版 **`webapp-blueos/drone-web-app-blueos/`** を使って、コンテナ起動を確認します（スキル適用は宿題）。
 
 ```bash
 # ① SITL
@@ -686,13 +686,13 @@ sim_vehicle.py -v Copter --console -L Kawachi
 
 ```bash
 # ② ビルド & 起動（接続先をローカル SITL に上書き）
-cd ~/GitHub/droneschool/vibe-coding/drone-web-app-blueos
+cd ~/GitHub/droneschool/webapp-blueos/drone-web-app-blueos
 docker build -t drone-web-app .
 docker run --rm --network host -e MAV_ENDPOINT=tcp:127.0.0.1:5762 drone-web-app
 # → ブラウザ http://localhost:9999/
 ```
 
-> **`--network host` と `-e MAV_ENDPOINT`:** ローカルでは host ネットワークで SITL に直結し、接続先を `tcp:5762` へ明示します。BlueOS（演習6）では env を渡さず、既定の `host.docker.internal` で Router に繋ぎます。
+> **`--network host` と `-e MAV_ENDPOINT`:** ローカルでは host ネットワークで SITL に直結し、接続先を `tcp:5762` へ明示します。BlueOS（演習6）では env を渡さず、既定の `host.docker.internal` で MAVLink Server に繋ぎます。
 
 **成果物:** 要件適用済み・ローカル検証済みの Extension イメージ
 
@@ -795,11 +795,11 @@ docker buildx build --platform linux/amd64,linux/arm64 --provenance=false \
 
 **学習内容**
 - 実機フライトコントローラーへのテレメトリ接続
-- BlueOS MAVLink Router 経由でのデータ取得
+- BlueOS MAVLink Server 経由でのデータ取得
 
 **変更点（コードは変えない）**
 
-Extension はコンテナ内から `host.docker.internal:14550`（BlueOS の MAVLink Router）に接続します。この経路は SITL でも実機でも同じなので、**アプリのコードもイメージも変更不要**です。変わるのは BlueOS 側の「どの機体を Router に流すか」だけです。
+Extension はコンテナ内から `host.docker.internal:14550`（BlueOS の MAVLink Server）に接続します。この経路は SITL でも実機でも同じなので、**アプリのコードもイメージも変更不要**です。変わるのは BlueOS 側の「どの機体を MAVLink Server に流すか」だけです。
 
 - SITL: 外部 SITL → Manual ボード（演習1の構成）
 - 実機: フライトコントローラー → シリアル接続
@@ -836,7 +836,7 @@ Extension はコンテナ内から `host.docker.internal:14550`（BlueOS の MAV
 import threading
 from pymavlink import mavutil
 
-# Extension（コンテナ内）から Router へ。演習5と同じ接続先。
+# Extension（コンテナ内）から MAVLink Server へ。演習5と同じ接続先。
 master = mavutil.mavlink_connection("udpout:host.docker.internal:14550")
 master.wait_heartbeat()
 
@@ -963,9 +963,9 @@ drone-web-app/
 演習4で Vibe コーディングしたアプリ（Drone Web Control）に、通知・異常検知を加えて完成させます。BlueOS の左メニューから開き、ドローンの見守り・基本操作ができる状態を最終目標とします。
 
 > **教材（`droneschool` リポジトリ）**
-> - 生成プロンプト: `vibe-coding/build-prompt.md`
-> - 完成・素版: `vibe-coding/drone-web-app/`（ローカル SITL で動く最小構成）
-> - 完成・BlueOS版: `vibe-coding/drone-web-app-blueos/`（Extension 化まで適用済み）
+> - 生成プロンプト: `webapp-blueos/build-prompt.md`
+> - 完成・素版: `webapp-blueos/drone-web-app/`（ローカル SITL で動く最小構成）
+> - 完成・BlueOS版: `webapp-blueos/drone-web-app-blueos/`（Extension 化まで適用済み）
 > - BlueOS 化スキル: `.claude/skills/dronify-blueos/`
 
 <div style="page-break-before:always"></div>
