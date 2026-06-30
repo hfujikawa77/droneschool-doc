@@ -170,10 +170,10 @@ WSL (Ubuntu) ── UDP 14551 ──→ 192.168.42.1:14551
                                     │
 Raspberry Pi (BlueOS)  IP: 192.168.42.1
   ArduPilot Manager → Manual ボード（外部 SITL を受信）
-  MAVLink Server → UDP Server 14550 を公開
-        ├─→ Cockpit / Mission Planner（GCS・外部 PC）
-        ├─→ MAVLink2REST（ポート 6040）
-        └─→ Extension アプリ（BlueOS 内部・host.docker.internal:14550）
+  MAVLink Server（複数のエンドポイントを公開）
+        ├─→ UDP Server 14552 → Mission Planner（GCS・外部 PC／3.2 で追加）
+        ├─→ UDP Server 14550 → Cockpit（GCS・3.4）／Extension（内部・host.docker.internal:14550・第4部）
+        └─→ MAVLink2REST（ポート 6040・3.3）
 ```
 
 ## 3.1. 接続 ― 環境構築のおさらい
@@ -188,25 +188,51 @@ Raspberry Pi (BlueOS)  IP: 192.168.42.1
 
 ## 3.2. MAVLink Server ― エンドポイント追加と接続確認
 
-BlueOS の **MAVLink Server** は、フライトコントローラー（または外部 SITL）の MAVLink を複数のクライアントへ同時配信（ルーティング）するサービスです。Web UI 上は **MAVLink Endpoints** として設定します。
+BlueOS の **MAVLink Server** は、フライトコントローラー（または外部 SITL）の MAVLink を複数のクライアントへ同時配信（ルーティング）するサービスです。Web UI 上は **MAVLink Endpoints** として設定します。ここでは **新しいエンドポイント（UDP Server 14552）を追加し、そこへ Mission Planner を接続できること**を確認します。
 
-**エンドポイントの確認・追加**
+> 既定の `UDP Server 14550` は Cockpit（3.4）や Extension（第4部）が使うため、ここでは別ポート `14552` を新規に追加して「エンドポイントを増やす」操作を体験します。MAVLink Server は同じ機体のデータを複数エンドポイントへ同時配信できます。
+
+**① エンドポイント一覧を開く**
 
 1. ブラウザで `http://192.168.42.1`（BlueOS のホットスポット IP）を開く
 2. 左メニュー → `Vehicle Setup` → `MAVLink Endpoints`
-3. **`UDP Server 0.0.0.0:14550`** があることを確認する。無ければ次の値で追加する：
+
+![MAVLink Endpoints 画面](media/blueos-mavlink-endpoints-010.png)
+
+**② エンドポイントを追加する**
+
+右下の `+` ボタンを押し、ダイアログに次の値を入力して `CREATE ENDPOINT` を押す。
+
+| 項目 | 値 |
+|-----|-----|
+| Name | 任意（例: `My UDP Server_14552`） |
+| Type | `UDP Server` |
+| IP/Device | `0.0.0.0` |
+| Port/Baudrate | `14552` |
+| Start endpoint already enabled | ✅ チェック |
+
+![エンドポイント作成ダイアログ](media/blueos-mavlink-endpoints-020.png)
+
+追加すると、一覧の先頭に `UDP Server 0.0.0.0:14552` が有効状態で表示される。
+
+![追加されたエンドポイント](media/blueos-mavlink-endpoints-030.png)
+
+**③ Mission Planner から UDPCl 接続する**
+
+1. PC を BlueOS のホットスポット（`192.168.42.1`）に接続する
+2. Mission Planner 右上の接続種別で **`UDPCl`（UDP Client）** を選ぶ
+3. `接続` を押し、接続先を入力する
 
    | 項目 | 値 |
    |-----|-----|
-   | Connection type | UDP Server |
-   | IP | 0.0.0.0 |
-   | Port | 14550 |
+   | Host | `192.168.42.1` |
+   | Port | `14552` |
 
-![MAVLink Endpoints 画面（UDP Server 0.0.0.0:14550）](media/blueos-mavlink-endpoints-010.png)
+4. HUD に姿勢・GPS・高度が表示され、`リンク ステータス` に機体（例: `UDPCl14552-1-QUADROTOR`）が出れば成功
 
-> MAVLink Server は1つのエンドポイントへ複数クライアントが同時接続できます。このあとの Cockpit（GCS）も、第4部の Extension も、同じ `UDP Server 14550` を共有して接続します（Extension は BlueOS 内部から `host.docker.internal` 経由）。
+![Mission Planner を UDPCl で 14552 に接続](media/blueos-mavlink-endpoints-040.png)
 
-**成果物:** `UDP Server 14550` エンドポイントの確認／追加
+**成果物:** 新規エンドポイント `UDP Server 14552` を追加し、Mission Planner から接続できることを確認
 
 ## 3.3. MAVLink2REST ― curl で確認
 
