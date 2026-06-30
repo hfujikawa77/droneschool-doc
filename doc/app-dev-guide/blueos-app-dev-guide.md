@@ -245,7 +245,7 @@ curl http://192.168.42.1/mavlink2rest/mavlink/vehicles/1/components/1/messages/G
 
 JSON が返れば疎通 OK です。`jq` があれば高度だけを取り出せます。
 
-> 🖼️ **TODO（画像）**: curl 実行結果（または <http://192.168.42.1:6040/docs/index.html?url=/docs.json> の画面）
+![curl で MAVLink2REST から GLOBAL_POSITION_INT を取得した結果](media/blueos-mavlink2rest-010.png)
 
 ```bash
 curl -s http://192.168.42.1/mavlink2rest/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT \
