@@ -171,10 +171,11 @@ WSL (Ubuntu) ── UDP 14551 ──→ 192.168.42.1:14551
 Raspberry Pi (BlueOS)  IP: 192.168.42.1
   ArduPilot Manager → Manual ボード（外部 SITL を受信）
   MAVLink Server（複数のエンドポイントを公開）
-        ├─→ UDP Server 14552 → Mission Planner（GCS・外部 PC／3.2 で追加）
-        ├─→ UDP Server 14550 → Cockpit（GCS・3.4）／Extension（内部・host.docker.internal:14550・第4部）
+        ├─→ UDP Server 14550 → Mission Planner / Cockpit（GCS・3.4）／Extension（内部・host.docker.internal:14550・第4部）
         └─→ MAVLink2REST（ポート 6040・3.3）
 ```
+
+> 3.2 では、エンドポイントの追加操作を体験するために一時的に `UDP Server 14552` を作って Mission Planner をつなぎ、最後に削除します。以降の手順では上図のとおり既定の `UDP Server 14550` を共有して使います。
 
 ## 3.1. 接続 ― 環境構築のおさらい
 
@@ -259,20 +260,6 @@ JSON が返れば疎通 OK です。
 
 ![curl で MAVLink2REST から GLOBAL_POSITION_INT を取得した結果](media/blueos-mavlink2rest-010.png)
 
-高度だけを取り出すには `jq` が便利です（未インストールなら `sudo apt install jq`）。
-
-```bash
-curl -s http://192.168.42.1/mavlink2rest/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT \
-  | jq '.message.relative_alt / 1000'   # 高度 [m]
-```
-
-> `jq` を入れたくない場合は Python でも取り出せます：
->
-> ```bash
-> curl -s http://192.168.42.1/mavlink2rest/mavlink/vehicles/1/components/1/messages/GLOBAL_POSITION_INT \
->   | python3 -c "import sys,json; print(json.load(sys.stdin)['message']['relative_alt']/1000)"
-> ```
-
 **主要エンドポイント**
 
 | エンドポイント | 説明 |
@@ -283,9 +270,17 @@ curl -s http://192.168.42.1/mavlink2rest/mavlink/vehicles/1/components/1/message
 | `.../messages/GLOBAL_POSITION_INT` | GPS 位置・高度 |
 | `.../messages/SYS_STATUS` | バッテリー等 |
 
-> API ドキュメント（Swagger UI）は <http://192.168.42.1:6040/docs/index.html?url=/docs.json> で確認できます。
+**Swagger UI で API を試す**
 
-**成果物:** curl で MAVLink2REST から応答を得る
+ブラウザで <http://192.168.42.1:6040/docs/index.html?url=/docs.json> を開くと、Swagger UI で全 API を一覧でき、ブラウザ上から直接リクエストを試せます。
+
+![MAVLink2REST の Swagger UI（API 一覧）](media/blueos-mavlink2rest-020.png)
+
+各エンドポイントを開いて `Execute` を押すと、リクエスト URL とレスポンス（JSON）が確認できます。
+
+![Swagger UI で /info を実行した結果](media/blueos-mavlink2rest-030.png)
+
+**成果物:** curl と Swagger UI で MAVLink2REST から応答を得る
 
 ## 3.4. Cockpit ― ARM・離陸・GOTO の確認
 
