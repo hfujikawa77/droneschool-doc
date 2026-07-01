@@ -345,10 +345,6 @@ claude        # Claude Code を起動
 
 ![`/dronify-blueos` 実行中の設定確認（アプリ名などの一問一答）](media/blueos-extensions-002.png)
 
-> **`/dronify-blueos` が使える理由:** このスキルは `droneschool/.claude/skills/dronify-blueos/` にあります。ワークフォルダが droneschool リポジトリの**中**にあれば、Claude Code が親ディレクトリを辿ってスキルを検出するため、コピー不要でそのまま使えます。droneschool の外に作ると検出されないので注意してください。
->
-> Codex / GitHub Copilot CLI は `.claude/skills/` を読みません。その場合は `.claude/skills/dronify-blueos/SKILL.md` の内容をプロンプトとして渡してください。
->
 > スキルは要件の適用と **ローカルビルド検証**（`GET /` が 200、`/register_service` の JSON、`permissions` LABEL の確認）まで行います。**push と BlueOS インストールは行いません**（4.2 で自分で実施）。
 
 **ローカル確認（完成版で確認）**
@@ -481,7 +477,7 @@ Drone Web App に、表示情報や運用機能を足していきます。
 
 ## 5.2. ArduPilot 公式 Extension を読む
 
-ArduPilot コミュニティが公開している BlueOS Extension は、実用的な実装の好例です。自分の Extension に通じる構成（`register_service` / Docker LABEL / カメラ・MAVLink 連携）を読み解いてみましょう。
+ArduPilot のコア開発者 Randy Mackay 氏（rmackay9）が公開している BlueOS Extension は、ArduPilot 公式による実用的な実装の好例です。自分の Extension に通じる構成（`register_service` / Docker LABEL / カメラ・MAVLink 連携）を読み解いてみましょう。
 
 - **プレシジョンランディング** … <https://github.com/rmackay9/blueos-precision-landing>
 - **高高度オプティカルフロー** … <https://github.com/rmackay9/blueos-opticalflow>
