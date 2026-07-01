@@ -284,20 +284,7 @@ JSON が返れば疎通 OK です。
 
 ## 3.4. Cockpit ― ARM・離陸・GOTO の確認
 
-**Cockpit** は BlueOS に統合された Web ベースの GCS（地上局）です。Mission Planner を使わずに、ブラウザだけで機体の監視・操作ができます。ここで SITL に対して基本操作が通ることを確認します。
-
-1. BlueOS 左メニューから **Cockpit** を開く（接続確認手順は [環境構築手順書 §4.4](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#44-cockpitからのgcs接続確認任意) を参照）
-2. テレメトリ（姿勢・GPS・高度）が表示されることを確認する
-3. 以下の基本操作が通ることを確認する：
-   - **ARM** … アーム
-   - **TAKEOFF** … 高度を指定して離陸（GUIDED に入る）
-   - **GOTO** … 地図上の地点を指定して移動
-
-> 🖼️ **TODO（画像）**: Cockpit で SITL に接続し、ARM・離陸・GOTO を実行している画面
-
-> Cockpit / Mission Planner はいずれも MAVLink Server（`192.168.42.1:14550`）に GCS として接続します。第4部で作る Extension も同じ MAVLink Server に内部から接続するため、ここで操作が通れば Extension からも同じ操作が通ります。
-
-**成果物:** Cockpit から SITL を ARM・離陸・GOTO できることを確認
+Cockpit からの GCS 接続確認・ARM・離陸・GOTO の手順は [BlueOS 環境構築手順書 §4.4](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#44-cockpitからのgcs接続確認任意) を参照してください。
 
 <div style="page-break-before:always"></div>
 
@@ -483,46 +470,7 @@ Drone Web App に、表示情報や運用機能を足していきます。
 - **フェイルセーフ監視** … GPS 異常・バッテリー低下・EKF 異常・RC 喪失を検知して通知
 - **実機での運用** … 同じ Extension を実機 FC で動かす（コードもイメージも無変更。SITL ボードを実機 FC に差し替えるだけ。手順は [BlueOS 環境構築手順書 §5.3](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#53-参考実機fcフライトコントローラーを接続する場合)）
 
-**例：Discord 通知**
-
-```python
-import requests
-
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/<your-webhook-url>"
-
-def notify(message: str):
-    requests.post(DISCORD_WEBHOOK_URL, json={"content": message})
-
-notify("バッテリー低下を検知しました！")
-```
-
-**例：フェイルセーフ監視スレッド**
-
-```python
-import threading
-from pymavlink import mavutil
-
-# Extension（コンテナ内）から MAVLink Server へ。4.1 と同じ接続先。
-master = mavutil.mavlink_connection("udpout:host.docker.internal:14550")
-master.wait_heartbeat()
-
-BATTERY_THRESHOLD_V = 14.0  # 警告電圧 (V)
-
-def monitor():
-    while True:
-        msg = master.recv_match(type=["GPS_RAW_INT", "SYS_STATUS"],
-                                blocking=True, timeout=5)
-        if msg is None:
-            continue
-        if msg.get_type() == "GPS_RAW_INT" and msg.fix_type < 3:
-            notify("GPS 異常: Fix なし")
-        if msg.get_type() == "SYS_STATUS":
-            volt = msg.voltage_battery / 1000
-            if volt < BATTERY_THRESHOLD_V:
-                notify(f"バッテリー低下: {volt:.1f} V")
-
-threading.Thread(target=monitor, daemon=True).start()
-```
+フェイルセーフ監視で検知したい異常と、その手がかりとなる MAVLink メッセージの例：
 
 | 異常 | 検出方法 |
 |-----|---------|
