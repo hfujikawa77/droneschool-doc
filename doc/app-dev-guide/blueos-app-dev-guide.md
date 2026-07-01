@@ -443,6 +443,11 @@ docker buildx build --platform linux/amd64,linux/arm64 --provenance=false \
 
 ![インストール済み Extension の詳細](media/blueos-extensions-020.png)
 
+> **動作確認の前に:** WSL 上で SITL が起動していることを確認してください。起動していなければ、次のコマンドで起動します（3.1 と同じ構成）。
+> ```bash
+> sim_vehicle.py -v ArduCopter -L Kawachi --out udp:192.168.42.1:14551
+> ```
+
 **動作確認（Definition of Done）**
 
 - [ ] 左メニューに **Drone Web App** が出る／クリックで `:9999` が開く
