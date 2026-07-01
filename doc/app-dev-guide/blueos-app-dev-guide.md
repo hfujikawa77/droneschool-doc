@@ -363,12 +363,14 @@ sim_vehicle.py -v Copter --console -L Kawachi
 
 ```bash
 # ② 完成版をワークフォルダにコピー（演習用。宿題で /dronify-blueos を適用済みの場合は不要）
-cp -r ~/GitHub/droneschool/webapp-blueos/drone-web-app-blueos ~/GitHub/droneschool/workshop/<term_no>/<fname-lname>/
+#    2.2 でコピーした Extension化前の drone-web-app を、Extension化後の内容で置き換える
+rm -rf ~/GitHub/droneschool/workshop/<term_no>/<fname-lname>/drone-web-app
+cp -r ~/GitHub/droneschool/webapp-blueos/drone-web-app-blueos ~/GitHub/droneschool/workshop/<term_no>/<fname-lname>/drone-web-app
 ```
 
 ```bash
 # ③ ビルド & 起動（接続先をローカル SITL に上書き）
-cd ~/GitHub/droneschool/workshop/<term_no>/<fname-lname>/drone-web-app-blueos
+cd ~/GitHub/droneschool/workshop/<term_no>/<fname-lname>/drone-web-app
 docker build -t drone-web-app .
 docker run --rm --network host -e MAV_ENDPOINT=tcp:127.0.0.1:5762 drone-web-app
 # → ブラウザ http://localhost:9999/
