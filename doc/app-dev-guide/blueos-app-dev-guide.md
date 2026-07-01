@@ -13,7 +13,7 @@ Table of Contents
 - [1. 事前準備](#1-事前準備)
   - [1.1. 最新資材の取得](#11-最新資材の取得)
   - [1.2. AIコーディングエージェントの準備](#12-aiコーディングエージェントの準備)
-- [2. WSL/Pymavlink 応用編 ― Web アプリ開発](#2-wslpymavlink-応用編--web-アプリ開発)
+- [2. ドローン Web アプリ開発編](#2-ドローン-web-アプリ開発編)
   - [2.1. Web 制御アプリを生成する（Vibe コーディング）](#21-web-制御アプリを生成するvibe-コーディング)
   - [2.2. ローカル SITL で動作確認する](#22-ローカル-sitl-で動作確認する)
 - [3. BlueOS 基礎編](#3-blueos-基礎編)
@@ -39,11 +39,11 @@ Table of Contents
 本ガイドは、WSL 上の SITL で動作確認した Web アプリを、そのまま **BlueOS Extension** として Raspberry Pi 上で動かすまでを扱う実習ガイドです。
 
 ```
-応用編 ― WSL + SITL で Web アプリを動かす
+ドローン Web アプリ開発編 ― WSL + SITL で Web アプリを動かす
    ↓
-基礎編 ― BlueOS の各サービスへの接続を確認する
+BlueOS 基礎編 ― BlueOS の各サービスへの接続を確認する
    ↓
-Extension 編 ― Agent Skill で Extension 化し、配布する
+BlueOS Extension 編 ― Agent Skill で Extension 化し、配布する
    ↓
 次の一手 ― 機能を足し、他者の実装を読む
 ```
@@ -96,7 +96,7 @@ ls webapp-blueos/ .claude/skills/dronify-blueos/
 
 <div style="page-break-before:always"></div>
 
-# 2. WSL/Pymavlink 応用編 ― Web アプリ開発
+# 2. ドローン Web アプリ開発編
 
 **目的:** pymavlink の操作（既習）を、ブラウザから使える Web 制御アプリへ発展させる。ここでは**仕様と技術スタックを与えて AI に生成させ**、ローカル SITL で動かすところまでを行う。
 
