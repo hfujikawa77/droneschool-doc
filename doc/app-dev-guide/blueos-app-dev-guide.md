@@ -356,6 +356,8 @@ claude        # Claude Code を起動
 # → /dronify-blueos を実行（アプリ名・ポート・機体種別などの一問一答に答える）
 ```
 
+![`/dronify-blueos` 実行中の設定確認（アプリ名などの一問一答）](media/blueos-extensions-002.png)
+
 > **`/dronify-blueos` が使える理由:** このスキルは `droneschool/.claude/skills/dronify-blueos/` にあります。ワークフォルダが droneschool リポジトリの**中**にあれば、Claude Code が親ディレクトリを辿ってスキルを検出するため、コピー不要でそのまま使えます。droneschool の外に作ると検出されないので注意してください。
 >
 > Codex / GitHub Copilot CLI は `.claude/skills/` を読みません。その場合は `.claude/skills/dronify-blueos/SKILL.md` の内容をプロンプトとして渡してください。
@@ -381,7 +383,7 @@ docker run --rm --network host -e MAV_ENDPOINT=tcp:127.0.0.1:5762 drone-web-app
 
 > **`--network host` と `-e MAV_ENDPOINT`:** ローカルでは host ネットワークで SITL に直結し、接続先を `tcp:5762` へ明示します。BlueOS（4.2）では env を渡さず、既定の `host.docker.internal` で MAVLink Server に繋ぎます。
 
-![docker run でコンテナを起動し、ブラウザで開いた画面](media/blueos-extensions-002.png)
+![docker run でコンテナを起動し、ブラウザで開いた画面](media/blueos-extensions-003.png)
 
 **成果物:** 要件適用済み・ローカル検証済みの Extension イメージ
 
