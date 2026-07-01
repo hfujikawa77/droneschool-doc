@@ -170,15 +170,7 @@ MAV_ENDPOINT=tcp:127.0.0.1:5762 uvicorn main:app --host 0.0.0.0 --port 9999
 
 **目的:** Extension を載せる前に、BlueOS が各クライアントへ MAVLink をどう配るかを確認する。BlueOS 環境構築手順書で構築した「外部 SITL → Manual ボード」構成の上で進める。
 
-```
-WSL (Ubuntu) ── UDP 14551 ──→ 192.168.42.1:14551
-                                    │
-Raspberry Pi (BlueOS)  IP: 192.168.42.1
-  ArduPilot Manager → Manual ボード（外部 SITL を受信）
-  MAVLink Server（複数のエンドポイントを公開）
-        ├─→ UDP Server 14550 → Mission Planner / Cockpit（GCS・3.4）／Extension（内部・host.docker.internal:14550・第4部）
-        └─→ MAVLink2REST（ポート 6040・3.3）
-```
+![BlueOS 基礎編の全体像（MAVLink Server が各クライアントへ配信する経路）](media/blueos-basics-010.png)
 
 > 3.2 では、エンドポイントの追加操作を体験するために一時的に `UDP Server 14552` を作って Mission Planner をつなぎ、最後に削除します。以降の手順では上図のとおり既定の `UDP Server 14550` を共有して使います。
 
