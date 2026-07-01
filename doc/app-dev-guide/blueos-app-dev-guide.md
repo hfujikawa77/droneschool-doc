@@ -116,7 +116,7 @@ ls webapp-blueos/ .claude/skills/dronify-blueos/
 
 ## 2.1. Web 制御アプリを生成する（Vibe コーディング）
 
-上記の仕様＋技術スタックは、生成用プロンプト **`webapp-blueos/build-prompt.md`** にまとまっています。これを自分のワークフォルダにコピーし、AI コーディングエージェントにそのプロンプトで指示してアプリ（以後 **Drone Web Control**）を生成します。
+上記の仕様＋技術スタックは、生成用プロンプト **`webapp-blueos/build-prompt.md`** にまとまっています。これを自分のワークフォルダにコピーし、AI コーディングエージェントにそのプロンプトで指示してアプリ（以後 **Drone Web App**）を生成します。
 
 ワークフォルダ `~/GitHub/droneschool/workshop/<term_no>/<fname-lname>/` は、[環境構築手順書 9.4](../drone-dev-env-setup-guide/drone-dev-env-setup-guide.md#94-課題提出用githubリポジトリ準備) で作成済みである前提です。
 
@@ -153,7 +153,7 @@ MAV_ENDPOINT=tcp:127.0.0.1:5762 uvicorn main:app --host 0.0.0.0 --port 9999
 
 ブラウザで <http://localhost:9999/> を開き、地図・テレメトリ・操作ボタンが動くことを確認します。
 
-![ローカル SITL で動作する Drone Web Control](media/drone-webapp-010.png)
+![ローカル SITL で動作する Drone Web App](media/drone-webapp-010.png)
 
 > 接続先は環境変数 `MAV_ENDPOINT` で切り替えます。未指定だと BlueOS 用の既定値（`udpout:host.docker.internal:14550`）になるため、ローカルでは `tcp:127.0.0.1:5762` を明示します。**同じコード・同じイメージのまま、接続先だけを差し替えて** WSL→BlueOS を移行できるのがポイントです。
 
@@ -396,6 +396,7 @@ docker run --rm --network host -e MAV_ENDPOINT=tcp:127.0.0.1:5762 drone-web-app
 BlueOS は Docker Hub からイメージを pull するため、事前に公開しておきます。Raspberry Pi は arm64 のため、`docker buildx` で **マルチアーキ**ビルドして push します。
 
 ```bash
+cd ~/GitHub/droneschool/workshop/<term_no>/<fname-lname>/drone-web-app   # 4.1 で Extension 化したアプリ（Dockerfile があるディレクトリ）
 docker login
 docker buildx create --use            # 初回のみ
 # push 時に "blob upload unknown" が出たら --provenance=false を付けて再実行
@@ -405,16 +406,18 @@ docker buildx build --platform linux/amd64,linux/arm64 --provenance=false \
 
 `https://hub.docker.com/r/<username>/drone-web-app` でイメージ（amd64/arm64）を確認します。
 
+![Docker Hub に公開されたイメージ](media/blueos-extensions-004.png)
+
 **BlueOS へのインストール（Web UI）**
 
-1. `http://<BlueOS_IP>` → 左メニュー `Extensions` → `INSTALLED` タブ
+1. `http://192.168.42.1` → 左メニュー `Extensions` → `INSTALLED` タブ
 2. 右下の `+` → `Create from scratch`
 3. 以下を入力する
 
    | 項目 | 値 |
    |-----|-----|
-   | Extension Identifier | `<username>.drone-web-control` |
-   | Extension Name | `Drone Web Control` |
+   | Extension Identifier | `<username>.drone-web-app` |
+   | Extension Name | `Drone Web App` |
    | Docker image | `<username>/drone-web-app` |
    | Docker tag | `latest` |
 
@@ -436,13 +439,13 @@ docker buildx build --platform linux/amd64,linux/arm64 --provenance=false \
 
 5. `CREATE` を押下
 
-インストール後、左メニューに **Drone Web Control** が追加されます。詳細画面で Status が `Up` になっていれば起動成功。クリックすると `avoid_iframes` により **`http://<BlueOS_IP>:9999/` が新規ウィンドウで開きます**。
+インストール後、左メニューに **Drone Web App** が追加されます。詳細画面で Status が `Up` になっていれば起動成功。クリックすると `avoid_iframes` により **`http://192.168.42.1:9999/` が新規ウィンドウで開きます**。
 
 ![インストール済み Extension の詳細](media/blueos-extensions-020.png)
 
 **動作確認（Definition of Done）**
 
-- [ ] 左メニューに **Drone Web Control** が出る／クリックで `:9999` が開く
+- [ ] 左メニューに **Drone Web App** が出る／クリックで `:9999` が開く
 - [ ] ステータス（接続/ARM/モード/座標/高度）が**点滅せず安定**して表示
 - [ ] ARM / TAKEOFF / LAND / GoTo / モード変更が機能（TAKEOFF で **GUIDED** に入る）
 - [ ] オフラインでも地図ウィジェット・マーカー・航跡が描画（タイルは灰色で可）
@@ -457,7 +460,7 @@ docker buildx build --platform linux/amd64,linux/arm64 --provenance=false \
 | 地図が出ない | CDN（unpkg/OSM）に到達できない | Leaflet をローカル同梱（4.1 ⑤） |
 | VIEW LOGS がタイムアウト | アクセスログ肥大 | `uvicorn ... --no-access-log`（4.1） |
 
-**成果物:** BlueOS 左メニューから開ける Drone Web Control Extension
+**成果物:** BlueOS 左メニューから開ける Drone Web App Extension
 
 <div style="page-break-before:always"></div>
 
@@ -467,7 +470,7 @@ docker buildx build --platform linux/amd64,linux/arm64 --provenance=false \
 
 ## 5.1. 機能を追加する
 
-Drone Web Control に、表示情報や運用機能を足していきます。
+Drone Web App に、表示情報や運用機能を足していきます。
 
 - **表示情報の追加** … HUD（姿勢）、バッテリー残量、GPS 状況（fix・衛星数）などをパネルに追加
 - **GOTO の強化** … 地図クリックで目的地指定、複数 WP の連続移動
