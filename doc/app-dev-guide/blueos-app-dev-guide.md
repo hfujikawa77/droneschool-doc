@@ -94,6 +94,16 @@ ls webapp-blueos/ .claude/skills/dronify-blueos/
 >
 > Extension 化で使う `/dronify-blueos` は Claude Code の **Agent Skill**（`/コマンド` で起動）です。Codex / GitHub Copilot CLI では、`.claude/skills/dronify-blueos/SKILL.md` の内容を**プロンプトとして渡して**同じ手順を実行してください。
 
+**Vibe コーディングの安全ルール(重要)**
+
+AI エージェントは、指示のしかたによっては**作業フォルダの外のファイル(教材や他の受講生の成果物)を書き換え・削除してしまう**ことがあります。どのエージェントを使う場合も、次の3点を必ず守ってください。
+
+1. **必ず自分のワークフォルダで起動する** … `cd ~/GitHub/droneschool/workshop/<term_no>/<fname-lname>` してから起動する(リポジトリ直下で起動しない)
+2. **確認プロンプトをスキップしない** … コマンド実行やファイル編集の確認を省略する全自動モード(`--dangerously-skip-permissions` 等)は使わない
+3. **AI に作業させる前にコミットする** … `git add -A && git commit -m "wip"` しておけば、万一ファイルを壊されても `git restore` で戻せる(未コミットの変更は復旧できない)
+
+> `droneschool` リポジトリには、Claude Code 向けのガードレール(ワークフォルダ外への変更・危険なコマンドを自動ブロックするフック)と、全エージェント共通のルールを書いた `CLAUDE.md` / `AGENTS.md` が同梱されています。ただしこれらは上記3点を守っていることが前提です。特に Codex / GitHub Copilot CLI ではフックが働かないため、各エージェント標準のサンドボックス・確認プロンプトを無効化しないことが重要です。
+
 <div style="page-break-before:always"></div>
 
 # 2. ドローン Web アプリ開発編
