@@ -2,7 +2,7 @@
 | :--- | :---: | :---: |:--- |
 | Git/GitHub | 〇 | 〇 | [GitHub 公式スタートガイド](https://docs.github.com/ja/get-started/start-your-journey) |
 | VSCode | 〇 | 〇 |[Visual Studio Code 入門](https://code.visualstudio.com/docs/getstarted/getting-started)|
-| WSL/Linux | 〇 | 〇 |[WSLインストールガイド（Microsoft）](https://learn.microsoft.com/ja-jp/windows/wsl/install)<br>[Linux と Bash の概要（Microsoft）](https://learn.microsoft.com/ja-jp/windows/wsl/tutorials/linux)|
+| WSL/Linux | 〇 | 〇 |[WSLとは（Microsoft）](https://learn.microsoft.com/ja-jp/windows/wsl/about)<br>[Linux と Bash の概要（Microsoft）](https://learn.microsoft.com/ja-jp/windows/wsl/tutorials/linux)<br>[Command line for beginners（Ubuntu公式・英語）](https://ubuntu.com/tutorials/command-line-for-beginners#1-overview)|
 | Python | 〇 | |[Python公式チュートリアル（Section 8まで）](https://docs.python.org/ja/3/tutorial/)|
 | C++ | | 〇 |[Cplusplus.com チュートリアル（英語）](https://cplusplus.com/doc/tutorial/)|
 | Lua | | 〇 |[Programming in Lua（公式）](https://www.lua.org/pil/contents.html)|
@@ -51,8 +51,9 @@
 
 ## WSL / Linux（開発環境・基本操作）
 
-* [WSL公式インストールガイド（Microsoft）](https://learn.microsoft.com/ja-jp/windows/wsl/install)
+* [WSLとは（Microsoft）](https://learn.microsoft.com/ja-jp/windows/wsl/about)
 * [WSLチュートリアル一覧（Microsoft）](https://learn.microsoft.com/ja-jp/windows/wsl/tutorials/linux)
+* [Command line for beginners（Ubuntu公式・英語）](https://ubuntu.com/tutorials/command-line-for-beginners#1-overview)
 
 
 
