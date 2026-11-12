@@ -2,12 +2,13 @@
 <h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
 <h2>コンパニオンコンピュータ環境構築手順書</h2><br>
 (Raspberry Pi Zero 2W + Rpanion-Server + Visual Studio Code)<br/>
-Ver.1.0.1 - 2025.5.17
+Ver.1.0.2 - 2026.11.12
 </div>
 
 <!--
 Ver.1.0.0 - 2024.5.30 - 初版
 Ver.1.0.1 - 2025.5.17 - Rpanion-SServerバージョン更新, 拡張機能追加
+Ver.1.0.2 - 2026.11.12 - DroneKit Python の記載を削除
 -->
 
 Table of Contents
@@ -38,7 +39,6 @@ Table of Contents
 - [7. ラズパイ上のアプリケーションから接続確認](#7-ラズパイ上のアプリケーションから接続確認)
   - [7.1. MAVProxyからの確認](#71-mavproxyからの確認)
   - [7.2. Pymavlinkからの確認](#72-pymavlinkからの確認)
-  - [7.3. DroneKit-Pythonからの確認](#73-dronekit-pythonからの確認)
 - [8. Appendix](#8-appendix)
   - [8.1. Rpanion-Server](#81-rpanion-server)
   - [8.2. Mission Planner](#82-mission-planner)
@@ -46,7 +46,6 @@ Table of Contents
   - [8.4. MAVLink-router](#84-mavlink-router)
   - [8.5. MAVProxy](#85-mavproxy)
   - [8.6. Pymavlink](#86-pymavlink)
-  - [8.7. DroneKit Python](#87-dronekit-python)
 
 <!-- /code_chunk_output -->
 
@@ -271,7 +270,6 @@ cd
 mkdir GitHub
 cd GitHub
 git clone https://github.com/＜あなたのGitHubアカウント名＞/droneschool
-git clone https://github.com/dronekit/dronekit-python
 git clone https://github.com/ArduPilot/pymavlink
 cd pymavlink
 git clone https://github.com/ArduPilot/mavlink
@@ -281,8 +279,6 @@ git clone https://github.com/ArduPilot/mavlink
 
 ```bash
 pip install --user mavproxy
-cd  /home/pi/GitHub/dronekit-python
-pip install --user .
 cd  /home/pi/GitHub/pymavlink
 pip install --user .
 ```
@@ -305,12 +301,10 @@ VS Codeをラズパイに接続している状態で、左側メニュー `拡�
 ```json
 {
     "python.autoComplete.extraPaths": [
-        "/home/pi/GitHub/pymavlink",
-        "/home/pi/GitHub/dronekit-python"
+        "/home/pi/GitHub/pymavlink"
     ],
     "python.analysis.extraPaths": [
-        "/home/pi/GitHub/pymavlink",
-        "/home/pi/GitHub/dronekit-python"
+        "/home/pi/GitHub/pymavlink"
     ],
     ～省略～
 }
@@ -318,9 +312,6 @@ VS Codeをラズパイに接続している状態で、左側メニュー `拡�
 
 VS Codeを再起動します。  
 下記画像のようにソースコードを入力した際に`Ctrl+SPACE`をクリックすると補完候補が表示されるようになっていればセットアップ完了です。  
-* DroneKit-Python  
- ![Alt text](media/dev-app-setup-040.jpg)  
-
 * pymavlink  
 ![Alt text](media/dev-app-setup-050.jpg)  
 
@@ -369,19 +360,6 @@ VS Codeのエクスプローラーから `GitHub/droneschool/pymavlink_scripts/p
 
 <div style="page-break-before:always"></div>  
 
-## 7.3. DroneKit-Pythonからの確認
-
-VS Codeのエクスプローラーから `GitHub/droneschool/dronekit_scripts/011_connect.py` を開きます。
-ソースコード4～5行目 の接続先が `127.0.0.1:14551` になっていることを確認します。
-
-右上の`▷アイコン`をクリックします。ターミナルが起動し、Pythonスクリプトが実行されます。  
-機体（シミュレータ）から受信した機体情報（対地速度、対空速度、モード、アーム状態、など）が一定間隔で表示されることを確認します。  
-![alt text](media/rpi-app-connect-020.jpg)
-
-`Ctrl+C`で終了します。
-
-<div style="page-break-before:always"></div>  
-
 # 8. Appendix
 ## 8.1. Rpanion-Server
 1. Official Website：[https://www.docs.rpanion.com/software/rpanion-server](https://www.docs.rpanion.com/software/rpanion-server)
@@ -400,6 +378,3 @@ VS Codeのエクスプローラーから `GitHub/droneschool/dronekit_scripts/01
 ## 8.6. Pymavlink
 1. GitHub：[https://github.com/ArduPilot/pymavlink](https://github.com/ArduPilot/pymavlink)
 2. Examples：[https://www.ardusub.com/developers/pymavlink.html](https://www.ardusub.com/developers/pymavlink.html)
-## 8.7. DroneKit Python
-1. Document：[https://dronekit.netlify.app/](https://dronekit.netlify.app/)
-2. Examples：[https://github.com/dronekit/dronekit-python/tree/master/examples](https://github.com/dronekit/dronekit-python/tree/master/examples)
