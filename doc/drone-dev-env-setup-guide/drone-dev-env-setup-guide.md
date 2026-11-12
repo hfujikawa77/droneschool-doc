@@ -567,12 +567,12 @@ Visual Studio Codeのエクスプローラーから `GitHub/droneschool/pymavlin
      cd GitHub/droneschool
      ```
 
-1. ワークブランチを作成し、チェックアウトします。ブランチ名の `＜term_no＞` は期番号（例: `21st`）、`＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `21st_hideyuki-fujikawa` ）
+1. ワークブランチを作成し、チェックアウトします。ブランチ名の `＜term_no＞` は期番号（例: `1st`、`2nd`、`3rd` …）、`＜fname-lname＞` はご自身の氏名に置き換えてください。（例: 1期の場合 `1st_hideyuki-fujikawa` ）
      ```bash
      git checkout -b ＜term_no＞_＜fname-lname＞
      ```
 
-1. 作業ディレクトリを作成します。 ディレクトリ名の `＜term_no＞` は期番号（例: `21st`）、`＜fname-lname＞` はご自身の氏名に置き換えてください。（例: `workshop/21st/hideyuki-fujikawa` ）
+1. 作業ディレクトリを作成します。 ディレクトリ名の `＜term_no＞` は期番号（例: `1st`、`2nd`、`3rd` …）、`＜fname-lname＞` はご自身の氏名に置き換えてください。（例: 1期の場合 `workshop/1st/hideyuki-fujikawa` ）
      ```bash
      mkdir -p workshop/＜term_no＞/＜fname-lname＞
      ```
@@ -602,7 +602,7 @@ Visual Studio Codeのエクスプローラーから `GitHub/droneschool/pymavlin
       - **base repository**: `hfujikawa77/droneschool`
       - **base**: `master`
       - **head repository**: `＜あなたのGitHubアカウント名＞/droneschool`
-      - **compare**: `＜term_no＞_＜fname-lname＞`（例: `21st_hideyuki-fujikawa`）
+      - **compare**: `＜term_no＞_＜fname-lname＞`（例: 1期の場合 `1st_hideyuki-fujikawa`）
     - Pull Requestのタイトルと本文を入力し、 `Create pull request`ボタンをクリックして、Pull Requestを作成します。
   
 1. フォーク元の変更の取り込み  
