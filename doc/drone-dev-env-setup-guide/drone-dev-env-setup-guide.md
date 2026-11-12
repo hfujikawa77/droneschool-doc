@@ -2,7 +2,7 @@
 <h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
 <h2>開発環境構築手順書</h2><br>
 (Windows10/11 + WSL2(Ubuntu22.04) + Visual Studio Code)<br/>
-Ver.1.4.7 - 2026.6.15
+Ver.1.4.8 - 2026.11.12
 </div>
 
 <!--
@@ -14,6 +14,7 @@ Ver.1.4.4 - 2025.5.17 - Appendixの更新
 Ver.1.4.5 - 2025.11.8 - 一部GitHubリポジトリはFork&Cloneするように修正
 Ver.1.4.6 - 2026.6.8  - 誤字修正
 Ver.1.4.7 - 2026.6.15 - 20th -> 21st に変更
+Ver.1.4.8 - 2026.11.12 - DroneKit Python の記載を削除、期番号の例を特定の期に依存しない表記に変更
 -->
 
 Table of Contents
@@ -42,12 +43,11 @@ Table of Contents
 - [7. WSL（Ubuntu22.04）へ拡張機能のインストール](#7-wslubuntu2204へ拡張機能のインストール)
 - [8. シミュレータ（SITL）用セットアップ](#8-シミュレータsitl用セットアップ)
   - [8.1. シミュレータ動作確認](#81-シミュレータ動作確認)
-- [9. 【Applicationコース向け】DroneKit Python, Pymavlinkセットアップ](#9-applicationコース向けdronekit-python-pymavlinkセットアップ)
+- [9. 【Applicationコース向け】Pymavlinkセットアップ](#9-applicationコース向けpymavlinkセットアップ)
   - [9.1. GitHubからソースコード取得とインストール](#91-githubからソースコード取得とインストール)
   - [9.2. Visual Studio Code入力補完設定](#92-visual-studio-code入力補完設定)
   - [9.3. 接続確認](#93-接続確認)
-    - [9.3.1. DroneKit Python からの確認](#931-dronekit-python-からの確認)
-    - [9.3.2. Pymavlink からの確認](#932-pymavlink-からの確認)
+    - [9.3.1. Pymavlink からの確認](#931-pymavlink-からの確認)
   - [9.4. 課題提出用GitHubリポジトリ準備](#94-課題提出用githubリポジトリ準備)
 - [10. 【FlightCodeコース向け】デバッグ環境セットアップ](#10-flightcodeコース向けデバッグ環境セットアップ)
   - [10.1. 必要なパッケージインストール](#101-必要なパッケージインストール)
@@ -60,7 +60,6 @@ Table of Contents
   - [11.3. MAVLink-router](#113-mavlink-router)
   - [11.4. MAVProxy](#114-mavproxy)
   - [11.5. Pymavlink](#115-pymavlink)
-  - [11.6. DroneKit Python](#116-dronekit-python)
 
 <!-- /code_chunk_output -->
 
@@ -71,6 +70,7 @@ Table of Contents
 | 日付 | バージョン | 変更箇所・理由 |
 |------|-----------|--------------|
 | 2026.6.15 | 1.4.7 | 9.3節：SITL起動方法（MP/WSL）毎の接続先IPアドレスの説明を追加<br>9.4節：20th → 21st に変更 |
+| 2026.11.12 | 1.4.8 | 9章：DroneKit Python のセットアップ手順・接続確認（旧9.3.1）を削除し、9.3.2 を 9.3.1 に繰り上げ<br>11章：11.6 DroneKit Python を削除<br>9.4節：期番号の例を `21st` から `1st`、`2nd`、`3rd` … に変更（期ごとの修正を不要にするため） |
 
 <div style="page-break-before:always"></div>
 
@@ -425,12 +425,12 @@ sim_vehicle.py -v Copter --map --console -L Kawachi
 
 次のページ以降は、コースによって必要なところだけセットアップしてください。  
 
-* [【Applicationコース向け】DroneKit Python, pymavlinkセットアップ](#9-applicationコース向けdronekit-python-pymavlinkセットアップ)  
+* [【Applicationコース向け】Pymavlinkセットアップ](#9-applicationコース向けpymavlinkセットアップ)  
 * [【FlightCodeコース向け】デバッグ環境セットアップ](#10-flightcodeコース向けデバッグ環境セットアップ)
 
 <div style="page-break-before:always"></div>
 
-# 9. 【Applicationコース向け】DroneKit Python, Pymavlinkセットアップ
+# 9. 【Applicationコース向け】Pymavlinkセットアップ
 【注意】セットアップ済みの場合はスキップしてください。
 ## 9.1. GitHubからソースコード取得とインストール
 [https://github.com/hfujikawa77/droneschool.git](https://github.com/hfujikawa77/droneschool.git) を開き、右上の`Fork` ボタンを押下して自分のアカウントに教材のソースコードをフォークします。  
@@ -443,7 +443,6 @@ sim_vehicle.py -v Copter --map --console -L Kawachi
 ```bash
 cd /home/ardupilot/GitHub
 git clone https://github.com/＜あなたのGitHubアカウント名＞/droneschool
-git clone https://github.com/dronekit/dronekit-python
 git clone https://github.com/mavlink-router/mavlink-router
 git clone https://github.com/ArduPilot/pymavlink
 cd pymavlink
@@ -451,9 +450,6 @@ git clone https://github.com/ArduPilot/mavlink
 ```
 下記コマンドを実行して各開発ツールをインストールします。パスワードを要求されたら都度入力してください。
 ```bash
-# DroneKit Python
-cd  /home/ardupilot/GitHub/dronekit-python
-pip install --user .
 # Pymavlink
 cd  /home/ardupilot/GitHub/pymavlink
 pip install --user .
@@ -477,12 +473,10 @@ Visual Studio Codeを開いて、メニュー `ファイル` → `ユーザ設�
 ```json
 {
     "python.autoComplete.extraPaths": [
-        "/home/ardupilot/GitHub/pymavlink",
-        "/home/ardupilot/GitHub/dronekit-python"
+        "/home/ardupilot/GitHub/pymavlink"
     ],
     "python.analysis.extraPaths": [
-        "/home/ardupilot/GitHub/pymavlink",
-        "/home/ardupilot/GitHub/dronekit-python"
+        "/home/ardupilot/GitHub/pymavlink"
     ],
     ～省略～
 }
@@ -497,9 +491,6 @@ Visual Studio Codeを開いて、メニュー `ファイル` → `ユーザ設�
 ![Alt text](media/dev-app-setup-030.jpg)  
 
 画像のようにソースコードを入力した際に補完候補が表示されるようになっていればセットアップ完了です。  
-* DroneKit Python  
- ![Alt text](media/dev-app-setup-040.jpg)  
-
 * pymavlink  
 ![Alt text](media/dev-app-setup-050.jpg)  
 
@@ -523,24 +514,7 @@ Visual Studio Codeを起動し、WSL（Ubuntu22.04）に接続します。
 
 <div style="page-break-before:always"></div>
 
-### 9.3.1. DroneKit Python からの確認
-Visual Studio Codeのエクスプローラーから `GitHub/droneschool/dronekit_scripts/011_connect.py` を開きます。  
-ソースコード4～5行目 の接続先を、使用するシミュレータに合わせて修正します。
-
-| 種別 | 接続先の設定値 |
-|------|--------------|
-| MP SITL | `tcp:＜PCのIPアドレス＞:5762` |
-| WSL SITL | `tcp:127.0.0.1:5762` |
-
-右上の`▷アイコン`をクリックします。ターミナルが起動し、Pythonスクリプトが実行されます。  
-機体（シミュレータ）から受信した機体情報（対地速度、対空速度、モード、アーム状態、など）が一定間隔で表示されることを確認します。  
-![alt text](media/dev-app-setup-052.jpg)  
-
-`Ctrl+C`で終了します。
-
-<div style="page-break-before:always"></div>
-
-### 9.3.2. Pymavlink からの確認
+### 9.3.1. Pymavlink からの確認
 Visual Studio Codeのエクスプローラーから `GitHub/droneschool/pymavlink_scripts/pm01_message_dump.py` を開きます。  
 ソースコード4～5行目 の接続先を、使用するシミュレータに合わせて修正します。
 
@@ -708,6 +682,3 @@ https://ardupilot.org/dev/docs/debugging-with-gdb-using-vscode.html
 ## 11.5. Pymavlink
 1. GitHub：[https://github.com/ArduPilot/pymavlink](https://github.com/ArduPilot/pymavlink)
 2. Examples：[https://www.ardusub.com/developers/pymavlink.html](https://www.ardusub.com/developers/pymavlink.html)
-## 11.6. DroneKit Python
-1. Document：[https://dronekit.netlify.app/](https://dronekit.netlify.app/)
-2. Examples：[https://github.com/dronekit/dronekit-python/tree/master/examples](https://github.com/dronekit/dronekit-python/tree/master/examples)
