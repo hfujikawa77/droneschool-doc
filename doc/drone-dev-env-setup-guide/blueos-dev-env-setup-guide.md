@@ -2,11 +2,12 @@
 <h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
 <h2>コンパニオンコンピュータ（BlueOS）環境構築手順書</h2><br>
 (Raspberry Pi 5 + BlueOS)<br/>
-Ver.1.0.0 - 2026.6.12
+Ver.1.1.0 - 2026.11.13
 </div>
 
 <!--
 Ver.1.0.0 - 2026.6.12 - 初版
+Ver.1.1.0 - 2026.11.13 - 機体をWSL上のSITLからBlueOS内蔵SITLに変更（第3章差し替え、BlueOSバージョンを1.5.0-beta.43に変更）
 -->
 
 Table of Contents
@@ -27,9 +28,11 @@ Table of Contents
     - [2.3.3. 接続確認](#233-接続確認)
   - [2.4. Pirate Modeの有効化](#24-pirate-modeの有効化)
   - [2.5. BlueOSのバージョン切り替え](#25-blueosのバージョン切り替え)
-- [3. SITLの接続設定](#3-sitlの接続設定)
-  - [3.1. Manualボードへの切り替え](#31-manualボードへの切り替え)
-  - [3.2. WSL上のSITLの起動](#32-wsl上のsitlの起動)
+- [3. SITLの起動設定](#3-sitlの起動設定)
+  - [3.1. SITLボードへの切り替え](#31-sitlボードへの切り替え)
+  - [3.2. SITLファームウェアのインストールと起動](#32-sitlファームウェアのインストールと起動)
+  - [3.3. 起動位置の設定（ドローンフィールドKawachi）](#33-起動位置の設定ドローンフィールドkawachi)
+  - [3.4. トラブルシューティング](#34-トラブルシューティング)
 - [4. 疎通確認](#4-疎通確認)
   - [4.1. MAVLink Inspectorでの確認](#41-mavlink-inspectorでの確認)
   - [4.2. Mission Plannerからの接続確認](#42-mission-plannerからの接続確認)
@@ -41,8 +44,7 @@ Table of Contents
     - [5.1.2. ArduPilot SITL](#512-ardupilot-sitl)
     - [5.1.3. Mission Planner](#513-mission-planner)
     - [5.1.4. Cockpit](#514-cockpit)
-  - [5.2. （参考）BlueOS内蔵SITLを使う場合](#52-参考blueos内蔵sitlを使う場合)
-  - [5.3. （参考）実機FC（フライトコントローラー）を接続する場合](#53-参考実機fcフライトコントローラーを接続する場合)
+  - [5.2. （参考）実機FC（フライトコントローラー）を接続する場合](#52-参考実機fcフライトコントローラーを接続する場合)
 
 <!-- /code_chunk_output -->
 
@@ -52,14 +54,16 @@ Table of Contents
 本書はArduPilotドローンアプリケーション開発用コンパニオンコンピュータ環境を構築する手順書です。  
 コンパニオンコンピュータとしてRaspberry Pi 5（以下、ラズパイ）、OSイメージとしてBlueOSを使用します。
 
-機体の代わりとしてWSL上のSITL（ArduPilotのシミュレータ）を使用し、ラズパイ上のBlueOSに機体として接続します。BlueOS内蔵のMAVLink Routerが、機体のテレメトリをPC上のGCS（Mission Planner）や開発アプリに配信します。  
+機体の代わりとしてBlueOS内蔵のSITL（ArduPilotのシミュレータ）を使用します。BlueOS内蔵のMAVLink Routerが、機体のテレメトリをPC上のGCS（Mission Planner）や開発アプリに配信します。  
 本書で構築する環境の構成は下記の通りです。
 
 ```
 Windows PC                                Raspberry Pi 5（BlueOS）
 ┌──────────────────────────┐             ┌──────────────────────────────┐
-│ WSL2 + VS Code           │             │                              │
-│   SITL（ArduCopter）──────┼─UDP:14551─▶│ MAVLink Router               │
+│                          │             │ SITL（ArduCopter）           │
+│                          │             │   │                          │
+│                          │             │   ▼                          │
+│                          │             │ MAVLink Router               │
 │                          │             │   ├─（各クライアントへ配信）  │
 │                          │             │   └─ Extension               │
 │ Mission Planner（GCS）◀───┼─UDP:14550──│     （開発したアプリ）        │
@@ -75,9 +79,9 @@ Windows PC                                Raspberry Pi 5（BlueOS）
 - 卒業後でも継続して開発、運用のために活用できる。
 
 ## 1.2. 本書の位置づけ
-本書のゴールは、**WSL上のSITLをBlueOSに機体として接続し、PC側のMission PlannerからBlueOS経由で機体に接続できること**を確認するところまでです。
+本書のゴールは、**BlueOS内蔵のSITLを起動し、PC側のMission PlannerからBlueOS経由で機体に接続できること**を確認するところまでです。
 
-SITLをWSL側で動かすことで、起動場所（ドローンフィールドKawachi）の指定やパラメータの変更が自由にできます。また、実機のフライトコントローラー（FC）を接続したときと同じ「機体 → BlueOS（MAVLink Router）→ クライアント」のデータフローのまま学習・開発ができます。
+SITLをBlueOS内で動かすことで、PCとラズパイの間にSITL用の接続設定は不要になります。また、実機のフライトコントローラー（FC）を接続したときと同じ「機体 → BlueOS（MAVLink Router）→ クライアント」のデータフローのまま学習・開発ができます。
 
 アプリ開発はすべてPC（WSL2）側で行い、ラズパイ上には開発環境を構築しません。  
 BlueOSは「ホストOSには手を入れず、アプリはDockerコンテナ（Extension）として動かす」という設計思想のOSです。本書でもこの思想に沿って、ラズパイへのライブラリの直接インストールやVS Codeのリモート接続は行いません。
@@ -90,7 +94,7 @@ BlueOSは「ホストOSには手を入れず、アプリはDockerコンテナ（
 デベロッパーコース向けの開発環境構築手順書（`drone-dev-env-setup-guide.pdf`）に則ってセットアップが完了している前提とします。  
 下記を確認してください。
 - Windows 10/11のPCにMission PlannerとVS Codeがインストールされていること
-- WSL2（Ubuntu）にArduPilotのビルド環境がセットアップされ、SITL（`sim_vehicle.py`）の起動確認が完了していること
+- WSL2（Ubuntu）が使用できること（アプリ開発ガイドでのローカル動作確認・Dockerイメージのビルドに使用します）
 
 <div style="page-break-before:always"></div>
 
@@ -228,64 +232,96 @@ Pirate Modeが有効になると左メニューに `MAVLink Inspector` などの
 <div style="page-break-before:always"></div>
 
 ## 2.5. BlueOSのバージョン切り替え
-本書で使用する `Manual` ボード機能（第3章で外部のSITLを機体として接続するために使用）は、BlueOS 1.5系で追加された機能です。本書ではバージョンを **`1.5.0-beta.37`** に固定して使用します。  
+本書で使用するBlueOS内蔵SITLの起動位置の指定（第3章。`SIM_OPOS_*` パラメータで指定）は、BlueOS 1.5.0-beta.39以降で使用できます。本書ではバージョンを、1.5系の最新ベータ版である **`1.5.0-beta.43`** に固定して使用します。  
 ※ 執筆時点の安定版（1.4.3）にはこの機能がありません。1.5.0の正式リリース後はそちらに読み替えてください。
 
 1. 左側メニューから `BlueOS Version` をクリックします。
-1. リモートバージョン一覧から `1.5.0-beta.37` を探し、ダウンロードして適用します。
-1. 適用するとBlueOSが再起動します。再起動後、画面左下のバージョン表示が `1.5.0-beta.37` になっていることを確認します。
+1. リモートバージョン一覧から `1.5.0-beta.43` を探し、ダウンロードして適用します。
+1. 適用するとBlueOSが再起動します。再起動後、画面左下のバージョン表示が `1.5.0-beta.43` になっていることを確認します。
 
 ※ ダウンロードには時間がかかります。インターネット接続（2.3.2 Step 1）が完了している必要があります。  
 ![alt text](media/blueos-version-010.png)
 
 <div style="page-break-before:always"></div>
 
-# 3. SITLの接続設定
+# 3. SITLの起動設定
 
-本書ではラズパイにフライトコントローラー（FC）実機を接続する代わりに、**WSL上で動作するSITL**（Software In The Loop：ArduPilotのシミュレータ）を機体として使用します。  
-BlueOSのボードを `Manual`（外部の機体ストリームを受け取るモード）に設定し、WSLのSITLからテレメトリを送り込むことで、BlueOSはSITLを実機FCと同じように扱います。
+本書ではラズパイにフライトコントローラー（FC）実機を接続する代わりに、**BlueOS内蔵のSITL**（Software In The Loop：ArduPilotのシミュレータ）を機体として使用します。  
+BlueOSのボードを `SITL` に設定してArduPilot（SITL）を起動すると、BlueOSはこれを実機FCと同じように扱い、MAVLink Router経由で各クライアントにテレメトリを配信します。WSL側でSITLを起動したり、BlueOSに接続したりする必要はありません。
 
-## 3.1. Manualボードへの切り替え
-左側メニューから `Autopilot Firmware` をクリックします。  
+## 3.1. SITLボードへの切り替え
+1. BlueOS管理画面 → 左メニュー `Vehicle Setup` → `Autopilot Firmware` をクリックします。
+2. 画面下部の `CHANGE BOARD` ボタンをクリックします。
+3. Board を `SITL` に変更して `SET` をクリックします。
 
-画面下部の `CHANGE BOARD` ボタンをクリックし、ボード一覧から `Manual` を選択して適用します。  
-※ Firmware update欄の `Board` リストボックスはファームウェアの書き込み先を選ぶものです。ボードの切り替えには使用しません。  
-![alt text](media/blueos-firmware-select-010.png)
+※ Firmware update欄の `Board` リストボックスはファームウェアの書き込み先を選ぶものです。ボードの切り替えには使用しません。
 
-切り替え後、画面上部の表示が `Board name: Manual` になり、**Master Endpoint Configuration**（機体側からの接続を受け付ける設定）が表示されることを確認します。  
-下記の値になっていることを確認します。
+## 3.2. SITLファームウェアのインストールと起動
+`Firmware update` を展開し、下記を入力して `INSTALL FIRMWARE` をクリックします。
 
 | 項目 | 値 |
 |------|-----|
-| Connection Type | UDP Server |
-| IP/Device | 0.0.0.0 |
-| Port | 14551 |
- 
-![alt text](media/blueos-firmware-endpoint-010.png)
+| Board | SITL (current) |
+| Vehicle Type | Copter |
+| Firmware | DEV |
 
-<div style="page-break-before:always"></div>
+![alt text](media/blueos-sitl-setup-010.png)
+<!-- TODO: 採用バージョン（1.5.0-beta.43）の画面で撮り直し・UI差異の確認 -->
 
-## 3.2. WSL上のSITLの起動
-VS CodeでWSLに接続し、ターミナルを開きます。  
-PCがBlueOSホットスポットに接続している状態で、下記コマンドでSITLを起動します。
+`Successfully installed new firmware` が表示されたら、`START AUTOPILOT` をクリックします。  
+これでBlueOS上でSITLが起動し、MAVLink Router経由でMission Planner（UDP 14550）等に接続できます。
+
+## 3.3. 起動位置の設定（ドローンフィールドKawachi）
+BlueOS内蔵SITLの既定の起動位置は、フロリアノポリス（ブラジル）です。本書では、ドローンフィールドKawachiで起動するように設定します。  
+起動位置は ArduPilot のパラメータ `SIM_OPOS_LAT` / `SIM_OPOS_LNG` / `SIM_OPOS_ALT` / `SIM_OPOS_HDG` で指定できます（BlueOS 1.5.0-beta.39以降）。
+
+<!-- TODO: 実機検証後に記載
+ - SIM_OPOS_* の設定場所（Parameters画面など）と操作手順
+ - Kawachiの座標値（緯度・経度・高度・方位）
+ - 設定の反映に再起動が必要か、再起動後も設定が保持されるか
+ - スクリーンショット（SIM_OPOS_* 設定画面）
+-->
+
+
+## 3.4. トラブルシューティング
+<!-- TODO: 1.5.0-beta.43で症状1・症状2が再現するか実機で確認し、改善済みなら該当項目を削除 -->
+
+**症状1: アームできない（PreArm: 3D Accel calibration needed）**
+
+SITLでもキャリブレーション未実施扱いになることがあります。BlueOS管理画面の左メニューから `Vehicle Setup` → `CONFIGURE` → `ACCELEROMETER` → `QUICK CALIBRATION` をクリックしてキャリブレーションを実施してください。
+
+**症状2: 離陸しても高度が上がらない（Potential Thrust Loss）**
+
+`sitl_frame` が `vectored`（水中ROV向け）のまま残っている場合に発生します。設定ファイルはホストOS上にあるため、SSHでログインして下記を実行します（[2.3.3節](#233-接続確認)参照）。
 
 ```bash
-sim_vehicle.py -v ArduCopter -L Kawachi --out udp:192.168.42.1:14551
+# バックアップ
+cp /root/.config/blueos/ardupilot-manager/settings.json \
+   /root/.config/blueos/ardupilot-manager/settings.json.bak
+
+# 設定ファイルを編集
+sudo nano /root/.config/blueos/ardupilot-manager/settings.json
 ```
 
-- `-L Kawachi` : 起動場所としてドローンフィールドKawachiを指定します。
-- `--out udp:192.168.42.1:14551` : テレメトリをBlueOS（Master Endpoint）に送信します。
+`sitl_frame` の値を `vectored` から `quad` に変更して保存します（`Ctrl+O` → `Enter` → `Ctrl+X`）。
 
-※ SITLの起動方法の詳細は、環境構築手順書（`drone-dev-env-setup-guide.pdf`）の `8.1. シミュレータ動作確認` もご覧ください。
+```json
+"preferred_router": "MAVLinkRouter",
+"sitl_frame": "quad"
+```
 
-SITLが起動すると、BlueOSはこれを機体として認識します。  
-このターミナルは開いたままにしてください（閉じるとSITLが終了し、機体が消えます）。SITLを終了する場合は `Ctrl+C` を押します。
+保存後、`sudo reboot` で再起動します。起動後に下記で確認できます。
+
+```bash
+pgrep -af ardupilot   # "--model quad" が含まれていれば正常
+```
+
 
 <div style="page-break-before:always"></div>
 
 # 4. 疎通確認
 
-WSLのSITL → BlueOS（MAVLink Router）→ PC側クライアント の順にテレメトリが流れていることを確認します。  
+BlueOS内蔵SITL → BlueOS（MAVLink Router）→ PC側クライアント の順にテレメトリが流れていることを確認します。  
 クライアントごとの接続方法は下記の通りです。エンドポイントの追加設定は不要です。
 
 | クライアント | 接続方法 | 備考 |
@@ -293,16 +329,16 @@ WSLのSITL → BlueOS（MAVLink Router）→ PC側クライアント の順に�
 | Mission Planner | UDPCl 192.168.42.1:14550 | 起動時の自動検出ダイアログからも接続可 |
 | Cockpit | ブラウザで `http://192.168.42.1` → 左メニュー | BlueOS内蔵のWeb GCS |
 
-※ 実機FCを接続する場合も、ボードが `Manual` からシリアルボード（Pixhawk等）に変わるだけで、クライアント側の接続方法は同じです。
+※ 実機FCを接続する場合も、ボードが `SITL` からシリアルボード（Pixhawk等）に変わるだけで、クライアント側の接続方法は同じです。
 
 ## 4.1. MAVLink Inspectorでの確認
-まず、WSLのSITLからのテレメトリがBlueOSに届いていることを、BlueOSのWeb管理画面から確認します。
+まず、BlueOS内蔵SITLのテレメトリがMAVLink Routerに届いていることを、BlueOSのWeb管理画面から確認します。
 
 左側メニューから `MAVLink Inspector` をクリックします。  
 `HEARTBEAT` や `ATTITUDE` などのMAVLinkメッセージがリアルタイムに受信・表示されていることを確認します。  
 ![alt text](media/blueos-mavlink-inspector.png)
 
-メッセージが表示されない場合は、第3章の設定（Manualボード、Master Endpoint、SITLの起動オプション）を見直してください。
+メッセージが表示されない場合は、第3章の設定（SITLボード、ファームウェアのインストール、`START AUTOPILOT` の実行）を見直してください。
 
 <div style="page-break-before:always"></div>
 
@@ -368,72 +404,10 @@ Cockpitの画面に切り替わり、機体（SITL）のテレメトリ（高度
 1. GitHub：[https://github.com/bluerobotics/cockpit](https://github.com/bluerobotics/cockpit)
 2. ドキュメント：[https://blueos.cloud/docs/stable/extensions/cockpit/](https://blueos.cloud/docs/stable/extensions/cockpit/)
 
-## 5.2. （参考）BlueOS内蔵SITLを使う場合
 
-本書では外部SITL（WSL）+ Manualボード構成を採用していますが、BlueOS内部でSITLを起動して使用する機能もあります。構成が簡素化されるので、手軽に動作確認したい場合に参考としてください。
+## 5.2. （参考）実機FC（フライトコントローラー）を接続する場合
 
-**有効化手順**
-
-1. BlueOS管理画面 → 左メニュー `Vehicle Setup` → `Autopilot Firmware`
-2. `CHANGE BOARD` ボタンをクリック
-3. Board を `SITL` に変更して `SET` をクリック
-4. `Firmware update` を展開し、下記を入力して `INSTALL FIRMWARE` をクリック
-
-| 項目 | 値 |
-|------|-----|
-| Board | SITL (current) |
-| Vehicle Type | Copter |
-| Firmware | DEV |
-
-![alt text](media/blueos-sitl-setup-010.png)
-
-5. `Successfully installed new firmware` が表示されたら、`START AUTOPILOT` をクリック
-
-これだけでBlueOS上でSITLが起動し、MAVLink Router経由でMission Planner（UDP 14550）に接続できます。WSL側でのSITL起動は不要です。
-
-**既知の制限事項**
-
-ホーム位置の固定はBlueOSのソースコード（`autopilot_manager.py`）に `--home "-27.563,-48.459,0.0,270.0"` としてハードコードされているため、設定画面からは変更できません。起動場所を日本国内にしたい場合は本書のWSL外部SITL構成を使用してください。
-
-<div style="page-break-before:always"></div>
-
-**トラブルシューティング**
-
-**症状1: アームできない（PreArm: 3D Accel calibration needed）**
-
-SITLでもキャリブレーション未実施扱いになることがあります。BlueOS管理画面の左メニューから `Vehicle Setup` → `CONFIGURE` → `ACCELEROMETER` → `QUICK CALIBRATION` をクリックしてキャリブレーションを実施してください。
-
-**症状2: 離陸しても高度が上がらない（Potential Thrust Loss）**
-
-`sitl_frame` が `vectored`（水中ROV向け）のまま残っている場合に発生します。設定ファイルはホストOS上にあるため、SSHでログインして下記を実行します（[2.3.3節](#233-接続確認)参照）。
-
-```bash
-# バックアップ
-cp /root/.config/blueos/ardupilot-manager/settings.json \
-   /root/.config/blueos/ardupilot-manager/settings.json.bak
-
-# 設定ファイルを編集
-sudo nano /root/.config/blueos/ardupilot-manager/settings.json
-```
-
-`sitl_frame` の値を `vectored` から `quad` に変更して保存します（`Ctrl+O` → `Enter` → `Ctrl+X`）。
-
-```json
-"preferred_router": "MAVLinkRouter",
-"sitl_frame": "quad"
-```
-
-保存後、`sudo reboot` で再起動します。起動後に下記で確認できます。
-
-```bash
-pgrep -af ardupilot   # "--model quad" が含まれていれば正常
-```
-
-<div style="page-break-before:always"></div>
-
-## 5.3. （参考）実機FC（フライトコントローラー）を接続する場合
-
-本書ではFC実機の代わりにWSL上のSITLを機体として接続しますが、ラズパイにFC実機を接続して使用することもできます。実機を接続する場合の手順を参考として示します。
+本書ではFC実機の代わりにBlueOS内蔵のSITLを機体として使用しますが、ラズパイにFC実機を接続して使用することもできます。実機を接続する場合の手順を参考として示します。
 
 **接続手順**
 
@@ -449,4 +423,4 @@ pgrep -af ardupilot   # "--model quad" が含まれていれば正常
 
 FCが認識されると、SITLの場合と同様にMAVLink Router経由でMission Planner（UDP 14550）等のクライアントから接続できます。エンドポイントの追加設定は不要です（[第4章](#4-疎通確認)参照）。
 
-※ 実機FCを接続する場合は、第3章の `Manual` ボードへの切り替えやWSL上のSITLの起動は不要です。
+※ 実機FCを接続する場合は、第3章の `SITL` ボードへの切り替えやSITLの起動は不要です。

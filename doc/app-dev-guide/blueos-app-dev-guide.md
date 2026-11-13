@@ -1,7 +1,7 @@
 <div align="center">
 <h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
 <h2>BlueOS アプリ開発ガイド</h2><br>
-(WSL2 + SITL → BlueOS Extension 開発)<br/>
+(WSL2 + SITL → BlueOS 内蔵 SITL で Extension 開発)<br/>
 Ver.2.0.0 - 2026.6.30
 </div>
 
@@ -36,7 +36,7 @@ Table of Contents
 
 # 1. 事前準備
 
-本ガイドは、WSL 上の SITL で動作確認した Web アプリを、そのまま **BlueOS Extension** として Raspberry Pi 上で動かすまでを扱う実習ガイドです。
+本ガイドは、WSL 上の SITL で動作確認した Web アプリを、そのまま **BlueOS Extension** として Raspberry Pi 上で動かし、**BlueOS 内蔵の SITL** でテストするまでを扱う実習ガイドです。
 
 ```
 ドローン Web アプリ開発編 ― WSL + SITL で Web アプリを動かす
@@ -51,7 +51,7 @@ BlueOS Extension 編 ― Agent Skill で Extension 化し、配布する
 > **前提となる環境構築**
 > 本ガイドを始める前に、下記2つの環境構築ガイドを完了しておいてください。本ガイドではこれらの内容（pymavlink 基礎・BlueOS の概要・実機接続）は既習として扱います。
 > - **[ドローン開発環境構築手順書](../drone-dev-env-setup-guide/drone-dev-env-setup-guide.md)** … WSL2 + ArduPilot SITL + pymavlink + Docker
-> - **[BlueOS 環境構築手順書](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md)** … Raspberry Pi + BlueOS + SITL 接続
+> - **[BlueOS 環境構築手順書](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md)** … Raspberry Pi + BlueOS + 内蔵 SITL
 
 完了済みであること：
 
@@ -60,7 +60,7 @@ BlueOS Extension 編 ― Agent Skill で Extension 化し、配布する
 | ☐ | WSL2 (Ubuntu22.04) で SITL が起動できる |
 | ☐ | WSL に Docker がインストール済み（[WSL Docker セットアップ手順](../drone-dev-env-setup-guide/wsl-docker-setup-guide.md)） |
 | ☐ | `droneschool` リポジトリをフォーク＆クローン済み・ワークブランチ作成済み（[環境構築手順書 9.4](../drone-dev-env-setup-guide/drone-dev-env-setup-guide.md#94-課題提出用githubリポジトリ準備)） |
-| ☐ | Raspberry Pi で BlueOS が起動し、SITL を Manual ボードに接続できる（[BlueOS 環境構築手順書](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md)） |
+| ☐ | Raspberry Pi で BlueOS が起動し、内蔵 SITL を起動して Mission Planner から接続できる（[BlueOS 環境構築手順書](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md)） |
 
 ## 1.1. 最新資材の取得
 
@@ -170,7 +170,7 @@ MAV_ENDPOINT=tcp:127.0.0.1:5762 uvicorn main:app --host 0.0.0.0 --port 9999
 
 ![ローカル SITL で動作する Drone Web App](media/drone-webapp-010.png)
 
-> 接続先は環境変数 `MAV_ENDPOINT` で切り替えます。未指定だと BlueOS 用の既定値（`udpout:host.docker.internal:14550`）になるため、ローカルでは `tcp:127.0.0.1:5762` を明示します。**同じコード・同じイメージのまま、接続先だけを差し替えて** WSL→BlueOS を移行できるのがポイントです。
+> 接続先は環境変数 `MAV_ENDPOINT` で切り替えます。未指定だと BlueOS 用の既定値（`udpout:host.docker.internal:14550`）になるため、ローカルでは `tcp:127.0.0.1:5762` を明示します。**同じコード・同じイメージのまま、接続先だけを差し替えて** ローカル SITL（WSL）→ BlueOS 内蔵 SITL へ移行できるのがポイントです。
 
 **成果物:** ローカル SITL で地図・テレメトリ・操作ができる Web アプリ
 
@@ -178,7 +178,7 @@ MAV_ENDPOINT=tcp:127.0.0.1:5762 uvicorn main:app --host 0.0.0.0 --port 9999
 
 # 3. BlueOS 基礎編
 
-**目的:** Extension を載せる前に、BlueOS が各クライアントへ MAVLink をどう配るかを確認する。BlueOS 環境構築手順書で構築した「外部 SITL → Manual ボード」構成の上で進める。
+**目的:** Extension を載せる前に、BlueOS が各クライアントへ MAVLink をどう配るかを確認する。BlueOS 環境構築手順書で構築した「BlueOS 内蔵 SITL」構成の上で進める。
 
 ![BlueOS 基礎編の全体像（MAVLink Server が各クライアントへ配信する経路）](media/blueos-basics-010.png)
 
@@ -191,12 +191,13 @@ MAV_ENDPOINT=tcp:127.0.0.1:5762 uvicorn main:app --host 0.0.0.0 --port 9999
 | チェック | 内容 | 参照 |
 |--------|------|------|
 | ☐ | BlueOS が起動し、PC がホットスポット（`192.168.42.1`）に接続済み | 環境構築手順書 §2 |
-| ☐ | Manual ボード設定済み（Master Endpoint: UDP Server `0.0.0.0:14551`） | 環境構築手順書 §3 |
-| ☐ | WSL 上の SITL が起動済み（`sim_vehicle.py -v ArduCopter -L Kawachi --out udp:192.168.42.1:14551`） | 環境構築手順書 §3 |
+| ☐ | BlueOS のバージョンが `1.5.0-beta.43`（1.5 系の最新） | 環境構築手順書 §2.5 |
+| ☐ | SITL ボードを選択し、内蔵 SITL が起動済み（`START AUTOPILOT` 実行済み） | 環境構築手順書 §3.1〜3.2 |
+| ☐ | 内蔵 SITL の起動位置が Kawachi に設定済み（`SIM_OPOS_*`） | 環境構築手順書 §3.3 |
 
 ## 3.2. MAVLink Server ― エンドポイント追加と接続確認
 
-BlueOS の **MAVLink Server** は、フライトコントローラー（または外部 SITL）の MAVLink を複数のクライアントへ同時配信（ルーティング）するサービスです。Web UI 上は **MAVLink Endpoints** として設定します。ここでは **新しいエンドポイント（UDP Server 14552）を追加し、そこへ Mission Planner を接続できること**を確認します。
+BlueOS の **MAVLink Server** は、フライトコントローラー（または内蔵 SITL）の MAVLink を複数のクライアントへ同時配信（ルーティング）するサービスです。Web UI 上は **MAVLink Endpoints** として設定します。ここでは **新しいエンドポイント（UDP Server 14552）を追加し、そこへ Mission Planner を接続できること**を確認します。
 
 > 既定の `UDP Server 14550` は Cockpit（3.4）や Extension（第4部）が使うため、ここでは別ポート `14552` を新規に追加して「エンドポイントを増やす」操作を体験します。MAVLink Server は同じ機体のデータを複数エンドポイントへ同時配信できます。
 
@@ -317,7 +318,7 @@ Cockpit からの GCS 接続確認・ARM・離陸・GOTO の手順は [BlueOS �
 
 第4部の流れは「**作る（WSL／4.1）→ 配る（4.2 前半・Docker Hub へ push/pull）→ 動かす（4.2 後半・BlueOS 上で MAVLink Server に接続）**」の3段階です。
 
-> 図のとおり、**同じアプリが「WSL では SITL（5762）」「BlueOS では MAVLink Server（14550）」に接続**します。接続先は環境変数 `MAV_ENDPOINT` で切り替わるだけで、コードもイメージも共通です（第2部 2.2 参照）。
+> 図のとおり、**同じアプリが「WSL では SITL（5762）」「BlueOS では内蔵 SITL を配信する MAVLink Server（14550）」に接続**します。接続先は環境変数 `MAV_ENDPOINT` で切り替わるだけで、コードもイメージも共通です（第2部 2.2 参照）。
 
 <div style="page-break-before:always"></div>
 
@@ -462,10 +463,7 @@ docker buildx build --platform linux/amd64,linux/arm64 --provenance=false \
 
 ![インストール済み Extension の詳細](media/blueos-extensions-020.png)
 
-> **動作確認の前に:** WSL 上で SITL が起動していることを確認してください。起動していなければ、次のコマンドで起動します（3.1 と同じ構成）。
-> ```bash
-> sim_vehicle.py -v ArduCopter -L Kawachi --out udp:192.168.42.1:14551
-> ```
+> **動作確認の前に:** BlueOS 内蔵 SITL が起動していることを確認してください（`Autopilot Firmware` 画面で Autopilot が起動中であること）。起動していなければ `START AUTOPILOT` で起動します（3.1 と同じ構成）。WSL 側で SITL を起動する必要はありません。
 
 **動作確認（Definition of Done）**
 
@@ -483,6 +481,7 @@ docker buildx build --platform linux/amd64,linux/arm64 --provenance=false \
 | ARM/モード表示が点滅 | GCS の HEARTBEAT も拾っている | 受信を自機（target）に限定（4.1 ④b） |
 | 地図が出ない | CDN（unpkg/OSM）に到達できない | Leaflet をローカル同梱（4.1 ⑤） |
 | VIEW LOGS がタイムアウト | アクセスログ肥大 | `uvicorn ... --no-access-log`（4.1） |
+| 内蔵 SITL で ARM できない／離陸しても高度が上がらない | 加速度キャリブレーション未実施、`sitl_frame` が `vectored` のまま | [BlueOS 環境構築手順書 §3.4](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#34-トラブルシューティング) を参照 |
 
 **成果物:** BlueOS 左メニューから開ける Drone Web App Extension
 
@@ -500,7 +499,7 @@ Drone Web App に、表示情報や運用機能を足していきます。
 - **GOTO の強化** … 地図クリックで目的地指定、複数 WP の連続移動
 - **Discord 通知** … イベント（離陸・着陸・モード変更・異常）を Discord へ通知
 - **フェイルセーフ監視** … GPS 異常・バッテリー低下・EKF 異常・RC 喪失を検知して通知
-- **実機での運用** … 同じ Extension を実機 FC で動かす（コードもイメージも無変更。SITL ボードを実機 FC に差し替えるだけ。手順は [BlueOS 環境構築手順書 §5.3](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#53-参考実機fcフライトコントローラーを接続する場合)）
+- **実機での運用** … 同じ Extension を実機 FC で動かす（コードもイメージも無変更。SITL ボードを実機 FC に差し替えるだけ。手順は [BlueOS 環境構築手順書 §5.2](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#52-参考実機fcフライトコントローラーを接続する場合)）
 
 フェイルセーフ監視で検知したい異常と、その手がかりとなる MAVLink メッセージの例：
 
