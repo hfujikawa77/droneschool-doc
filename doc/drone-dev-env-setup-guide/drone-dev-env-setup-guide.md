@@ -2,7 +2,7 @@
 <h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
 <h2>開発環境構築手順書</h2><br>
 (Windows10/11 + WSL2(Ubuntu22.04) + Visual Studio Code)<br/>
-Ver.1.4.8 - 2026.11.12
+Ver.1.4.9 - 2026.11.14
 </div>
 
 <!--
@@ -15,6 +15,7 @@ Ver.1.4.5 - 2025.11.8 - 一部GitHubリポジトリはFork&Cloneするように�
 Ver.1.4.6 - 2026.6.8  - 誤字修正
 Ver.1.4.7 - 2026.6.15 - 20th -> 21st に変更
 Ver.1.4.8 - 2026.11.12 - DroneKit Python の記載を削除、期番号の例を特定の期に依存しない表記に変更
+Ver.1.4.9 - 2026.11.14 - 9.3節の記述修正、9.4節の字下げ修正と期番号に関する注意書きを追加
 -->
 
 Table of Contents
@@ -71,6 +72,7 @@ Table of Contents
 |------|-----------|--------------|
 | 2026.6.15 | 1.4.7 | 9.3節：SITL起動方法（MP/WSL）毎の接続先IPアドレスの説明を追加<br>9.4節：20th → 21st に変更 |
 | 2026.11.12 | 1.4.8 | 9章：DroneKit Python のセットアップ手順・接続確認（旧9.3.1）を削除し、9.3.2 を 9.3.1 に繰り上げ<br>11章：11.6 DroneKit Python を削除<br>9.4節：期番号の例を `21st` から `1st`、`2nd`、`3rd` … に変更（期ごとの修正を不要にするため） |
+| 2026.11.14 | 1.4.9 | 9.3節：ディレクトリの記述誤りを修正、「Pythonスクリプト」を「Pymavlinkスクリプト」に修正<br>9.4節：コードブロックの字下げを修正、期番号の例をそのまま使わないよう注意書きを追加 |
 
 <div style="page-break-before:always"></div>
 
@@ -499,10 +501,10 @@ Visual Studio Codeを開いて、メニュー `ファイル` → `ユーザ設�
 ## 9.3. 接続確認
 
 Visual Studio Codeを起動し、WSL（Ubuntu22.04）に接続します。  
-メニューを ファイル -> フォルダーを開く の順に選択し、前項でダウンロードしたardupilotディレクトリ（パス：`/home/ardupilot/GitHub`）を開きます。  
+メニューを ファイル -> フォルダーを開く の順に選択し、`/home/ardupilot/GitHub` ディレクトリを開きます。  
 [2.2. シミュレータ（Mission Planner）の起動](#22-シミュレータmission-plannerの起動) 、または [8.1. シミュレータ動作確認](#81-シミュレータ動作確認) の手順を参照してシミュレータを起動しておきます。  
 
-本手順書では、以下の2種類のシミュレータ起動方法を扱います。起動方法によって、Pythonスクリプトからの接続先IPアドレスが異なります。
+本手順書では、以下の2種類のシミュレータ起動方法を扱います。起動方法によって、Pymavlinkスクリプトからの接続先IPアドレスが異なります。
 
 | 種別 | 起動方法 | 動作環境 | 接続先IPアドレス |
 |------|----------|----------|-----------------|
@@ -535,6 +537,8 @@ Visual Studio Codeのエクスプローラーから `GitHub/droneschool/pymavlin
 
 アプリケーション編の課題提出用にGitHubリポジトリの準備を行います。
 
+**【重要】以降の `1st` などの期番号はあくまで例です。そのまま使わず、必ずご自身が受講する期の番号に置き換えてください。**
+
 1. 既にcloneしているローカルGitリポジトリに移動します。
      ```bash
      cd 
@@ -563,9 +567,9 @@ Visual Studio Codeのエクスプローラーから `GitHub/droneschool/pymavlin
      # コミットメッセージを付けてコミット
      git commit -m "Add ＜term_no＞ workshop folder with README.md"
 
-    # 変更をリモートリポジトリにプッシュ
-    git push origin ＜term_no＞_＜fname-lname＞
-    ```
+     # 変更をリモートリポジトリにプッシュ
+     git push origin ＜term_no＞_＜fname-lname＞
+     ```
 
 <div style="page-break-before:always"></div>
 
