@@ -2,7 +2,7 @@
 <h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
 <h2>開発環境構築手順書</h2><br>
 (Windows10/11 + WSL2(Ubuntu22.04) + Visual Studio Code)<br/>
-Ver.1.4.9 - 2026.11.14
+Ver.1.4.10 - 2026.11.14
 </div>
 
 <!--
@@ -16,6 +16,7 @@ Ver.1.4.6 - 2026.6.8  - 誤字修正
 Ver.1.4.7 - 2026.6.15 - 20th -> 21st に変更
 Ver.1.4.8 - 2026.11.12 - DroneKit Python の記載を削除、期番号の例を特定の期に依存しない表記に変更
 Ver.1.4.9 - 2026.11.14 - 9.3節の記述修正、9.4節の字下げ修正と期番号に関する注意書きを追加
+Ver.1.4.10 - 2026.11.14 - Windows 10 サポート終了の注意書き追加、4章のWSLセットアップ手順を現行のコマンドに更新
 -->
 
 Table of Contents
@@ -73,6 +74,7 @@ Table of Contents
 | 2026.6.15 | 1.4.7 | 9.3節：SITL起動方法（MP/WSL）毎の接続先IPアドレスの説明を追加<br>9.4節：20th → 21st に変更 |
 | 2026.11.12 | 1.4.8 | 9章：DroneKit Python のセットアップ手順・接続確認（旧9.3.1）を削除し、9.3.2 を 9.3.1 に繰り上げ<br>11章：11.6 DroneKit Python を削除<br>9.4節：期番号の例を `21st` から `1st`、`2nd`、`3rd` … に変更（期ごとの修正を不要にするため） |
 | 2026.11.14 | 1.4.9 | 9.3節：ディレクトリの記述誤りを修正、「Pythonスクリプト」を「Pymavlinkスクリプト」に修正<br>9.4節：コードブロックの字下げを修正、期番号の例をそのまま使わないよう注意書きを追加 |
+| 2026.11.14 | 1.4.10 | 4.1節：Windows 10 サポート終了の注意書きを追加、WSL有効化を `wsl --install --no-distribution` に変更（従来の `dism` 手順は代替手順として残す）、`wsl --update` を追加<br>4.2節：カーネルエラー時の対処に `wsl --update` を追加、USB接続に関するNoteを更新 |
 
 <div style="page-break-before:always"></div>
 
@@ -195,6 +197,9 @@ Visual Studio Codeのインストールが完了したらPCを再起動して次
 
 # 4. WSLにUbuntuをインストール
 ## 4.1. WSLの有効化設定とバージョン確認
+> **Note**
+> Windows 10 のサポートは 2025年10月14日に終了しており、セキュリティ更新プログラムが提供されません。可能であれば Windows 11 を使用してください。Windows 10 を使用する場合は、下記のバージョン要件を満たしている必要があります。
+
 あまり古いバージョンのWindows10だとWSL機能が使えないため念の為バージョンを確認してください。  
 確認するためにPowerShellで `winver` を実行して確認してください。 
 ```powershell
@@ -217,16 +222,25 @@ WSL有効化をするために、PowerShellを管理者権限で開きます。
 
 ![Alt text](media/wsl-install-020.jpg)  
 
-立ち上がったPowerShellのウィンドウに次の2つのコマンドを順番に実行し、PCを再起動してください。
+立ち上がったPowerShellのウィンドウで次のコマンドを実行し、PCを再起動してください。WSLに必要なWindowsの機能が有効化されます。Ubuntuのインストールは次節で行うため、ここではディストリビューションをインストールしません。
 ```powershell
-dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-```
-```powershell
-dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+wsl --install --no-distribution
 ```
 
-PCを再起動後、PowerShellを開いて次のコマンドを実行し、PowerShellを閉じてください。これで、デフォルトの WSL バージョンが 2 に設定されます。  
+> **Note**
+> 上記のコマンドが使用できない、またはエラーになる場合は、次の2つのコマンドを順番に実行してWindowsの機能を手動で有効化し、PCを再起動してください。
+> ```powershell
+> dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+> ```
+> ```powershell
+> dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+> ```
+
+PCを再起動後、PowerShellを開いて次のコマンドを実行し、PowerShellを閉じてください。WSLが最新の状態に更新され、デフォルトの WSL バージョンが 2 に設定されます。  
 デフォルトをバージョン 2 から 1 に戻したい場合は、`wsl --set-default-version 1`を実行して変更してください。  
+```powershell
+wsl --update
+```
 ```powershell
 wsl --set-default-version 2
 ```
@@ -253,7 +267,7 @@ Error: 0x800701bc WSL 2 ???????????? ??????????????????????? https://aka.ms/wsl2
 Press any key to continue...
 ```
 
-次のURLを参照して、Linux カーネル更新プログラムパッケージをダウンロードしてインストールしてから再度 [4.2. Ubuntu22のインストールと初期設定](#42-ubuntu22のインストールと初期設定) を実施してください。  
+まず、PowerShellで `wsl --update` を実行してWSLを更新してください。それでも解決しない場合は、次のURLを参照して、Linux カーネル更新プログラムパッケージをダウンロードしてインストールしてから再度 [4.2. Ubuntu22のインストールと初期設定](#42-ubuntu22のインストールと初期設定) を実施してください。  
 https://learn.microsoft.com/ja-jp/windows/wsl/install-manual#step-4---download-the-linux-kernel-update-package
 
 * 画面が進まない  
@@ -288,7 +302,7 @@ VERSIONのところが `2` と表示されていれば問題ありません。
 ```
 
 > **Note**
-> WSLはバージョン1と2を混在させることができます。WSL2はUSB接続を可能にする手順が複雑なため、実機デバイスなどを接続する場合WSL1を推奨します。シミュレータしか使用しない場合はWSL2の方が処理速度が速いのでオススメです。
+> WSLはバージョン1と2を混在させることができます。WSL2で実機デバイスなどのUSB機器を使用する場合は、`usbipd-win` のインストールと機器の接続（attach）操作が別途必要です。この設定が難しい場合はWSL1の使用も検討してください。シミュレータしか使用しない場合はWSL2の方が処理速度が速いのでオススメです。
 
 Ubuntuのインストールが完了したら、Visual Studio Codeと連携するため次のステップに進んでください。  
 
