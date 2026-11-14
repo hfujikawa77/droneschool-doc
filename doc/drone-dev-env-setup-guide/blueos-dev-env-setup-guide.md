@@ -7,7 +7,7 @@ Ver.1.1.0 - 2026.11.13
 
 <!--
 Ver.1.0.0 - 2026.6.12 - 初版
-Ver.1.1.0 - 2026.11.13 - 機体をWSL上のSITLからBlueOS内蔵SITLに変更（第3章差し替え、BlueOSバージョンを1.5.0-beta.43に変更）
+Ver.1.1.0 - 2026.11.13 - 機体をWSL上のSITLからBlueOS内蔵SITLに変更（第3章差し替え、BlueOSバージョンを1.5.0-beta.43に変更）、Windows 11 前提に変更
 -->
 
 Table of Contents
@@ -93,7 +93,7 @@ BlueOSは「ホストOSには手を入れず、アプリはDockerコンテナ（
 ## 1.3. 前提事項
 デベロッパーコース向けの開発環境構築手順書（`drone-dev-env-setup-guide.pdf`）に則ってセットアップが完了している前提とします。  
 下記を確認してください。
-- Windows 10/11のPCにMission PlannerとVS Codeがインストールされていること
+- Windows 11のPCにMission PlannerとVS Codeがインストールされていること
 - WSL2（Ubuntu）が使用できること（アプリ開発ガイドでのローカル動作確認・Dockerイメージのビルドに使用します）
 
 <div style="page-break-before:always"></div>
