@@ -8,7 +8,7 @@ Ver.1.0.2 - 2026.11.12
 <!--
 Ver.1.0.0 - 2024.5.30 - 初版
 Ver.1.0.1 - 2025.5.17 - Rpanion-SServerバージョン更新, 拡張機能追加
-Ver.1.0.2 - 2026.11.12 - DroneKit Python の記載を削除
+Ver.1.0.2 - 2026.11.12 - DroneKit Python の記載を削除、Windows 11 前提に変更
 -->
 
 Table of Contents
@@ -66,7 +66,7 @@ Table of Contents
 
 ## 1.2. 前提事項
 デベロッパーコース向けの開発環境構築手順書（`drone-dev-env-setup-guide.pdf`）に則ってセットアップが完了している前提とします。  
-Windows 10/11のPCにMission PlannerとVS Codeがインストールされていることを確認してください。
+Windows 11のPCにMission PlannerとVS Codeがインストールされていることを確認してください。
 
 <div style="page-break-before:always"></div>  
 
