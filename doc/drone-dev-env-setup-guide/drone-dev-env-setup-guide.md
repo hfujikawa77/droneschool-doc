@@ -58,9 +58,8 @@ Table of Contents
 - [11. Appendix](#11-appendix)
   - [11.1. Mission Planner](#111-mission-planner)
   - [11.2. Visual Studio Code](#112-visual-studio-code)
-  - [11.3. MAVLink-router](#113-mavlink-router)
-  - [11.4. MAVProxy](#114-mavproxy)
-  - [11.5. Pymavlink](#115-pymavlink)
+  - [11.3. MAVProxy](#113-mavproxy)
+  - [11.4. Pymavlink](#114-pymavlink)
 
 <!-- /code_chunk_output -->
 
@@ -114,6 +113,8 @@ Select your versionダイアログが表示されたら、`Stable` を押下し�
 
 シミュレータを終了するには、タイトルバーに `ArduCopter.exe` が表示されているターミナルのウィンドウを閉じます。  
 ![Alt text](media/mp-setup-050.jpg)  
+
+<div style="page-break-before:always"></div>  
 
 二回目以降は`Skip Download` にチェックを付けることで、実行ファイルのダウンロードをスキップしてシミュレータを起動できます。  
 ![Alt text](media/mp-setup-060.jpg)  
@@ -677,10 +678,8 @@ https://ardupilot.org/dev/docs/debugging-with-gdb-using-vscode.html
 1. ArduPilot Wiki：[https://ardupilot.org/planner/](https://ardupilot.org/planner/)
 ## 11.2. Visual Studio Code
 1. Keyboard shortcuts：[https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf](https://code.visualstudio.com/shortcuts/keyboard-shortcuts-windows.pdf)
-## 11.3. MAVLink-router
-1. GitHub：[https://github.com/mavlink-router/mavlink-router](https://github.com/mavlink-router/mavlink-router)
-## 11.4. MAVProxy
+## 11.3. MAVProxy
 1. ArduPilot Wiki：[https://ardupilot.org/mavproxy/index.html](https://ardupilot.org/mavproxy/index.html)
-## 11.5. Pymavlink
+## 11.4. Pymavlink
 1. GitHub：[https://github.com/ArduPilot/pymavlink](https://github.com/ArduPilot/pymavlink)
 2. Examples：[https://www.ardusub.com/developers/pymavlink.html](https://www.ardusub.com/developers/pymavlink.html)
