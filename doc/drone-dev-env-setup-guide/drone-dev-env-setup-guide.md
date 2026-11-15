@@ -15,7 +15,7 @@ Ver.1.4.5 - 2025.11.8 - 一部GitHubリポジトリはFork&Cloneするように�
 Ver.1.4.6 - 2026.6.8  - 誤字修正
 Ver.1.4.7 - 2026.6.15 - 20th -> 21st に変更
 Ver.1.4.8 - 2026.11.12 - DroneKit Python の記載を削除、期番号の例を汎用化
-Ver.1.4.9 - 2026.11.14 - Windows 11 前提に変更、WSL手順の更新、9.3/9.4節の修正
+Ver.1.4.9 - 2026.11.14 - Windows 11 前提に変更、構成図の差し替え、WSL手順の更新、9.3/9.4節の修正
 -->
 
 Table of Contents
@@ -72,14 +72,14 @@ Table of Contents
 |------|-----------|--------------|
 | 2026.6.15 | 1.4.7 | 9.3節：SITL起動方法（MP/WSL）毎の接続先IPアドレスの説明を追加<br>9.4節：20th → 21st に変更 |
 | 2026.11.12 | 1.4.8 | 9章：DroneKit Python の記載を削除<br>9.4節：期番号の例を `1st`、`2nd` … の汎用表記に変更 |
-| 2026.11.14 | 1.4.9 | 1, 4章：Windows 11 前提に変更、バージョン確認の削除、WSL手順を更新<br>9.3, 9.4節：記述・字下げの修正、期番号の注意書きを追加 |
+| 2026.11.14 | 1.4.9 | 1, 4章：Windows 11 前提に変更、1章の構成図を差し替え、バージョン確認の削除、WSL手順を更新<br>9.3, 9.4節：記述・字下げの修正、期番号の注意書きを追加 |
 
 <div style="page-break-before:always"></div>
 
 # 1. はじめに
 本書はWindows11 + WSL2（Ubuntu22.04） + Visual Studio Code を使用してArduPilotドローンソフトウェアの開発・テストを行うための環境構築手順です。  
 開発環境構成における本書の対象範囲は下図の通りとなります。  
-![Alt text](media/intro-010.jpg)  
+![Alt text](media/intro-010.png)  
 
 <div style="page-break-before:always"></div>  
 
@@ -315,7 +315,6 @@ Visual Studio Codeが起動したら次の手順に進んでください。
 |Black Formatter|Black Formatter|Python言語フォーマッター|
 |C/C++|C++|C/C++言語サポート|
 |Lua|Lua|Lua言語サポート|
-<!-- |Docker|Docker|Dockerサポート| -->
 |ardupilot-devenv|ardupilot|ArduPilot開発サポート|
 |Lua Autocomplete for ArduPilot|ardupilot|ArduPilot用Lua言語サポート|
 
