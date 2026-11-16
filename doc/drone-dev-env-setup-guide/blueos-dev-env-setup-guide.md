@@ -32,7 +32,11 @@ Table of Contents
   - [3.1. SITLボードへの切り替え](#31-sitlボードへの切り替え)
   - [3.2. SITLファームウェアのインストールと起動](#32-sitlファームウェアのインストールと起動)
   - [3.3. 起動位置の設定（ドローンフィールドKawachi）](#33-起動位置の設定ドローンフィールドkawachi)
-  - [3.4. トラブルシューティング](#34-トラブルシューティング)
+  - [3.4. 機体設定とアーム・離陸の確認](#34-機体設定とアーム離陸の確認)
+    - [3.4.1. 機体モデルの設定（sitl_frame）](#341-機体モデルの設定sitl_frame)
+    - [3.4.2. フレーム設定](#342-フレーム設定)
+    - [3.4.3. 加速度計のキャリブレーション](#343-加速度計のキャリブレーション)
+    - [3.4.4. アームと離陸](#344-アームと離陸)
 - [4. 疎通確認](#4-疎通確認)
   - [4.1. MAVLink Inspectorでの確認](#41-mavlink-inspectorでの確認)
   - [4.2. Mission Plannerからの接続確認](#42-mission-plannerからの接続確認)
@@ -205,6 +209,18 @@ ssh pi@192.168.42.1 [エンターキー]
 
 ※ SSHログインは通常の手順では使用しませんが、トラブルシューティング等でラズパイ内のファイルを操作する際に使用します。
 
+【発生しうるエラーと対策】  
+* `WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!` が表示されて接続できない  
+
+SDカードを書き直した場合や別のラズパイに替えた場合、同じIPアドレス（`192.168.42.1`）でもホスト鍵が変わるため、PCに保存されている前回の鍵と一致せずに表示されます。自分のラズパイに直接接続していることを確認したうえで、次のコマンドで古い鍵を削除し、再度接続してください。
+```cmd
+ssh-keygen -R 192.168.42.1
+```
+```cmd
+ssh pi@192.168.42.1
+```
+`Are you sure you want to continue connecting` と表示されたら `yes` と回答します。
+
 <div style="page-break-before:always"></div>
 
 ## 2.4. Pirate Modeの有効化
@@ -230,6 +246,8 @@ Pirate Modeが有効になると左メニューに `MAVLink Inspector` などの
 ※ ダウンロードには時間がかかります。インターネット接続（2.3.2 Step 1）が完了している必要があります。  
 ![alt text](media/blueos-version-010.png)
 
+※ 画像に表示されているバージョンは例です。画像と異なる場合でも、必ず本書で指定した **`1.5.0-beta.43`** を選択してください。
+
 <div style="page-break-before:always"></div>
 
 # 3. SITLの起動設定
@@ -238,7 +256,7 @@ Pirate Modeが有効になると左メニューに `MAVLink Inspector` などの
 BlueOSのボードを `SITL` に設定してArduPilot（SITL）を起動すると、BlueOSはこれを実機FCと同じように扱い、MAVLink Server経由で各クライアントにテレメトリを配信します。WSL側でSITLを起動したり、BlueOSに接続したりする必要はありません。
 
 ## 3.1. SITLボードへの切り替え
-1. BlueOS管理画面 → 左メニュー `Vehicle Setup` → `Autopilot Firmware` をクリックします。
+1. BlueOS管理画面 → 左メニュー `Autopilot Firmware` をクリックします。
 2. 画面下部の `CHANGE BOARD` ボタンをクリックします。
 3. Board を `SITL` に変更して `SET` をクリックします。
 
@@ -253,57 +271,92 @@ BlueOSのボードを `SITL` に設定してArduPilot（SITL）を起動する�
 | Vehicle Type | Copter |
 | Firmware | DEV |
 
-![alt text](media/blueos-sitl-setup-010.png)
+![alt text](media/blueos-sitl-setup-011.png)
 <!-- TODO: 採用バージョン（1.5.0-beta.43）の画面で撮り直し・UI差異の確認 -->
 
 `Successfully installed new firmware` が表示されたら、`START AUTOPILOT` をクリックします。  
 これでBlueOS上でSITLが起動し、MAVLink Server経由でMission Planner（UDP 14550）等に接続できます。
 
+PCがBlueOSホットスポットに接続している状態で、Mission Plannerを起動します。  
+ダイアログ（`A Mavlink stream has been detected, blueos-avahi...`）が表示されたら、`Yes` をクリックします。  
+HUDにテレメトリが表示されれば接続完了です。機体はフロリアノポリス（ブラジル）付近に表示されます。  
+![alt text](media/blueos-sitl-setup-012.png)
+
 ## 3.3. 起動位置の設定（ドローンフィールドKawachi）
 BlueOS内蔵SITLの既定の起動位置は、フロリアノポリス（ブラジル）です。本書では、ドローンフィールドKawachiで起動するように設定します。  
 起動位置は ArduPilot のパラメータ `SIM_OPOS_LAT` / `SIM_OPOS_LNG` / `SIM_OPOS_ALT` / `SIM_OPOS_HDG` で指定できます（BlueOS 1.5.0-beta.39以降）。
 
-<!-- TODO: 実機検証後に記載
- - SIM_OPOS_* の設定場所（Parameters画面など）と操作手順
- - Kawachiの座標値（緯度・経度・高度・方位）
- - 設定の反映に再起動が必要か、再起動後も設定が保持されるか
- - スクリーンショット（SIM_OPOS_* 設定画面）
--->
+Mission Plannerからパラメータを変更します。ドローンフィールドKawachiの値は下記の通りです。
+
+| パラメータ | 値 | 内容 |
+|------|-----|------|
+| `SIM_OPOS_LAT` | `35.879129` | 緯度 |
+| `SIM_OPOS_LNG` | `140.339683` | 経度 |
+| `SIM_OPOS_ALT` | `7` | 高度（m） |
+| `SIM_OPOS_HDG` | `0` | 方位（度） |
+
+1. 上部メニューの `設定/調整` → 左メニューの `フルパラメータ リスト` を開きます。
+1. 右側の `絞込み検索` に `SIM_OPOS*` を入力します。
+1. 上表の通りに `値` を入力し、`パラメータ書込` をクリックします。  
+![alt text](media/blueos-sitl-setup-020.png)
+
+設定を反映するため、SITLを再起動します。
+
+1. 上部メニューの `フライト・データ` → `アクション` タブを開きます。
+1. リストボックスから `Preflight_Reboot_Shutdown` を選択し、`アクション実行` をクリックします。
+1. 再起動後、機体の位置がドローンフィールドKawachiになっていることを確認します。  
+![alt text](media/blueos-sitl-setup-021.png)
 
 
-## 3.4. トラブルシューティング
-<!-- TODO: 1.5.0-beta.43で症状1・症状2が再現するか実機で確認し、改善済みなら該当項目を削除 -->
+## 3.4. 機体設定とアーム・離陸の確認
+BlueOS内蔵SITLを、Copter（クアッド）として飛行できるように設定します。
 
-**症状1: アームできない（PreArm: 3D Accel calibration needed）**
-
-SITLでもキャリブレーション未実施扱いになることがあります。BlueOS管理画面の左メニューから `Vehicle Setup` → `CONFIGURE` → `ACCELEROMETER` → `QUICK CALIBRATION` をクリックしてキャリブレーションを実施してください。
-
-**症状2: 離陸しても高度が上がらない（Potential Thrust Loss）**
-
-`sitl_frame` が `vectored`（水中ROV向け）のまま残っている場合に発生します。設定ファイルはホストOS上にあるため、SSHでログインして下記を実行します（[2.3.3節](#233-接続確認)参照）。
-
-```bash
-# バックアップ
-cp /root/.config/blueos/ardupilot-manager/settings.json \
-   /root/.config/blueos/ardupilot-manager/settings.json.bak
-
-# 設定ファイルを編集
-sudo nano /root/.config/blueos/ardupilot-manager/settings.json
-```
-
-`sitl_frame` の値を `vectored` から `quad` に変更して保存します（`Ctrl+O` → `Enter` → `Ctrl+X`）。
-
-```json
-"preferred_router": "MAVLinkRouter",
-"sitl_frame": "quad"
-```
-
-保存後、`sudo reboot` で再起動します。起動後に下記で確認できます。
+### 3.4.1. 機体モデルの設定（sitl_frame）
+BlueOS内蔵SITLの機体モデルは、既定で `vectored`（水中ROV向け）です。`quad` に変更します。設定ファイルはホストOS上にあるため、PCのコマンドプロンプトからSSHでログインして実行します（[2.3.3節](#233-接続確認)参照）。
 
 ```bash
-pgrep -af ardupilot   # "--model quad" が含まれていれば正常
+D=/root/.config/blueos/ardupilot-manager
+```
+```bash
+sudo cp $D/settings-1.json $D/settings-1.json.bak
+```
+```bash
+sudo sed -i 's/"sitl_frame": "vectored"/"sitl_frame": "quad"/' $D/settings-1.json
+```
+```bash
+sudo grep -n sitl_frame $D/settings-1.json
+```
+`"sitl_frame": "quad",` と表示されることを確認します。続けて再起動します。
+```bash
+sudo reboot
 ```
 
+再起動後（1〜2分後）、再度SSHでログインして次のコマンドを実行します。`--model quad` が含まれていれば正常です。
+```bash
+pgrep -af ardupilot
+```
+
+### 3.4.2. フレーム設定
+Mission Plannerを接続し、`設定/調整` → `フルパラメータ リスト` を開きます。`絞込み検索` に `FRAME_*` を入力し、下記の値になっていることを確認します。異なる場合は値を入力して `パラメータ書込` をクリックします。
+
+| パラメータ | 値 | 内容 |
+|------|-----|------|
+| `FRAME_CLASS` | `1` | Quad |
+| `FRAME_TYPE` | `1` | X |
+
+変更した場合は、[3.3節](#33-起動位置の設定ドローンフィールドkawachi)と同じ手順で `Preflight_Reboot_Shutdown` を実行して、SITLを再起動します。
+
+### 3.4.3. 加速度計のキャリブレーション
+BlueOS管理画面の左メニューから `Vehicle Setup` → `CONFIGURE` → `ACCELEROMETER` → `QUICK CALIBRATION` をクリックして、キャリブレーションを実施します。
+
+### 3.4.4. アームと離陸
+Mission Plannerのフライト・データ画面で、アームと離陸を行います（操作の詳細は[4.3節](#43-飛行動作の確認任意)参照）。
+
+1. `アクション` タブで `Guided` を選択して `モードをセット` をクリックします。
+1. `Arm/Disarm` をクリックしてアームします。
+1. 地図上で右クリックして `離陸` を選択し、高度 `10` を入力します。
+
+機体が離陸して高度10mでホバリングすることを確認します。
 
 <div style="page-break-before:always"></div>
 
@@ -402,7 +455,7 @@ Cockpitの画面に切り替わり、機体（SITL）のテレメトリ（高度
 1. FCをUSBケーブルでラズパイのUSBポートに接続します。  
 ![alt text](media/blueos-fc-connect-010.png)
 
-2. BlueOS管理画面 → 左メニュー `Vehicle Setup` → `Autopilot Firmware` を開きます。
+2. BlueOS管理画面 → 左メニュー `Autopilot Firmware` を開きます。
 3. 画面下部の `CHANGE BOARD` ボタンをクリックします。`Available boards` に接続したFC（例: `CUAV-7-Nano`）が表示されるので選択して適用します。  
 ![alt text](media/blueos-fc-connect-020.png)
 

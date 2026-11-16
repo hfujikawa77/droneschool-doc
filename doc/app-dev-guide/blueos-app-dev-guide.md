@@ -481,7 +481,7 @@ docker buildx build --platform linux/amd64,linux/arm64 --provenance=false \
 | ARM/モード表示が点滅 | GCS の HEARTBEAT も拾っている | 受信を自機（target）に限定（4.1 ④b） |
 | 地図が出ない | CDN（unpkg/OSM）に到達できない | Leaflet をローカル同梱（4.1 ⑤） |
 | VIEW LOGS がタイムアウト | アクセスログ肥大 | `uvicorn ... --no-access-log`（4.1） |
-| 内蔵 SITL で ARM できない／離陸しても高度が上がらない | 加速度キャリブレーション未実施、`sitl_frame` が `vectored` のまま | [BlueOS 環境構築手順書 §3.4](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#34-トラブルシューティング) を参照 |
+| 内蔵 SITL で ARM できない／離陸しても高度が上がらない | 加速度キャリブレーション未実施、`sitl_frame` が `vectored` のまま | [BlueOS 環境構築手順書 §3.4](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#34-機体設定とアーム離陸の確認) を参照 |
 
 **成果物:** BlueOS 左メニューから開ける Drone Web App Extension
 
