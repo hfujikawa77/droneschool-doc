@@ -329,29 +329,16 @@ BlueOSのパラメータ編集画面から変更します。ドローンフィ�
 BlueOS内蔵SITLを、Copter（クアッド）として飛行できるように設定します。
 
 ### 3.5.1. 機体モデルの設定（sitl_frame）
-BlueOS内蔵SITLの機体モデルは、既定で `vectored`（水中ROV向け）です。`quad` に変更します。設定ファイルはホストOS上にあるため、PCのコマンドプロンプトからSSHでログインして実行します（[2.3.3節](#233-接続確認)参照）。
+BlueOS内蔵SITLの機体モデルは、既定で `vectored`（水中ROV向け）になっている場合があります。Copterとして飛行させるため、`quad` に変更します。この設定はBlueOSの管理画面から変更できます。SSHでログインする必要はありません。
 
-```bash
-D=/root/.config/blueos/ardupilot-manager
-```
-```bash
-sudo cp $D/settings-1.json $D/settings-1.json.bak
-```
-```bash
-sudo sed -i 's/"sitl_frame": "vectored"/"sitl_frame": "quad"/' $D/settings-1.json
-```
-```bash
-sudo grep -n sitl_frame $D/settings-1.json
-```
-`"sitl_frame": "quad",` と表示されることを確認します。続けて再起動します。
-```bash
-sudo reboot
-```
+1. BlueOS管理画面 → 左メニュー `Autopilot Firmware` を開きます。
+1. `SITL configuration` を展開します。
+1. `SITL frame` のリストから `quad` を選択します。
+<!-- TODO: beta.43 の SITL configuration 画面でスクリーンショットを取得 -->
 
-再起動後（1〜2分後）、再度SSHでログインして次のコマンドを実行します。`--model quad` が含まれていれば正常です。
-```bash
-pgrep -af ardupilot
-```
+選択すると設定が保存され、オートパイロットが自動で再起動します。再起動が終わると `SITL frame set, autopilot restarted` と表示されます。再起動後、`SITL frame` が `quad` になっていることを確認します。
+
+※ `SITL configuration` は、ボードが `SITL` のときだけ表示されます。表示されない場合は、[3.1節](#31-sitlボードへの切り替え)でボードが `SITL` になっていることを確認してください。
 
 ### 3.5.2. フレーム設定
 BlueOS管理画面 → 左メニュー `Autopilot Parameters` を開きます。検索欄に `FRAME_` を入力し、下記の値になっていることを確認します。異なる場合は値を変更します。
