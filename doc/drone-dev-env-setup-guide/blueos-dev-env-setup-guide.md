@@ -57,19 +57,7 @@ Table of Contents
 機体の代わりとしてBlueOS内蔵のSITL（ArduPilotのシミュレータ）を使用します。BlueOS内蔵のMAVLink Serverが、機体のテレメトリをPC上のGCS（Mission Planner）や開発アプリに配信します。  
 本書で構築する環境の構成は下記の通りです。
 
-```
-Windows PC                                Raspberry Pi 5（BlueOS）
-┌──────────────────────────┐             ┌──────────────────────────────┐
-│                          │             │ SITL（ArduCopter）           │
-│                          │             │   │                          │
-│                          │             │   ▼                          │
-│                          │             │ MAVLink Server               │
-│                          │             │   ├─（各クライアントへ配信）  │
-│                          │             │   └─ Extension               │
-│ Mission Planner（GCS）◀───┼─UDP:14550──│     （開発したアプリ）        │
-└──────────────────────────┘             └──────────────────────────────┘
-```
-<!-- TODO: 構成図を画像に差し替え -->
+![alt text](media/blueos-intro-010.png)
 
 ## 1.1. 実機導入の目的
 コンパニオンコンピュータ実機を導入することで座学習の理解をより一層深めることを第一の目的としています。  
