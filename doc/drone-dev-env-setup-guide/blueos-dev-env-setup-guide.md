@@ -31,24 +31,21 @@ Table of Contents
 - [3. SITLの起動設定](#3-sitlの起動設定)
   - [3.1. SITLボードへの切り替え](#31-sitlボードへの切り替え)
   - [3.2. SITLファームウェアのインストールと起動](#32-sitlファームウェアのインストールと起動)
-  - [3.3. 起動位置の設定（ドローンフィールドKawachi）](#33-起動位置の設定ドローンフィールドkawachi)
-  - [3.4. 機体設定とアーム・離陸の確認](#34-機体設定とアーム離陸の確認)
-    - [3.4.1. 機体モデルの設定（sitl_frame）](#341-機体モデルの設定sitl_frame)
-    - [3.4.2. フレーム設定](#342-フレーム設定)
-    - [3.4.3. 加速度計のキャリブレーション](#343-加速度計のキャリブレーション)
-    - [3.4.4. アームと離陸](#344-アームと離陸)
-- [4. 疎通確認](#4-疎通確認)
-  - [4.1. MAVLink Inspectorでの確認](#41-mavlink-inspectorでの確認)
-  - [4.2. Mission Plannerからの接続確認](#42-mission-plannerからの接続確認)
-  - [4.3. 飛行動作の確認（任意）](#43-飛行動作の確認任意)
-  - [4.4. CockpitからのGCS接続確認（任意）](#44-cockpitからのgcs接続確認任意)
-- [5. Appendix](#5-appendix)
-  - [5.1. 参考情報](#51-参考情報)
-    - [5.1.1. BlueOS](#511-blueos)
-    - [5.1.2. ArduPilot SITL](#512-ardupilot-sitl)
-    - [5.1.3. Mission Planner](#513-mission-planner)
-    - [5.1.4. Cockpit](#514-cockpit)
-  - [5.2. （参考）実機FC（フライトコントローラー）を接続する場合](#52-参考実機fcフライトコントローラーを接続する場合)
+  - [3.3. Mission Plannerからの接続確認](#33-mission-plannerからの接続確認)
+  - [3.4. 起動位置の設定（ドローンフィールドKawachi）](#34-起動位置の設定ドローンフィールドkawachi)
+  - [3.5. 機体設定](#35-機体設定)
+    - [3.5.1. 機体モデルの設定（sitl_frame）](#351-機体モデルの設定sitl_frame)
+    - [3.5.2. フレーム設定](#352-フレーム設定)
+    - [3.5.3. 加速度計のキャリブレーション](#353-加速度計のキャリブレーション)
+  - [3.6. 飛行動作の確認（任意）](#36-飛行動作の確認任意)
+- [4. Appendix](#4-appendix)
+  - [4.1. 参考情報](#41-参考情報)
+    - [4.1.1. BlueOS](#411-blueos)
+    - [4.1.2. ArduPilot SITL](#412-ardupilot-sitl)
+    - [4.1.3. Mission Planner](#413-mission-planner)
+    - [4.1.4. Cockpit](#414-cockpit)
+  - [4.2. （参考）実機FC（フライトコントローラー）を接続する場合](#42-参考実機fcフライトコントローラーを接続する場合)
+  - [4.3. （参考）CockpitからのGCS接続確認（任意）](#43-参考cockpitからのgcs接続確認任意)
 
 <!-- /code_chunk_output -->
 
@@ -277,12 +274,33 @@ BlueOSのボードを `SITL` に設定してArduPilot（SITL）を起動する�
 `Successfully installed new firmware` が表示されたら、`START AUTOPILOT` をクリックします。  
 これでBlueOS上でSITLが起動し、MAVLink Server経由でMission Planner（UDP 14550）等に接続できます。
 
+## 3.3. Mission Plannerからの接続確認
+まず、BlueOS内蔵SITLのテレメトリがMAVLink Serverに届いていることを、BlueOSのWeb管理画面から確認します。
+
+左側メニューから `MAVLink Inspector` をクリックします。  
+`HEARTBEAT` や `ATTITUDE` などのMAVLinkメッセージがリアルタイムに受信・表示されていることを確認します。  
+![alt text](media/blueos-mavlink-inspector.png)
+
+メッセージが表示されない場合は、ここまでの設定（SITLボード、ファームウェアのインストール、`START AUTOPILOT` の実行）を見直してください。
+
+次に、PC側のGCSからテレメトリを受信できることを確認します。  
 PCがBlueOSホットスポットに接続している状態で、Mission Plannerを起動します。  
-ダイアログ（`A Mavlink stream has been detected, blueos-avahi...`）が表示されたら、`Yes` をクリックします。  
-HUDにテレメトリが表示されれば接続完了です。機体はフロリアノポリス（ブラジル）付近に表示されます。  
+起動時に下記のダイアログ（`A Mavlink stream has been detected, blueos-avahi...`）が表示された場合は、`Yes` をクリックします。これだけで接続が完了します。  
+※ BlueOSが通知するMAVLinkストリームへの自動接続の確認です。  
+![alt text](media/blueos-mp-stream-010.png)
+
+ダイアログが表示されなかった場合は、画面右上の接続リストボックスから `UDPCl` を選択して `接続` をクリックし、下記を入力します。
+
+| 項目 | 値 |
+|------|-----|
+| remote host | 192.168.42.1 |
+| remote Port | 14550 |
+
+接続が完了すると、フライト・データ画面のHUDに姿勢・高度などのテレメトリが表示され、地図上に機体（シミュレータ）が表示されることを確認します。機体はフロリアノポリス（ブラジル）付近に表示されます（起動位置は次の3.4節で変更します）。  
 ![alt text](media/blueos-sitl-setup-012.png)
 
-## 3.3. 起動位置の設定（ドローンフィールドKawachi）
+
+## 3.4. 起動位置の設定（ドローンフィールドKawachi）
 BlueOS内蔵SITLの既定の起動位置は、フロリアノポリス（ブラジル）です。本書では、ドローンフィールドKawachiで起動するように設定します。  
 起動位置は ArduPilot のパラメータ `SIM_OPOS_LAT` / `SIM_OPOS_LNG` / `SIM_OPOS_ALT` / `SIM_OPOS_HDG` で指定できます（BlueOS 1.5.0-beta.39以降）。
 
@@ -308,10 +326,10 @@ Mission Plannerからパラメータを変更します。ドローンフィー�
 ![alt text](media/blueos-sitl-setup-021.png)
 
 
-## 3.4. 機体設定とアーム・離陸の確認
+## 3.5. 機体設定
 BlueOS内蔵SITLを、Copter（クアッド）として飛行できるように設定します。
 
-### 3.4.1. 機体モデルの設定（sitl_frame）
+### 3.5.1. 機体モデルの設定（sitl_frame）
 BlueOS内蔵SITLの機体モデルは、既定で `vectored`（水中ROV向け）です。`quad` に変更します。設定ファイルはホストOS上にあるため、PCのコマンドプロンプトからSSHでログインして実行します（[2.3.3節](#233-接続確認)参照）。
 
 ```bash
@@ -336,7 +354,7 @@ sudo reboot
 pgrep -af ardupilot
 ```
 
-### 3.4.2. フレーム設定
+### 3.5.2. フレーム設定
 Mission Plannerを接続し、`設定/調整` → `フルパラメータ リスト` を開きます。`絞込み検索` に `FRAME_*` を入力し、下記の値になっていることを確認します。異なる場合は値を入力して `パラメータ書込` をクリックします。
 
 | パラメータ | 値 | 内容 |
@@ -344,67 +362,13 @@ Mission Plannerを接続し、`設定/調整` → `フルパラメータ リス�
 | `FRAME_CLASS` | `1` | Quad |
 | `FRAME_TYPE` | `1` | X |
 
-変更した場合は、[3.3節](#33-起動位置の設定ドローンフィールドkawachi)と同じ手順で `Preflight_Reboot_Shutdown` を実行して、SITLを再起動します。
+変更した場合は、[3.4節](#34-起動位置の設定ドローンフィールドkawachi)と同じ手順で `Preflight_Reboot_Shutdown` を実行して、SITLを再起動します。
 
-### 3.4.3. 加速度計のキャリブレーション
+### 3.5.3. 加速度計のキャリブレーション
 BlueOS管理画面の左メニューから `Vehicle Setup` → `CONFIGURE` → `ACCELEROMETER` → `QUICK CALIBRATION` をクリックして、キャリブレーションを実施します。
 
-### 3.4.4. アームと離陸
-Mission Plannerのフライト・データ画面で、アームと離陸を行います（操作の詳細は[4.3節](#43-飛行動作の確認任意)参照）。
 
-1. `アクション` タブで `Guided` を選択して `モードをセット` をクリックします。
-1. `Arm/Disarm` をクリックしてアームします。
-1. 地図上で右クリックして `離陸` を選択し、高度 `10` を入力します。
-
-機体が離陸して高度10mでホバリングすることを確認します。
-
-<div style="page-break-before:always"></div>
-
-# 4. 疎通確認
-
-BlueOS内蔵SITL → BlueOS（MAVLink Server）→ PC側クライアント の順にテレメトリが流れていることを確認します。  
-クライアントごとの接続方法は下記の通りです。エンドポイントの追加設定は不要です。
-
-| クライアント | 接続方法 | 備考 |
-|------|------|------|
-| Mission Planner | UDPCl 192.168.42.1:14550 | 起動時の自動検出ダイアログからも接続可 |
-| Cockpit | ブラウザで `http://192.168.42.1` → 左メニュー | BlueOS内蔵のWeb GCS |
-
-※ 実機FCを接続する場合も、ボードが `SITL` からシリアルボード（Pixhawk等）に変わるだけで、クライアント側の接続方法は同じです。
-
-## 4.1. MAVLink Inspectorでの確認
-まず、BlueOS内蔵SITLのテレメトリがMAVLink Serverに届いていることを、BlueOSのWeb管理画面から確認します。
-
-左側メニューから `MAVLink Inspector` をクリックします。  
-`HEARTBEAT` や `ATTITUDE` などのMAVLinkメッセージがリアルタイムに受信・表示されていることを確認します。  
-![alt text](media/blueos-mavlink-inspector.png)
-
-メッセージが表示されない場合は、第3章の設定（SITLボード、ファームウェアのインストール、`START AUTOPILOT` の実行）を見直してください。
-
-<div style="page-break-before:always"></div>
-
-## 4.2. Mission Plannerからの接続確認
-PC側のGCSからテレメトリを受信できることを確認します。  
-PCがBlueOSホットスポットに接続している状態で実施します。
-
-Mission Plannerを起動します。  
-起動時に下記のダイアログ（`A Mavlink stream has been detected, blueos-avahi...`）が表示された場合は、`Yes` をクリックします。これだけで接続が完了します。  
-※ BlueOSが通知するMAVLinkストリームへの自動接続の確認です。  
-![alt text](media/blueos-mp-stream-010.png)
-
-ダイアログが表示されなかった場合は、画面右上の接続リストボックスから `UDPCl` を選択して `接続` をクリックし、下記を入力します。
-
-| 項目 | 値 |
-|------|-----|
-| remote host | 192.168.42.1 |
-| remote Port | 14550 |
-
-接続が完了すると、フライト・データ画面のHUDに姿勢・高度などのテレメトリが表示され、地図上のドローンフィールドKawachiに機体（シミュレータ）が表示されることを確認します。  
-![alt text](media/blueos-mp-connect-010.png)
-
-<div style="page-break-before:always"></div>
-
-## 4.3. 飛行動作の確認（任意）
+## 3.6. 飛行動作の確認（任意）
 Mission Plannerから機体（SITL）にコマンドを送信できること（双方向の疎通）を確認します。
 
 フライト・データ画面左下の `アクション` タブを開きます。
@@ -416,37 +380,27 @@ Mission Plannerから機体（SITL）にコマンドを送信できること（�
 ※ SITL起動直後はGPS測位（EKFの初期化）待ちでアームできないことがあります。その場合は1分ほど待ってから再実行してください。  
 ※ アームと離陸の操作の詳細は、環境構築手順書（`drone-dev-env-setup-guide.pdf`）の `2.3.1. アームと離陸` もご覧ください。
 
-## 4.4. CockpitからのGCS接続確認（任意）
-BlueOSに内蔵されたWebブラウザ版GCS「Cockpit」からテレメトリを確認します。  
-Mission Plannerを使わずにブラウザだけで機体の状態を確認・操作できることを体験する目的で実施します。
-
-PCのブラウザで `http://192.168.42.1` を開き、左メニューから `Cockpit` をクリックします。  
-※ 左メニューに `Cockpit` が表示されない場合は、左メニュー下部の `Tools` → `Extensions Manager` からインストールしてください。
-
-Cockpitの画面に切り替わり、機体（SITL）のテレメトリ（高度、機首方位、フライトモード等）が表示されることを確認します。
-![alt text](media/blueos-cockpit-010.png)
-
 以上で環境構築は完了です。
 
 <div style="page-break-before:always"></div>
 
-# 5. Appendix
-## 5.1. 参考情報
-### 5.1.1. BlueOS
+# 4. Appendix
+## 4.1. 参考情報
+### 4.1.1. BlueOS
 1. Official Website：[https://blueos.cloud/](https://blueos.cloud/)
 2. Documentation：[https://blueos.cloud/docs/stable/](https://blueos.cloud/docs/stable/)
 3. GitHub：[https://github.com/bluerobotics/BlueOS](https://github.com/bluerobotics/BlueOS)
 4. Releases（イメージダウンロード）：[https://github.com/bluerobotics/BlueOS/releases](https://github.com/bluerobotics/BlueOS/releases)
-### 5.1.2. ArduPilot SITL
+### 4.1.2. ArduPilot SITL
 1. ArduPilot Wiki：[https://ardupilot.org/dev/docs/sitl-simulator-software-in-the-loop.html](https://ardupilot.org/dev/docs/sitl-simulator-software-in-the-loop.html)
-### 5.1.3. Mission Planner
+### 4.1.3. Mission Planner
 1. ArduPilot Wiki：[https://ardupilot.org/planner/](https://ardupilot.org/planner/)
-### 5.1.4. Cockpit
+### 4.1.4. Cockpit
 1. GitHub：[https://github.com/bluerobotics/cockpit](https://github.com/bluerobotics/cockpit)
 2. ドキュメント：[https://blueos.cloud/docs/stable/extensions/cockpit/](https://blueos.cloud/docs/stable/extensions/cockpit/)
 
 
-## 5.2. （参考）実機FC（フライトコントローラー）を接続する場合
+## 4.2. （参考）実機FC（フライトコントローラー）を接続する場合
 
 本書ではFC実機の代わりにBlueOS内蔵のSITLを機体として使用しますが、ラズパイにFC実機を接続して使用することもできます。実機を接続する場合の手順を参考として示します。
 
@@ -462,6 +416,16 @@ Cockpitの画面に切り替わり、機体（SITL）のテレメトリ（高度
 4. 適用後、Autopilotパネルに接続したボードの情報が表示されることを確認します。`Board name` に接続したFC名、`Path` に `/dev/ttyACM0` などのシリアルデバイスが表示されていれば、FCが正常に認識されています。  
 ![alt text](media/blueos-fc-connect-030.jpg)
 
-FCが認識されると、SITLの場合と同様にMAVLink Server経由でMission Planner（UDP 14550）等のクライアントから接続できます。エンドポイントの追加設定は不要です（[第4章](#4-疎通確認)参照）。
+FCが認識されると、SITLの場合と同様にMAVLink Server経由でMission Planner（UDP 14550）等のクライアントから接続できます。エンドポイントの追加設定は不要です（[3.3節](#33-mission-plannerからの接続確認)参照）。
 
 ※ 実機FCを接続する場合は、第3章の `SITL` ボードへの切り替えやSITLの起動は不要です。
+
+## 4.3. （参考）CockpitからのGCS接続確認（任意）
+BlueOSに内蔵されたWebブラウザ版GCS「Cockpit」からテレメトリを確認します。  
+Mission Plannerを使わずにブラウザだけで機体の状態を確認・操作できることを体験する目的で実施します。
+
+PCのブラウザで `http://192.168.42.1` を開き、左メニューから `Cockpit` をクリックします。  
+※ 左メニューに `Cockpit` が表示されない場合は、左メニュー下部の `Tools` → `Extensions Manager` からインストールしてください。
+
+Cockpitの画面に切り替わり、機体（SITL）のテレメトリ（高度、機首方位、フライトモード等）が表示されることを確認します。
+![alt text](media/blueos-cockpit-010.png)

@@ -304,7 +304,7 @@ JSON が返れば疎通 OK です。
 
 ## 3.4. Cockpit ― ARM・離陸・GOTO の確認
 
-Cockpit からの GCS 接続確認・ARM・離陸・GOTO の手順は [BlueOS 環境構築手順書 §4.4](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#44-cockpitからのgcs接続確認任意) を参照してください。
+Cockpit からの GCS 接続確認・ARM・離陸・GOTO の手順は [BlueOS 環境構築手順書 §4.3](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#43-参考cockpitからのgcs接続確認任意) を参照してください。
 
 <div style="page-break-before:always"></div>
 
@@ -481,7 +481,7 @@ docker buildx build --platform linux/amd64,linux/arm64 --provenance=false \
 | ARM/モード表示が点滅 | GCS の HEARTBEAT も拾っている | 受信を自機（target）に限定（4.1 ④b） |
 | 地図が出ない | CDN（unpkg/OSM）に到達できない | Leaflet をローカル同梱（4.1 ⑤） |
 | VIEW LOGS がタイムアウト | アクセスログ肥大 | `uvicorn ... --no-access-log`（4.1） |
-| 内蔵 SITL で ARM できない／離陸しても高度が上がらない | 加速度キャリブレーション未実施、`sitl_frame` が `vectored` のまま | [BlueOS 環境構築手順書 §3.4](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#34-機体設定とアーム離陸の確認) を参照 |
+| 内蔵 SITL で ARM できない／離陸しても高度が上がらない | 加速度キャリブレーション未実施、`sitl_frame` が `vectored` のまま | [BlueOS 環境構築手順書 §3.5](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#35-機体設定) を参照 |
 
 **成果物:** BlueOS 左メニューから開ける Drone Web App Extension
 
@@ -499,7 +499,7 @@ Drone Web App に、表示情報や運用機能を足していきます。
 - **GOTO の強化** … 地図クリックで目的地指定、複数 WP の連続移動
 - **Discord 通知** … イベント（離陸・着陸・モード変更・異常）を Discord へ通知
 - **フェイルセーフ監視** … GPS 異常・バッテリー低下・EKF 異常・RC 喪失を検知して通知
-- **実機での運用** … 同じ Extension を実機 FC で動かす（コードもイメージも無変更。SITL ボードを実機 FC に差し替えるだけ。手順は [BlueOS 環境構築手順書 §5.2](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#52-参考実機fcフライトコントローラーを接続する場合)）
+- **実機での運用** … 同じ Extension を実機 FC で動かす（コードもイメージも無変更。SITL ボードを実機 FC に差し替えるだけ。手順は [BlueOS 環境構築手順書 §4.2](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#42-参考実機fcフライトコントローラーを接続する場合)）
 
 フェイルセーフ監視で検知したい異常と、その手がかりとなる MAVLink メッセージの例：
 
