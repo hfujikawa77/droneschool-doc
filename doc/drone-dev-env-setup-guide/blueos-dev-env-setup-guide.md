@@ -359,7 +359,8 @@ BlueOS管理画面 → 左メニュー `Autopilot Parameters` を開きます。
 変更した場合は、[3.4節](#34-起動位置の設定ドローンフィールドkawachi)と同じ手順でオートパイロットを再起動します。
 
 ### 3.5.3. 加速度計のキャリブレーション
-BlueOS管理画面の左メニューから `Vehicle Setup` → `CONFIGURE` → `ACCELEROMETER` → `QUICK CALIBRATION` をクリックして、キャリブレーションを実施します。
+BlueOS管理画面の左メニューから `Vehicle Setup` → `CONFIGURE` → `ACCELEROMETER` → `QUICK CALIBRATION` をクリックして、キャリブレーションを実施します。  
+![alt text](media/blueos-sitl-setup-023.png)
 
 
 ## 3.6. 飛行動作の確認
