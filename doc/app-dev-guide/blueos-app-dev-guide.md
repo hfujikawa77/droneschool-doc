@@ -349,6 +349,7 @@ AI が生成しただけのアプリでは、BlueOS 固有の要件が**満た�
 | ③ | **`GET /` が 200 を返す** | BlueOS | Helper は `/` で生存確認する。200 以外だと `/register_service` を呼ばずメニューに出ない |
 | ④a | **`host.docker.internal` で MAVLink Server に接続** | BlueOS | コンテナからホスト側の MAVLink Server（内部 14550）へ到達するための接続先。BlueOS のコンテナ実行環境に起因 |
 | ④b | **`mode_mapping_byname` での明示マップ・自機のみ受信** | Webアプリ | 機体種別ごとのモード番号のずれ、複数 GCS 接続時の混信による mode/armed の点滅を防ぐための、このアプリ側の実装対策 |
+| ④c | **GCS の HEARTBEAT を 1 秒周期で送り続ける** | BlueOS | UDP（`udpout`）には接続確立がなく、MAVLink Server は直近に送信してきたクライアントにしか配信しない。接続時の 1 回だけだと 10 秒程度でテレメトリが止まる（TCP のローカル確認では不要） |
 | ⑤ | **Leaflet をローカル同梱** | Webアプリ | このアプリは Leaflet を CDN から読み込む実装のため。BlueOS ホットスポット接続中はネットに出られず CDN 不達になる（`L is not defined`） |
 
 > **モードマップの落とし穴:** Plane の `GUIDED=15` を Copter に送ると Copter ではモード 15 が **AUTOTUNE** になり「Mode change to Autotune failed」になります（Copter は `GUIDED=4`）。これが `mode_mapping_byname` を使う理由です。
@@ -479,6 +480,7 @@ docker buildx build --platform linux/amd64,linux/arm64 --provenance=false \
 | メニューに出ない | bridge/ポート未設定（JSONエディタ空）／`GET /` が 200 でない | 4.1 ①の permissions を JSON エディタに入力／4.1 ③で `/` が 200 を返す |
 | TAKEOFF で AUTOTUNE 失敗 | Plane のモードマップを誤適用 | `mode_mapping_byname` で機体タイプから生成（4.1 ④b） |
 | ARM/モード表示が点滅 | GCS の HEARTBEAT も拾っている | 受信を自機（target）に限定（4.1 ④b） |
+| ステータスが更新されなくなる（コマンドは遅れて動く） | HEARTBEAT を接続時に 1 回しか送っていない | GCS の HEARTBEAT を 1 秒周期で送り続ける（4.1 ④c） |
 | 地図が出ない | CDN（unpkg/OSM）に到達できない | Leaflet をローカル同梱（4.1 ⑤） |
 | VIEW LOGS がタイムアウト | アクセスログ肥大 | `uvicorn ... --no-access-log`（4.1） |
 | 内蔵 SITL で ARM できない／離陸しても高度が上がらない | 加速度キャリブレーション未実施、`sitl_frame` が `vectored` のまま | [BlueOS 環境構築手順書 §3.5](../drone-dev-env-setup-guide/blueos-dev-env-setup-guide.md#35-機体設定) を参照 |
