@@ -2,12 +2,12 @@
 <h3>ドローンエンジニア養成塾 デベロッパーコース</h3>
 <h2>コンパニオンコンピュータ（BlueOS）環境構築手順書</h2><br>
 (Raspberry Pi 5 + BlueOS)<br/>
-Ver.1.1.0 - 2026.11.13
+Ver.1.1.0 - 2026.11.17
 </div>
 
 <!--
 Ver.1.0.0 - 2026.6.12 - 初版
-Ver.1.1.0 - 2026.11.13 - 機体をWSL上のSITLからBlueOS内蔵SITLに変更（第3章差し替え、BlueOSバージョンを1.5.0-beta.43に変更）、Windows 11 前提に変更
+Ver.1.1.0 - 2026.11.17 - 機体をBlueOS内蔵SITLに変更（3章再編、BlueOS 1.5.0-beta.43に変更）、Windows 11 前提に変更、構成図の差し替え、SSHホスト鍵エラーの対処を追加
 -->
 
 Table of Contents
@@ -48,6 +48,14 @@ Table of Contents
   - [4.3. （参考）CockpitからのGCS接続確認（任意）](#43-参考cockpitからのgcs接続確認任意)
 
 <!-- /code_chunk_output -->
+
+<div style="page-break-before:always"></div>
+
+## 変更履歴
+
+| 日付 | バージョン | 変更箇所・理由 |
+|------|-----------|--------------|
+| 2026.11.17 | 1.1.0 | 機体をBlueOS内蔵SITLに変更（3章再編、BlueOSバージョンを1.5.0-beta.43に変更）、Windows 11 前提に変更<br>1章：構成図を差し替え<br>2.3.3節：SSHホスト鍵エラーの対処を追加 |
 
 <div style="page-break-before:always"></div>
 
