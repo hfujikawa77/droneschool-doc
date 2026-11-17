@@ -264,12 +264,10 @@ BlueOSのボードを `SITL` に設定してArduPilot（SITL）を起動する�
 
 | 項目 | 値 |
 |------|-----|
-| Board | SITL (current) |
 | Vehicle Type | Copter |
 | Firmware | DEV |
 
 ![alt text](media/blueos-sitl-setup-011.png)
-<!-- TODO: 採用バージョン（1.5.0-beta.43）の画面で撮り直し・UI差異の確認 -->
 
 `Successfully installed new firmware` が表示されたら、`START AUTOPILOT` をクリックします。  
 これでBlueOS上でSITLが起動し、MAVLink Server経由でMission Planner（UDP 14550）等に接続できます。
@@ -297,7 +295,7 @@ PCがBlueOSホットスポットに接続している状態で、Mission Planner
 | remote Port | 14550 |
 
 接続が完了すると、フライト・データ画面のHUDに姿勢・高度などのテレメトリが表示され、地図上に機体（シミュレータ）が表示されることを確認します。機体はフロリアノポリス（ブラジル）付近に表示されます（起動位置は次の3.4節で変更します）。  
-![alt text](media/blueos-sitl-setup-012.png)
+![alt text](media/blueos-sitl-setup-013.png)
 
 
 ## 3.4. 起動位置の設定（ドローンフィールドKawachi）
@@ -316,7 +314,7 @@ BlueOSのパラメータ編集画面から変更します。ドローンフィ�
 1. BlueOS管理画面 → 左メニュー `Autopilot Parameters` を開きます。
 1. 検索欄に `SIM_OPOS` を入力します。
 1. 上表の通りに各パラメータの値を変更します。
-<!-- TODO: beta.43 の Autopilot Parameters 画面でスクリーンショットを取得 -->
+![alt text](media/blueos-sitl-setup-012.png)
 
 設定を反映するため、オートパイロットを再起動します。
 
@@ -334,11 +332,13 @@ BlueOS内蔵SITLの機体モデルは、既定で `vectored`（水中ROV向け�
 1. BlueOS管理画面 → 左メニュー `Autopilot Firmware` を開きます。
 1. `SITL configuration` を展開します。
 1. `SITL frame` のリストから `quad` を選択します。
-<!-- TODO: beta.43 の SITL configuration 画面でスクリーンショットを取得 -->
+![alt text](media/blueos-sitl-setup-022.png)
 
 選択すると設定が保存され、オートパイロットが自動で再起動します。再起動が終わると `SITL frame set, autopilot restarted` と表示されます。再起動後、`SITL frame` が `quad` になっていることを確認します。
 
 ※ `SITL configuration` は、ボードが `SITL` のときだけ表示されます。表示されない場合は、[3.1節](#31-sitlボードへの切り替え)でボードが `SITL` になっていることを確認してください。
+
+<div style="page-break-before:always"></div>
 
 ### 3.5.2. フレーム設定
 BlueOS管理画面 → 左メニュー `Autopilot Parameters` を開きます。検索欄に `FRAME_` を入力し、下記の値になっていることを確認します。異なる場合は値を変更します。
@@ -389,6 +389,8 @@ Mission Plannerから機体（SITL）にコマンドを送信できること（�
 ## 4.2. （参考）実機FC（フライトコントローラー）を接続する場合
 
 本書ではFC実機の代わりにBlueOS内蔵のSITLを機体として使用しますが、ラズパイにFC実機を接続して使用することもできます。実機を接続する場合の手順を参考として示します。
+
+<div style="page-break-before:always"></div>
 
 **接続手順**
 

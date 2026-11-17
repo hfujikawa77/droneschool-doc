@@ -193,7 +193,7 @@ MAV_ENDPOINT=tcp:127.0.0.1:5762 uvicorn main:app --host 0.0.0.0 --port 9999
 | ☐ | BlueOS が起動し、PC がホットスポット（`192.168.42.1`）に接続済み | 環境構築手順書 §2 |
 | ☐ | BlueOS のバージョンが `1.5.0-beta.43`（1.5 系の最新） | 環境構築手順書 §2.5 |
 | ☐ | SITL ボードを選択し、内蔵 SITL が起動済み（`START AUTOPILOT` 実行済み） | 環境構築手順書 §3.1〜3.2 |
-| ☐ | 内蔵 SITL の起動位置が Kawachi に設定済み（`SIM_OPOS_*`） | 環境構築手順書 §3.3 |
+| ☐ | 内蔵 SITL の起動位置が Kawachi に設定済み（`SIM_OPOS_*`） | 環境構築手順書 §3.4 |
 
 ## 3.2. MAVLink Server ― エンドポイント追加と接続確認
 
